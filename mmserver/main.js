@@ -29,6 +29,13 @@ io.on('connection', function(socket){
     // JOIN REQUEST
     socket.on('join_request', function (data) {
 
+        
+        players.forEach(function (player) {
+            if(socket.id == player.socketId){
+                player.name = data.name;
+            }
+        });
+
         socket.emit('join',{
             id:socket.id,
             token:token,
@@ -36,22 +43,23 @@ io.on('connection', function(socket){
             text:'Te has unido a la sesión.'
         });
 
+        players.forEach(function (player) {
+            if(socket.id != player.socketId){
+                io.to(player.socketId).emit('userJoin',
+                {
+                    name:data.name,
+                    token:token, 
+                    text:'Un jugador se ha unido a la sesion'
+                });
+            }
+        }, this);
+    
+
     });
     
     // USER JOINED TO SESION
     var token = ++tokens;
-    players.push({ id:token, socketId:socket.id });
-    
-    players.forEach(function (player) {
-        if(socket.id != player.socketId){
-            io.to(player.socketId).emit('userJoin',
-            {
-                id:token, 
-                text:'Un jugador se ha unido a la sesion'
-            });
-        }
-    }, this);
-
+    players.push({ id:token, socketId:socket.id, name:socket.nombre });
     socket.emit('mensaje',{ text:'Pulsa [F11] para jugar en PANTALLA COMPLETA'});
 
     // -------------------------------------
