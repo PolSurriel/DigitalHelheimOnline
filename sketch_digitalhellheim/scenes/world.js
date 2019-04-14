@@ -33,7 +33,7 @@ function world_update(){
     
     
     //hexagons collisions
-    hexagon_collisions();
+
 
     var tries = 0;
     while(hexagons.added < 15 && tries < 50){
@@ -59,6 +59,8 @@ function world_update(){
 
 
     update_all();
+    hexagon_collisions();
+    chispas_menu.update();
 
     //PJ COLISIONS
     if(!pj.jumping){
@@ -378,7 +380,7 @@ function world_draw(){
     }
 
     draw_all();
-  
+    chispas_menu.draw();
 
     
 
@@ -520,16 +522,43 @@ function generar_enemigos(n,na,np,nl, nw){
 
 function hexagon_collisions(){
     for (let i = 0; i < hexagons.length; i++) {
-
+        var isTrue = false;
+        var colPoints = new Array();
         if(pj.shooting && hexagons[i] != null){
             var test = Collider2D.detector.lineToPolygon(pj.lighting.point1.x,pj.lighting.point1.y, pj.lighting.point2.x,pj.lighting.point2.y,hexagons[i].poly );
-
+            
             if(test.isTrue){
-                pj.lighting.point2.x = test.info.x;
-                pj.lighting.point2.y = test.info.y;
-
-                console.log(pj.lighting.point2);
+                isTrue = true;
+                for (let p = 0; p < test.info.length; p++) {
+                    colPoints.push(test.info[p]);
+                }
+                
             }
+        }
+
+        if(isTrue){
+
+            var minDistance = 99999999;
+            var point;
+            for (let p = 0; p < colPoints.length; p++) {
+                var distance = new Vector2D(colPoints[p].x, colPoints[p].y).getMagnitude();
+                if (distance < minDistance){
+                    minDistance = distance;
+                    point = test.info[p];
+                }
+            }
+
+            pj.lighting.point2.x = point.x;
+            pj.lighting.point2.y = point.y;
+
+            var vector2 = new Vector2D(pj.lighting.point1.x-pj.lighting.point2.x, pj.lighting.point1.y-pj.lighting.point2.y).getUnitaryVector();
+            vector2.x += Math.random() * 2 - 1;
+            vector2.y += Math.random() * 2 - 1;
+
+            if (chispas_menu.added < 30){
+                chispas_menu.addObj( new Chispa(point.x, point.y, vector2, false, true) );
+            } 
+
         }
 
         if(hexagons[i] != null && new Vector2D(pj.x-hexagons[i].x,pj.y-hexagons[i].y).getMagnitude() > distance_to_destroy ){

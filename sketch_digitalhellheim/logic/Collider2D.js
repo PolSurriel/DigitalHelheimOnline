@@ -236,14 +236,22 @@ class Collider2D {
         
 
         
-        polygonToLine(polygon,  x_ln1,  y_ln1,  x_ln2,  y_ln2) {
+        polygonToLine(polygon, x_ln1,  y_ln1,  x_ln2,  y_ln2) {
 
+
+            var colisionPoints = new Array();
+            var isTrue = false;
             for (let i = 0, j = polygon.length-1; i < polygon.length; j = i++) {
                 var test = this.lineToLine( x_ln1,  y_ln1,  x_ln2,  y_ln2, polygon[i][0],polygon[i][1], polygon[j][0], polygon[j][1] );
-                if(test.isTrue)
-                    return test;
+                if(test.isTrue){
+                    isTrue = true;
+                    colisionPoints.push(test.info);
+
+                }
+                    
             }
-            return new Collider2DResponse (false);
+
+            return new Collider2DResponse (isTrue, colisionPoints);
 
         },
 
@@ -293,7 +301,7 @@ class Collider2D {
                 
                   {
                     x: x_ln1_point1 + (x_ln1_point2 - x_ln1_point1) * lambda,
-                    y: y_ln1_point1 + (y_ln1_point2 - y_ln1_point1) * gamma
+                    y: y_ln1_point1 + (y_ln1_point2 - y_ln1_point1) * lambda
                   } 
                 );
             }

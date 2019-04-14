@@ -178,6 +178,8 @@ var TIMES_NEW_ARIAL;
 var PIXEL_ARIAL;
 
 var chispa2_sound;
+
+var textura_quemado;
 function preload() {
 
     font = loadFont('fuentes/fuente.ttf');
@@ -195,6 +197,7 @@ function preload() {
     music = new Sound('./src/disco-shmisco.mp3',0.5);
     room_music = new Sound('./src/room_music.mp3',0.5);;
     bg_room = loadImage('./src/bg_room_texture.png',100,100);
+    textura_quemado = loadImage('./src/textura_quemado.png');
     pj.loadAssets();
     stairs = loadImage('./src/stairs.png');
     stairs_2 = loadImage('./src/stairs_2.png');

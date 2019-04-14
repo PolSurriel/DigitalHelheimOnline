@@ -13,11 +13,13 @@ class Chispa {
 
     movSpeed;
 
+    noGravity = false;
+
     isLight;
     gravityForce = new Vector2D(0, 1).getUnitaryVector();
 
-     constructor(x,y, direction, isLight) {
-        
+     constructor(x,y, direction, isLight, noGravity) {
+        this.noGravity = noGravity;
         this.isLight = isLight;
 
         this.position = new SuperVector(x,y,0);
@@ -38,6 +40,11 @@ class Chispa {
         this.opSpeed = 466;
         this.movSpeed = 466;
 
+
+        if(!this.noGravity){
+            this.gravityForce = new Vector2D(Math.random()*2-1, Math.random()*2-1).getUnitaryVector();
+        }
+
         this.gravityForce.x /= 20;
         this.gravityForce.y /= 20;
 
@@ -53,7 +60,7 @@ class Chispa {
         this.force.toUnitary2D();
 
 
-        if(!this.esDuradero || this.esDuradero && this.aColisionado){
+        if(this.noGravity || (!this.esDuradero || this.esDuradero && this.aColisionado)){
             this.opacity -= current_opSpeed;
         }
 
@@ -61,21 +68,24 @@ class Chispa {
             var _x = UMI.toPixel( Camera.translationX(this.position.x));
             var _y = UMI.toPixel( Camera.translationY(this.position.y));
 
-            if ( _x < 0 ) {
-                this.aColisionado = true;
-                this.force.x *= -1;
-            }else if (_x > window.innerWidth) {
-                this.aColisionado = true;
-                this.force.x *= -1;
+            if(!this.noGravity){
 
-            }else if(_y < 0){
-                this.aColisionado = true;
-                this.force.y *= -1;
-
-            }else if(_y > window.innerHeight){
-                this.aColisionado = true;
-                this.force.y *= -1;
-
+                if ( _x < 0 ) {
+                    this.aColisionado = true;
+                    this.force.x *= -1;
+                }else if (_x > window.innerWidth) {
+                    this.aColisionado = true;
+                    this.force.x *= -1;
+    
+                }else if(_y < 0){
+                    this.aColisionado = true;
+                    this.force.y *= -1;
+    
+                }else if(_y > window.innerHeight){
+                    this.aColisionado = true;
+                    this.force.y *= -1;
+    
+                }
             }
 
         }

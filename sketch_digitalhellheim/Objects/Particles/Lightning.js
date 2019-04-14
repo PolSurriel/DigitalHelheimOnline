@@ -33,8 +33,6 @@ class Lightning {
                 direction *= -1;
             }
         }
-        
-
 
 
     }
@@ -76,7 +74,7 @@ class Lightning {
     }
 
     draw() {
-
+        
         drawingContext.shadowBlur = 12;
         drawingContext.shadowColor = "blue";
         stroke(188, 214, 255);
@@ -156,6 +154,17 @@ class Lightning {
              UMI.toPixel(Camera.translationY(this.point2.y)),
         );
         
+        
+
+        /*stroke(255);
+        strokeWeight(4);
+        line(
+             UMI.toPixel(Camera.translationX(this.point1.x)), 
+             UMI.toPixel(Camera.translationY(this.point1.y)), 
+             UMI.toPixel(Camera.translationX(this.point2.x)), 
+             UMI.toPixel(Camera.translationY(this.point2.y))
+        );*/
+
         strokeWeight(1);
     }
 
