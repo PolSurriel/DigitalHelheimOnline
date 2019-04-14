@@ -13,6 +13,8 @@ function room_setup(){
     if(menu_music.playing()) menu_music.stop();
 
     room_music.loop();
+    chispa_sound.stop();
+    chispa2_sound.stop();
 
     pj.x = 52;
     pj.y = -180;

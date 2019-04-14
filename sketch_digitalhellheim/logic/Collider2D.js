@@ -237,7 +237,7 @@ class Collider2D {
 
         
         polygonToLine(polygon,  x_ln1,  y_ln1,  x_ln2,  y_ln2) {
-            
+
             for (let i = 0, j = polygon.length-1; i < polygon.length; j = i++) {
                 var test = this.lineToLine( x_ln1,  y_ln1,  x_ln2,  y_ln2, polygon[i][0],polygon[i][1], polygon[j][0], polygon[j][1] );
                 if(test.isTrue)
@@ -772,7 +772,7 @@ class Collider2DResponse {
     isTrue;
 
     constructor (isTrue, info){
-        isTrue = isTrue;
-        info;
+        this.isTrue = isTrue;
+        this.info = info;
     }
 }

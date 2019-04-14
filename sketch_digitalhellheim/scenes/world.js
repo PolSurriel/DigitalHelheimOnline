@@ -137,12 +137,8 @@ function world_update(){
                     projectiles[i].rebounds++;
                 }
 
-                if(hexagons[j] != null){
-                    var test = Collider2D.detector.lineToPolygon(pj.lighting.point1.x,pj.lighting.point1.y, pj.lighting.point2.x,pj.lighting.point2.y,hexagons[j].poly );
-                    if(test.isTrue){
-                        console.log('colision');
-                    }
-                }
+
+                
 
             }
 
@@ -524,6 +520,17 @@ function generar_enemigos(n,na,np,nl, nw){
 
 function hexagon_collisions(){
     for (let i = 0; i < hexagons.length; i++) {
+
+        if(pj.shooting && hexagons[i] != null){
+            var test = Collider2D.detector.lineToPolygon(pj.lighting.point1.x,pj.lighting.point1.y, pj.lighting.point2.x,pj.lighting.point2.y,hexagons[i].poly );
+
+            if(test.isTrue){
+                pj.lighting.point2.x = test.info.x;
+                pj.lighting.point2.y = test.info.y;
+
+                console.log(pj.lighting.point2);
+            }
+        }
 
         if(hexagons[i] != null && new Vector2D(pj.x-hexagons[i].x,pj.y-hexagons[i].y).getMagnitude() > distance_to_destroy ){
             hexagons.destroy( i );
