@@ -31,8 +31,8 @@ class LittleLightning {
 
     draw() {
 
-        drawingContext.shadowBlur = 10;
-        drawingContext.shadowColor = "#5193ff";
+        //drawingContext.shadowBlur = 10;
+        //drawingContext.shadowColor = "#5193ff";
         stroke(255);
         strokeWeight(4);
 

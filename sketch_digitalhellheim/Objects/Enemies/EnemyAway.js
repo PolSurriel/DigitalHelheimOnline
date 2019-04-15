@@ -19,7 +19,7 @@ class EnemyAway extends RealObject {
         super(x, y);
         this.setSpeed();
         
-        this.forceVector = new Vector2D(x-pj.x, y-pj.y).getUnitaryVector();
+        this.forceVector = new Vector2D(pj.x-x, pj.y-x).getUnitaryVector();
         this.directionVector = new Vector2D(x-pj.x, y-pj.y);
     
 
@@ -48,11 +48,16 @@ class EnemyAway extends RealObject {
 
 
         var vectorToPlayer = new Vector2D(playerX-x,playerY-y);
+        var distanceToPlayer = vectorToPlayer.getMagnitude();
 
-        if (vectorToPlayer.getMagnitude() < this.distanceToRunAway){
-            this.forceVector = vectorToPlayer.getUnitaryVector().getInverseVector();
-            this.speed = UMI.getSpeed(Math.random() * (80 - 40) + 40);
-        } else if(vectorToPlayer.getMagnitude() > this.maxDistance) {
+        if(distanceToPlayer < pj.radio){
+            enemiesAway.destroy( this.index_in_main_array );
+        }
+
+        else if (distanceToPlayer < this.distanceToRunAway){
+            this.forceVector = vectorToPlayer.getUnitaryVector();
+            this.speed = UMI.getSpeed(Math.random() * (120 - 80) + 80);
+        } else if(distanceToPlayer > this.maxDistance) {
             enemiesAway.destroy( this.index_in_main_array );
         } else {
             if (this.rotationCompt > 0) {

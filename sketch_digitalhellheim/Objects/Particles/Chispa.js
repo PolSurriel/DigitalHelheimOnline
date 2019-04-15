@@ -40,9 +40,8 @@ class Chispa {
         this.opSpeed = 466;
         this.movSpeed = 466;
 
-
-        if(!this.noGravity){
-            this.gravityForce = new Vector2D(Math.random()*2-1, Math.random()*2-1).getUnitaryVector();
+        if(this.noGravity){
+            this.opSpeed*=2;
         }
 
         this.gravityForce.x /= 20;
@@ -56,7 +55,7 @@ class Chispa {
         var current_opSpeed = UMI.getSpeed(this.opSpeed);
 
         this.position.translate(this.force.x*current_movSpeed, this.force.y*current_movSpeed,0);
-        this.force.translate(this.gravityForce.x, this.gravityForce.y, 0);
+        if(!this.noGravity) this.force.translate(this.gravityForce.x, this.gravityForce.y, 0);
         this.force.toUnitary2D();
 
 

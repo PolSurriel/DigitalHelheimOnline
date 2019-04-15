@@ -142,6 +142,7 @@ if(!isMobileDevice()){
                 down:true
             });
         }
+
         
 
 
@@ -246,6 +247,9 @@ if(!isMobileDevice()){
                 break;
         }
 
+
+        
+        if(testModeActive && e.keyCode == 49) pause = !pause;
 
 
 

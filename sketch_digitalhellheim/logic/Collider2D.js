@@ -245,6 +245,17 @@ class Collider2D {
                 var test = this.lineToLine( x_ln1,  y_ln1,  x_ln2,  y_ln2, polygon[i][0],polygon[i][1], polygon[j][0], polygon[j][1] );
                 if(test.isTrue){
                     isTrue = true;
+
+                    test.info.line = {
+                        p1:{
+                            x:polygon[i][0],
+                            y:polygon[i][1]
+                        },
+                        p2:{
+                            x:polygon[j][0],
+                            y:polygon[j][1]
+                        }
+                    }
                     colisionPoints.push(test.info);
 
                 }

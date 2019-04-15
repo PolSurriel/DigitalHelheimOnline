@@ -58,7 +58,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
 var c;
 var ctx;
 
-
+var pause = false;
 
 // using UMI.js
 var online_players = new Array(60);
@@ -95,6 +95,7 @@ var linesShoot = new Array(60);
 var enemiesWaves = new Array(60);
 var waves = new Array(60);
 var particles = new Array(100);
+var quemaduras = new Array(100);
 
 enemies.setAllNull();
 enemiesAway.setAllNull();
@@ -108,7 +109,7 @@ waves.setAllNull();
 hexagons.setAllNull();
 particles.setAllNull();
 online_players.setAllNull();
-
+quemaduras.setAllNull();
 
 var pu_count = 0;
 var hunted = 0;
@@ -197,7 +198,7 @@ function preload() {
     music = new Sound('./src/disco-shmisco.mp3',0.5);
     room_music = new Sound('./src/room_music.mp3',0.5);;
     bg_room = loadImage('./src/bg_room_texture.png',100,100);
-    textura_quemado = loadImage('./src/textura_quemado.png');
+    textura_quemado = loadImage('./src/textura_quemado.png', 47/2, 27/2);
     pj.loadAssets();
     stairs = loadImage('./src/stairs.png');
     stairs_2 = loadImage('./src/stairs_2.png');

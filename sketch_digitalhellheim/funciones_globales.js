@@ -47,6 +47,7 @@
     linesShoot.update();
     enemiesProjectiles.update();
     online_players.update();
+    quemaduras.update();
 
     pj.update();
     particles.update();
@@ -65,9 +66,13 @@ function draw_all(){
     enemiesProjectiles.draw();
     online_players.draw();
     
+    
     pj.draw();
     particles.draw();
+    
+    chispas_menu.draw();
     hexagons.draw();
+    quemaduras.draw();
 }
 
 function destroy_all(){
@@ -83,4 +88,132 @@ function destroy_all(){
     hexagons.setAllNull();
     enemiesProjectiles.setAllNull();
     particles.setAllNull();
+    chispas_menu.setAllNull();
 }
+
+var testModeActive = false;
+function testMode(){
+  dificultad = 4;
+  testModeActive = true;
+
+  console.log(`
+  
+  With test mode activated enemies will not spawn if you don't choose a difficulty mode.
+  
+  Commands:
+
+  -destroy_all() -> destroy all Objects (except the player).
+  -score = 99999999
+  -Enemies:
+    +createEnemy()
+    +createEnemyAway()
+    +createEnemyWave()
+    +createEnemyLine()
+    +createEnemyProjectile()
+  -Powe Up's:
+    +getUnlimitedShield()
+    +getSpeedx1dot5()
+    +getDuplicateProjectiles()
+    +getHealthx2()
+    +getRandomChoice()
+  -Camera.zoom(n/-n)
+  
+  Press '1' to pause and resume the game execution.
+  
+  Game pause is not available in online modes`);
+
+  return "Use this tool to do some good. A great power carries a great responsibility.";
+}
+
+function createEnemy(){
+  enemies.addObj(new Enemy(pj.x-300, pj.y));
+}
+function createEnemyAway(){
+  enemiesAway.addObj(new EnemyAway(pj.x-300, pj.y));
+}
+
+function createEnemyWave(){
+  enemiesWaves.addObj(new EnemyWave(pj.x-300, pj.y));
+}
+
+function createEnemyLine(){
+  enemiesLines.addObj(new EnemyLine(pj.x-300, pj.y));
+}
+
+function createEnemyProjectile(){
+  enemiesProjectiles.addObj(new EnemyProjectile(pj.x-300, pj.y));
+}
+
+function getUnlimitedShield(){
+  pj.pu_shield_caught = true;
+
+      pj.health = 2;
+      pu_count++;
+      power_up_sound.play();
+
+}
+function getSpeedx1dot5(){
+  pj.pu_speed_caught = true;
+  
+
+  pj.speed *= 1.5;
+  pu_count++;
+  power_up_sound.play();
+
+}
+function getDuplicateProjectiles(){
+  pj.pu_doubleproj_caught = true;
+
+
+  pu_count++;
+  power_up_sound.play();
+
+}
+function getHealthx2(){
+  pj.pu_health_caught = true;
+  
+  pj.health = 2;
+  pu_count++;
+  power_up_sound.play();
+
+}
+function getRandomChoice(){
+  pj.pu_random_caught = true;
+
+  pj.health = 2;
+  pu_count++;
+  power_up_sound.play();
+
+  var assigned = false;
+
+  do{
+
+      
+      var val = Math.floor(Math.random() * (6));
+
+      if(val == 1 && !pj.pu_doubleproj_caught){
+          pj.pu_doubleproj_caught = true;
+          assigned=true;
+          
+      }else if (val == 2 && !pj.pu_health_caught){
+          pj.pu_health_caught = true;
+          pj.health = 2;
+          assigned=true;
+          
+      }else if (val == 3 && !pj.pu_speed_caught){
+          pj.pu_speed_caught = true;
+          pj.speed *= 1.5;
+          assigned=true;
+          
+      }else if(!pj.pu_shield_caught){
+          pj.pu_shield_caught = true;
+          assigned=true;
+      }
+      
+  }while(!assigned);
+
+}
+
+
+
+

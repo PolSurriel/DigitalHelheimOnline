@@ -380,7 +380,6 @@ function world_draw(){
     }
 
     draw_all();
-    chispas_menu.draw();
 
     
 
@@ -521,12 +520,73 @@ function generar_enemigos(n,na,np,nl, nw){
 }
 
 function hexagon_collisions(){
+    var isTrue = false;
+    var colPoints = new Array();
+
+    
+    /* COLISION PUNTO POR PUNTO
+    var AB = new Vector2D(pj.lighting.point2.x - pj.lighting.point1.x, pj.lighting.point2.y - pj.lighting.point1.y);
+    var magnitude = AB.getMagnitude();
+    var increment = magnitude / pj.lighting.len_points;
+    AB.convertToUnitary();
+    */
+
     for (let i = 0; i < hexagons.length; i++) {
-        var isTrue = false;
-        var colPoints = new Array();
+        
         if(pj.shooting && hexagons[i] != null){
-            var test = Collider2D.detector.lineToPolygon(pj.lighting.point1.x,pj.lighting.point1.y, pj.lighting.point2.x,pj.lighting.point2.y,hexagons[i].poly );
+
+            /* COLISION PUNTO POR PUNTO
+            var x1 = pj.lighting.point1.x;
+            var y1 = pj.lighting.point1.y;
+            var x2 = pj.lighting.point1.x+ AB.x*increment;
+            var y2 = pj.lighting.point1.y+ AB.y*increment;
+            for (let u = 0; u < pj.lighting.midPoints.length-1; u++) {
+                var test = Collider2D.detector.lineToPolygon(x1+pj.lighting.midPoints[u].x,
+                                                             y1+pj.lighting.midPoints[u].y,
+                                                             x2+pj.lighting.midPoints[u+1].x,
+                                                             y2+pj.lighting.midPoints[u+1].y,
+                                                             hexagons[i].poly );
+
+                if(test.isTrue){
+                    isTrue = true;
+                    for (let p = 0; p < test.info.length; p++) {
+                        colPoints.push(test.info[p]);
+                    }
+                    
+                }
+
+                x1 += AB.x*increment;
+                y1 += AB.y*increment;
+                x2 += AB.x*increment;
+                y2 += AB.y*increment;
+
+            }*/
+
             
+            //vector paralelo
+            var vp = new Vector2D(-(pj.lighting.point2.y - pj.lighting.point1.y), pj.lighting.point2.x - pj.lighting.point1.x).getUnitaryVector();
+            
+
+            var test = Collider2D.detector.lineToPolygon(pj.lighting.point1.x,pj.lighting.point1.y, pj.lighting.point2.x,pj.lighting.point2.y,hexagons[i].poly );
+            if (!test.isTrue){
+                
+                var maxScal = 50;
+                for (let scal = 1; scal < maxScal && !test.isTrue; scal+=3) {
+                    test = Collider2D.detector.lineToPolygon(pj.lighting.point1.x+vp.x*scal,pj.lighting.point1.y+vp.y*scal, 
+                                                             pj.lighting.point2.x,pj.lighting.point2.y,hexagons[i].poly );
+                }
+
+                if (!test.isTrue){
+                    vp.x = -vp.x;
+                    vp.y = -vp.y;
+                    for (let scal = 1; scal < maxScal && !test.isTrue; scal+=3) {
+                        test = Collider2D.detector.lineToPolygon(pj.lighting.point1.x+vp.x*scal,pj.lighting.point1.y+vp.y*scal, 
+                                                                 pj.lighting.point2.x,pj.lighting.point2.y,hexagons[i].poly );
+                    }
+                }
+                
+            }
+
             if(test.isTrue){
                 isTrue = true;
                 for (let p = 0; p < test.info.length; p++) {
@@ -534,32 +594,10 @@ function hexagon_collisions(){
                 }
                 
             }
+            
         }
 
-        if(isTrue){
 
-            var minDistance = 99999999;
-            var point;
-            for (let p = 0; p < colPoints.length; p++) {
-                var distance = new Vector2D(colPoints[p].x, colPoints[p].y).getMagnitude();
-                if (distance < minDistance){
-                    minDistance = distance;
-                    point = test.info[p];
-                }
-            }
-
-            pj.lighting.point2.x = point.x;
-            pj.lighting.point2.y = point.y;
-
-            var vector2 = new Vector2D(pj.lighting.point1.x-pj.lighting.point2.x, pj.lighting.point1.y-pj.lighting.point2.y).getUnitaryVector();
-            vector2.x += Math.random() * 2 - 1;
-            vector2.y += Math.random() * 2 - 1;
-
-            if (chispas_menu.added < 30){
-                chispas_menu.addObj( new Chispa(point.x, point.y, vector2, false, true) );
-            } 
-
-        }
 
         if(hexagons[i] != null && new Vector2D(pj.x-hexagons[i].x,pj.y-hexagons[i].y).getMagnitude() > distance_to_destroy ){
             hexagons.destroy( i );
@@ -695,6 +733,34 @@ function hexagon_collisions(){
 
     }
 }
+
+    if(isTrue){
+
+        var minDistance = 9999999999;
+        var point;
+        for (let p = 0; p < colPoints.length; p++) {
+            var distance = new Vector2D(colPoints[p].x-pj.lighting.point1.x, colPoints[p].y-pj.lighting.point1.y).getMagnitude();
+            if (distance < minDistance){
+                minDistance = distance;
+                point = colPoints[p];
+            }
+        }
+
+        pj.lighting.point2.x = point.x;
+        pj.lighting.point2.y = point.y;
+        
+        
+        if (chispas_menu.added < 30){
+    
+            var vector2 = new Vector2D((pj.lighting.point1.x-pj.lighting.point2.x), pj.lighting.point1.y-pj.lighting.point2.y).getUnitaryVector();
+            vector2.rotate(Math.random() *3 -2);
+            
+            chispas_menu.addObj( new Chispa(point.x, point.y, vector2, false, true) );
+            quemaduras.addObj( new Quemadura(point.x, point.y, new Vector2D(point.line.p2.x -point.line.p1.x, point.line.p2.y -point.line.p1.y).getAngle() ) );
+            
+        } 
+
+    }
 }
 
 function check_game_over(){

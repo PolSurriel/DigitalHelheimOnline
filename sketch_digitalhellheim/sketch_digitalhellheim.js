@@ -52,10 +52,12 @@ function draw(){
 
   
 
-  if(!registrado) register_gameloop();
-  else if (on_coop_battle) coop_battle_gameloop();
-  else if (on_world) world_gameloop();
-  else room_gameloop();
+  if(!pause){
+    if(!registrado) register_gameloop();
+    else if (on_coop_battle) coop_battle_gameloop();
+    else if (on_world) world_gameloop();
+    else room_gameloop();
+  }
 
   FPS_COUNT ++;
 
