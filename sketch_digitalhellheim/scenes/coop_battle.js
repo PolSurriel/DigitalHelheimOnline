@@ -39,12 +39,15 @@ function coop_battle_setup(){
 
 function coop_battle_update(){
     update_all();
+
     motor1.update();
     motor2.update();
     motor3.update();
     chispas_menu.update();
     littleLightnings.update();
     boss.update();
+
+    
 
     var isTrue = false;
     var colPoints = new Array();
@@ -174,6 +177,7 @@ function coop_battle_update(){
         }
     }
 
+    
 }
 
 function coop_battle_draw(){

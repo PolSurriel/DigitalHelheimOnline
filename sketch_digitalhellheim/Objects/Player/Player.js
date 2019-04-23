@@ -1,3 +1,4 @@
+var canmove = true;
 class Player extends RealObject {
 
     
@@ -146,8 +147,11 @@ class Player extends RealObject {
     }
 
     moveFront(){
-        this.x += this.directionVector.x*this.speed;
+        this.x += this.directionVector.x*this.speed;    
         this.y += this.directionVector.y*this.speed;
+
+
+        
     }
 
     moveToForce(){
@@ -271,10 +275,11 @@ class Player extends RealObject {
             this.jump();
 
         }
+
         this.move();
 
         this.orientation = this.directionVector.getAngle();
-
+        
         if(!this.pu_shield_caught && this.jumping && this.shield_active){
             this.shooting = false;
             this.shield_active = false;
@@ -385,9 +390,16 @@ class Player extends RealObject {
 
     move(){
 
-        
-        if(!this.shield_active && !this.shooting){
+        if(!( this.orientation < Number.MAX_VALUE )) this.orientation = 0;
+        if(!( this.directionVector.x < Number.MAX_VALUE )) this.directionVector.x = 0;
+        if(!( this.directionVector.y < Number.MAX_VALUE )) this.directionVector.y = 0;
+        if(!( this.forceVector.x < Number.MAX_VALUE )) this.forceVector.x = 0;
+        if(!( this.forceVector.y < Number.MAX_VALUE )) this.forceVector.y = 0;
 
+        
+
+
+        if(!this.shield_active && !this.shooting){
             this.directionVector.x += this.forceVector.x/this.rotationDelay;
             this.directionVector.y += this.forceVector.y/this.rotationDelay;
         }
@@ -428,17 +440,17 @@ class Player extends RealObject {
         }
         else {
 
+            
             var x = UMI.toPixel(Camera.translationX(this.x))+windowWidth/2;
             var y = UMI.toPixel(Camera.translationY(this.y))+windowHeight/2;
 
-            this.forceVector = new Vector2D(mouseX-x,mouseY-y).getUnitaryVector();
-
             
             var AB = new Vector2D(mouseX-x,mouseY-y).getUnitaryVector();
-
+            
+            this.forceVector = AB;
             this.directionVector.x += AB.x/this.rotationDelay;
             this.directionVector.y += AB.y/this.rotationDelay;
-            
+
         }
 
 
@@ -459,11 +471,13 @@ class Player extends RealObject {
         }
 
         this.directionVector.convertToUnitary();
+        //this.mouse_vector = new Vector2D(mouseX-x,mouseY-y).getUnitaryVector();
 
-        this.mouse_vector = new Vector2D(mouseX-x,mouseY-y).getUnitaryVector();
+        
     }
 
     draw(){
+        
         drawingContext.shadowBlur = 0;
         if(this.shooting)
             this.lighting.draw();
@@ -533,7 +547,6 @@ class Player extends RealObject {
             
             });
         }
-
         
     }
 

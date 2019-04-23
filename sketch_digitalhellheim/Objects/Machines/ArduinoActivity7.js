@@ -8,11 +8,46 @@ class ArduinoActivity7 {
 
     size = 200;
 
+    poly_base = [
+        [-95,-93],[-100,-85],[-100,85],[-95,93],
+        [-50,93],[-43,85],[-43,17],[43,17],[43,85],
+        [50,93],[95,93],[100,85],[100,-85],[95,-93],
+        [50,-93],[43,-85],[43,-30],[-43,-30],
+        [-43,-85],[-48,-93],[-95,-93]
+    ];
+    
+    poly_arm1 = [
+        [-42,47],[-37,43],[-37,-70],
+        [-42,-75],[-63,-75],[-67,-70],
+        [-67,43], [-63,47],[-42,47]
+
+    ];
+
+    poly_arm2 = [
+        [-118, -374],
+        [-123, -370],
+        [-123, -257],
+        [-118, -252],
+        [-97 , -252],
+        [-93 , -257],
+        [-93 , -370],
+        [-97 , -374],
+        [-118, -374]
+    ];
+
+
+    poly_head = [
+        [-25,64],[20,64],
+        [20,-90],[-25,-90],
+        [-25,64]
+    ];
+
     invoking_state = {
         img:0,
         blackBar:0,
         redBar:0,
         asset:900
+
     }
     
 
@@ -20,6 +55,43 @@ class ArduinoActivity7 {
         this.x = x;
         this.y = y;
 
+
+        for (let i = 0; i < this.poly_arm2.length; i++) {
+            this.poly_arm2[i][0] = (this.poly_arm1[i][0]*-1)-3;
+            this.poly_arm2[i][1] = (this.poly_arm1[i][1]*-1)-27;
+        }
+
+        /*
+        for (let i = 0; i < this.poly.length; i++) {
+            var np = new Vector2D(this.poly[i][0],this.poly[i][1]);
+            np.rotate(this.orientation);
+
+            this.poly[i][0] = np.x + x;
+            this.poly[i][1] = np.y + y;
+            
+        }*/
+    }
+
+    translate_polygons(){
+        for (let i = 0; i < this.poly_base.length; i++) {
+            this.poly_base[i][0] += x;
+            this.poly_base[i][1] += y;
+        }
+        
+        for (let i = 0; i < this.poly_arm1.length; i++) {
+            this.poly_arm1[i][0] += x;
+            this.poly_arm1[i][1] += y;
+        }
+
+        for (let i = 0; i < this.poly_arm2.length; i++) {
+            this.poly_arm2[i][0] += x;
+            this.poly_arm2[i][1] += y;
+        }
+
+        for (let i = 0; i < this.poly_head.length; i++) {
+            this.poly_head[i][0] += x;
+            this.poly_head[i][1] += y;
+        }
 
     }
 
@@ -113,6 +185,7 @@ class ArduinoActivity7 {
         }else if (this.invoked){
             this.draw_boss();
             this.draw_health();
+            this.drawCollider();
         }
 
     }
@@ -144,6 +217,47 @@ class ArduinoActivity7 {
         text('Arduino Activity 7', -innerWidth/3 + UMI.toPixel(320), innerHeight/2 - UMI.toPixel(110));
 
     }
+
+    drawCollider(){
+        stroke(255);
+
+        noFill();
+        
+        beginShape();
+        for (let i = 0; i < this.poly_base.length; i++) {
+            vertex(UMI.toPixel(Camera.translationX(this.poly_base[i][0])),
+                   UMI.toPixel(Camera.translationY(this.poly_base[i][1])));   
+        }
+        endShape();
+        
+
+       
+       beginShape();
+       for (let i = 0; i < this.poly_arm1.length; i++) {
+           vertex(UMI.toPixel(Camera.translationX(this.poly_arm1[i][0])),
+                  UMI.toPixel(Camera.translationY(this.poly_arm1[i][1])));   
+       }
+       endShape();
+       
+       
+       
+       beginShape();
+       for (let i = 0; i < this.poly_arm2.length; i++) {
+           vertex(UMI.toPixel(Camera.translationX(this.poly_arm2[i][0])),
+                  UMI.toPixel(Camera.translationY(this.poly_arm2[i][1])));   
+       }
+       endShape();
+       
+
+        
+        beginShape();
+        for (let i = 0; i < this.poly_head.length; i++) {
+            vertex(UMI.toPixel(Camera.translationX(this.poly_head[i][0])),
+                   UMI.toPixel(Camera.translationY(this.poly_head[i][1])));   
+        }
+        endShape();
+    }
+
 
     
 }

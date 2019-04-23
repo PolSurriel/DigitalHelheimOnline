@@ -72,6 +72,8 @@ class FollowerReference {
 
     update(){
 
+        
+
         if(this.doing_zoom){
             this.zoom_speed -= this.speed_d;
 
@@ -103,6 +105,7 @@ class FollowerReference {
 
         var magnitude = Math.sqrt(vectorToPlayer[0]*vectorToPlayer[0]+vectorToPlayer[1]*vectorToPlayer[1]);
         
+        
         if(magnitude > this.margin){
             var unitaryVectorToPlayer = [vectorToPlayer[0]/magnitude, vectorToPlayer[1]/magnitude];
 
@@ -116,6 +119,10 @@ class FollowerReference {
             this.y += UMI.getSpeed(unitaryVectorToPlayer[1]*(magnitude/3));
         
         }
+
+        if(!( this.x < Number.MAX_VALUE )) this.x = 0;
+        if(!( this.y < Number.MAX_VALUE )) this.y = 0;
+        
 
         
         
