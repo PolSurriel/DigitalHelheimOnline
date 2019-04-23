@@ -2,9 +2,11 @@ class Lightning {
 
     point1;
     point2;
-    
+
     len_points = 50;
     midPoints;
+
+    render_blur = true;
 
     max_S = 20;
     constructor(x1, y1, x2, y2){
@@ -26,6 +28,8 @@ class Lightning {
 
             this.midPoints[i] = new Vector2D(perpendicular.x*s, perpendicular.y*s);
             s += (Math.random() * 5) *direction;
+
+            
  
             if(i % changeEach == 1){
 
@@ -75,7 +79,8 @@ class Lightning {
 
     draw() {
         
-        drawingContext.shadowBlur = 12;
+        if(this.render_blur)drawingContext.shadowBlur = 12;
+        else drawingContext.shadowBlur = 0;
         drawingContext.shadowColor = "blue";
         stroke(188, 214, 255);
         strokeWeight(3);
@@ -87,38 +92,42 @@ class Lightning {
         var increment = magnitude / this.len_points;
 
 
-        for (let t = 0; t < 2; t++) {
-            var x1 = this.point1.x;
-            var y1 = this.point1.y;
-            var x2 = this.point1.x+ AB.x*increment;
-            var y2 = this.point1.y+ AB.y*increment;
-            for (let i = 0; i < this.midPoints.length-1; i++) {
-                line(
-                    UMI.toPixel(Camera.translationX(x1 + this.midPoints[i].x)),
-                    UMI.toPixel(Camera.translationY(y1 + this.midPoints[i].y)), 
-                    UMI.toPixel(Camera.translationX(x2 + this.midPoints[i+1].x)), 
-                    UMI.toPixel(Camera.translationY(y2 + this.midPoints[i+1].y))
-                );    
+        if(this.render_blur){
 
-                x1 += AB.x*increment;
-                y1 += AB.y*increment;
-                x2 += AB.x*increment;
-                y2 += AB.y*increment;
+            for (let t = 0; t < 2; t++) {
+                var x1 = this.point1.x;
+                var y1 = this.point1.y;
+                var x2 = this.point1.x+ AB.x*increment;
+                var y2 = this.point1.y+ AB.y*increment;
+                for (let i = 0; i < this.midPoints.length-1; i++) {
+                    line(
+                        UMI.toPixel(Camera.translationX(x1 + this.midPoints[i].x)),
+                        UMI.toPixel(Camera.translationY(y1 + this.midPoints[i].y)), 
+                        UMI.toPixel(Camera.translationX(x2 + this.midPoints[i+1].x)), 
+                        UMI.toPixel(Camera.translationY(y2 + this.midPoints[i+1].y))
+                    );    
 
+                    x1 += AB.x*increment;
+                    y1 += AB.y*increment;
+                    x2 += AB.x*increment;
+                    y2 += AB.y*increment;
+
+                }
+
+                line(UMI.toPixel(Camera.translationX(x1 + this.midPoints[this.midPoints.length-1].x)),
+                    UMI.toPixel(Camera.translationY(y1 + this.midPoints[this.midPoints.length-1].y)), 
+                    UMI.toPixel(Camera.translationX(this.point2.x)),
+                    UMI.toPixel(Camera.translationY(this.point2.y)),
+                );
+                
             }
 
-            line(UMI.toPixel(Camera.translationX(x1 + this.midPoints[this.midPoints.length-1].x)),
-                UMI.toPixel(Camera.translationY(y1 + this.midPoints[this.midPoints.length-1].y)), 
-                UMI.toPixel(Camera.translationX(this.point2.x)),
-                UMI.toPixel(Camera.translationY(this.point2.y)),
-            );
-            
         }
         
 
         
-        drawingContext.shadowBlur = Math.floor(Math.random() * (30 - 10) ) + 10;
-        drawingContext.shadowColor = "rgb(153, 191, 255)";
+        //drawingContext.shadowBlur = Math.floor(Math.random() * (30 - 10) ) + 10;
+        if(this.render_blur) drawingContext.shadowColor = "rgb(153, 191, 255)";
         stroke(153, 191, 255);
 
         var AB = new Vector2D(this.point2.x - this.point1.x, this.point2.y - this.point1.y);

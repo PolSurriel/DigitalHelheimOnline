@@ -32,10 +32,11 @@ initSocket = function () {
     });
 
     socket.on('playerAction', function(data){
+        
         if(data.playerToken != token){
             if(data.action.type == 'key') {
-                for (let i = 0; i < online_players.added; i++) {
-                    if(online_players[i].token == data.playerToken){
+                for (let i = 0; i < online_players.length; i++) {
+                    if(online_players[i] != null && online_players[i].token == data.playerToken){
                         if(data.action.code == online_players[i].controller.right.code){
                             online_players[i].controller.right.pressed = data.action.down;
 
@@ -58,16 +59,23 @@ initSocket = function () {
                 }
                 
 
-            } else if(data.action.type == 'mouseClick') {
-                for (let i = 0; i < online_players.added; i++) {
-                    if(online_players[i].token == data.playerToken){
-                        online_players[i].controller.mleft.clicked = data.action.down;
+            } else if(data.action.type == 'mouseLeftClick') {
+                for (let i = 0; i < online_players.length; i++) {
+                    if(online_players[i] != null && online_players[i].token == data.playerToken){
+                        online_players[i].controller.mLeft.clicked = data.action.down;
+                    }
+                }
+
+            }else if(data.action.type == 'mouseRightClick') {
+                for (let i = 0; i < online_players.length; i++) {
+                    if(online_players[i] != null && online_players[i].token == data.playerToken){
+                        online_players[i].controller.mRight.clicked = data.action.down;
                     }
                 }
 
             } else if(data.action.type == 'mouseMov') {
-                for (let i = 0; i < online_players.added; i++) {
-                    if(online_players[i].token == data.playerToken){
+                for (let i = 0; i < online_players.length; i++) {
+                    if(online_players[i] != null && online_players[i].token == data.playerToken){
                         online_players[i].last_mouse_vector = data.action.vector;
                     }
                 }
@@ -84,8 +92,9 @@ initSocket = function () {
 
         }else{
             //TODO
-            for (let i = 0; i < online_players.added; i++) {//**************** */
-                if(online_players[i].token == data.playerToken){
+            
+            for (let i = 0; i < online_players.length; i++) {
+                if(online_players[i] != null && online_players[i].token == data.playerToken){
                     online_players[i].x = data.x;
                     online_players[i].y = data.y;
 
@@ -98,11 +107,39 @@ initSocket = function () {
     });
 
     
+    socket.on('setLightningPos', function(data){
+        if(data.token != token){
+            for (let i = 0; i < online_players.length; i++) {
+                if(online_players[i] != null && online_players[i].token == data.playerToken){
+                    online_players[i].modifyLPos = false;
+                    online_players[i].lighting.point2 = new SuperVector(data.point.x, data.point.y, 0);
+                    online_players[i].lighting.point2.w = 1;
+                    
+                }
+                
+            }
+        }
+    });
+
     socket.on('die', function(data){
         if(data.token != token){
             // TODO
         }
     });
+
+    socket.on('unlockPlayer', function(data){
+        if(data.token != token){
+            for (let i = 0; i < online_players.length; i++) {
+                if(online_players[i] != null && online_players[i].token == data.playerToken){
+                    online_players[i].modifyLPos = true;
+                    
+                }
+                
+            }
+        }
+    });
+
+    
     
     socket.on('kill', function (data) {
         if(data.murder != token){
@@ -125,6 +162,22 @@ initSocket = function () {
 
 
 // Envios
+
+function unlockMyselfToOthers () {
+    socket.emit('unlockMe', {
+        token:token
+    });
+}
+
+function shareLightningPos(point){
+    socket.emit('shareLightningPos', {
+        point:point,
+        token:token
+    });
+
+}
+
+
 function sharePosition(x, y){
     socket.emit('sharePosition', {
         x:x,

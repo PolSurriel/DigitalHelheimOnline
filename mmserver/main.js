@@ -67,6 +67,21 @@ io.on('connection', function(socket){
 
     // GAMEPLAY EVENTS
 
+    
+
+    socket.on('unlockMe',function (data) {
+        io.emit('unlockPlayer', { 
+            playerToken:data.token,
+        });
+    });
+
+    socket.on('shareLightningPos',function (data) {
+        io.emit('setLightningPos', { 
+            playerToken:data.token,
+            point: data.point
+        });
+    });
+
     // ACTION SHARING
     socket.on('action',function (data) {
         io.emit('playerAction', { 

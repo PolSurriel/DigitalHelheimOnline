@@ -77,11 +77,18 @@ class TouchPad {
 if(!isMobileDevice()){
 
     online_playing_onmousedown = function (e) {
-        var tengoQEnviar = !Mouse.left.clicked;
-        Mouse.left.clicked = true;
+        var tengoQEnviar;
+        if((e.button == 0)){
+             tengoQEnviar = !Mouse.left.clicked;
+             Mouse.left.clicked = true;
+        }else{
+            tengoQEnviar = !Mouse.right.clicked;
+            Mouse.right.clicked = true;
+
+        } 
         if(tengoQEnviar){
             shareAction({
-                type:'mouseClick',
+                type:(e.button == 0) ? 'mouseLeftClick': 'mouseRightClick',
                 code:e.keyCode,
                 down:true
             });
@@ -90,11 +97,18 @@ if(!isMobileDevice()){
     }
 
     online_playing_onmouseup = function (e) {
-        var tengoQEnviar = Mouse.left.clicked;
-        Mouse.left.clicked = false;
+        var tengoQEnviar;
+        if((e.button == 0)){
+             tengoQEnviar = Mouse.left.clicked;
+             Mouse.left.clicked = false;
+        }else{
+            tengoQEnviar = Mouse.right.clicked;
+            Mouse.right.clicked = false;
+
+        } 
         if(tengoQEnviar){
             shareAction({
-                type:'mouseClick',
+                type:(e.button == 0) ? 'mouseLeftClick': 'mouseRightClick',
                 code:e.keyCode,
                 down:false
             });
@@ -197,6 +211,7 @@ if(!isMobileDevice()){
     }
 
     online_playing_onmousemove = function(){
+        
         shareAction({
             type:'mouseMov',
             vector:pj.mouse_vector

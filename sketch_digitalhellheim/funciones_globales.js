@@ -46,6 +46,7 @@
     waves.update();
     linesShoot.update();
     enemiesProjectiles.update();
+    
     online_players.update();
     quemaduras.update();
 
@@ -55,7 +56,8 @@
 }
 
 function draw_all(){
-
+    
+    drawingContext.shadowBlur = 0;
     enemies.draw();
     enemiesAway.draw();
     enemiesWaves.draw();
@@ -64,9 +66,8 @@ function draw_all(){
     waves.draw();
     linesShoot.draw();
     enemiesProjectiles.draw();
+
     online_players.draw();
-    
-    
     pj.draw();
     particles.draw();
     
@@ -217,3 +218,21 @@ function getRandomChoice(){
 
 
 
+function create_hexagon(x, y){
+        
+  var i = Math.floor( (y/(hexagon_height)));
+  var j = Math.floor( (x/(hexagon_width+hexagon_lado))); 
+
+  var r = new Array();
+
+  hexagon_reference.forEach(point => {
+      r.push([
+          point[0]+(hex_reg_x*j+(hexagon_width+hexagon_lado)*j),
+          point[1]+(hex_reg_y*i+hexagon_height*i)
+      ]);
+  });
+
+
+  return r;
+
+}

@@ -411,24 +411,6 @@ function world_draw(){
 }
 
 
-function create_hexagon(x, y){
-        
-    var i = Math.floor( (y/(hexagon_height)));
-    var j = Math.floor( (x/(hexagon_width+hexagon_lado))); 
-
-    var r = new Array();
-
-    hexagon_reference.forEach(point => {
-        r.push([
-            point[0]+(hex_reg_x*j+(hexagon_width+hexagon_lado)*j),
-            point[1]+(hex_reg_y*i+hexagon_height*i)
-        ]);
-    });
-
-
-    return r;
-
-}
 
 
 function generar_enemigos(n,na,np,nl, nw){

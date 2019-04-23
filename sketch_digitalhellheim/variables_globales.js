@@ -96,6 +96,7 @@ var enemiesWaves = new Array(60);
 var waves = new Array(60);
 var particles = new Array(100);
 var quemaduras = new Array(100);
+var littleLightnings = new Array(50);
 
 enemies.setAllNull();
 enemiesAway.setAllNull();
@@ -110,6 +111,7 @@ hexagons.setAllNull();
 particles.setAllNull();
 online_players.setAllNull();
 quemaduras.setAllNull();
+littleLightnings.setAllNull();
 
 var pu_count = 0;
 var hunted = 0;
@@ -181,6 +183,22 @@ var PIXEL_ARIAL;
 var chispa2_sound;
 
 var textura_quemado;
+
+var motor_things;
+var motor_base;
+var motor_light2;
+var motor_light1;
+var motor_canon;
+
+var boss_logo;
+var a7_song;
+
+var bossAssets_all;
+var boss_base;
+var boss_brazos;
+var boss_cabeza;
+
+
 function preload() {
 
     font = loadFont('fuentes/fuente.ttf');
@@ -194,7 +212,8 @@ function preload() {
     chispa_sound = new Sound('./src/chispas.mp3', 0.02);
     chispa2_sound = new Sound('./src/chispas.mp3', 0.015);
     power_up_sound = new Sound('./src/get_power_up.mp3',1);
-    menu_music = new Sound('./src/cancion_menu.wav',0.1); 
+    a7_song = new Sound('./src/a7_song.mp3',0.7);
+    menu_music = new Sound('./src/cancion_menu.wav',0.2); 
     music = new Sound('./src/disco-shmisco.mp3',0.5);
     room_music = new Sound('./src/room_music.mp3',0.5);;
     bg_room = loadImage('./src/bg_room_texture.png',100,100);
@@ -202,14 +221,28 @@ function preload() {
     pj.loadAssets();
     stairs = loadImage('./src/stairs.png');
     stairs_2 = loadImage('./src/stairs_2.png');
-    power_up_speed_img_layer_1 = loadImage('./src/power_up_speed_layer_1.png');
-    power_up_speed_img_layer_2 = loadImage('./src/power_up_speed_layer_2.png');
+    power_up_speed_img_layer_1 =     loadImage('./src/power_up_speed_layer_1.png'    );
+    power_up_speed_img_layer_2 =     loadImage('./src/power_up_speed_layer_2.png'    );
     power_up_duplicate_img_layer_1 = loadImage('./src/power_up_duplicate_layer_1.png'); 
     power_up_duplicate_img_layer_2 = loadImage('./src/power_up_duplicate_layer_2.png'); 
-    power_up_health_img_layer_1 = loadImage('./src/power_up_health_layer_1.png');
-    power_up_health_img_layer_2 = loadImage('./src/power_up_health_layer_2.png');
+    power_up_health_img_layer_1 =    loadImage('./src/power_up_health_layer_1.png'   );
+    power_up_health_img_layer_2 =    loadImage('./src/power_up_health_layer_2.png'   );
+
+    boss_base = loadImage('./src/boss_base.png');
+    boss_brazos = loadImage('./src/boss_brazos.png');
+    boss_cabeza = loadImage('./src/boss_cabeza.png');
+
+    bossAssets_all = loadImage('./src/boss.png');
+
+    motor_things = loadImage('./src/motor1.png');
+    motor_base = loadImage('./src/motor3.png');
+    motor_light2 = loadImage('./src/motor4.png');
+    motor_light1 = loadImage('./src/motor5.png');
+    motor_canon = loadImage('./src/motor2.png');
     throne_img = loadImage('./src/throne.png'); 
     bg_texture = loadImage('./src/bg_texture.png');
+
+    boss_logo = loadImage('./src/boss_logo.png');
 
     power_up_random_img_layer_1= loadImage('./src/power_up_random_layer_1.png');
     power_up_random_img_layer_2= loadImage('./src/power_up_random_layer_2.png');

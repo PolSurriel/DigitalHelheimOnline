@@ -25,11 +25,43 @@ class OnlinePlayer extends Player {
 
         this.particleGenerationSpeed = UMI.getSpeed(20);
         this.particlePointToGenerate = UMI.getSpeed(100);
+
+        this.render_blur = false;
+
+        this.lighting.render_blur = false;
     }
 
 
+    mousCkeck(){
+        if(!this.jumping && !this.shield_active && this.controller.mRight.clicked){
+            Player.shield_init_sound.play();
+            Player.shield_feedback_sound.play();  
+            
+        }
+
+        if(this.shield_active && !this.controller.mRight.clicked){
+            
+            for (let i = 0; i < this.holding_on_draw.length; i++) {
+                
+                if(this.holding_on_draw[i] != null){
+                
+                    projectiles.addObj(new Projectile(this.holding_on_draw[i].x, this.holding_on_draw[i].y, new Vector2D(this.holding_on_draw[i].x-this.x, this.holding_on_draw[i].y-this.y,true).getUnitaryVector()));
+                    
+                }
+            }
+
+            this.holding.setAllNull();
+            this.holding_on_draw.setAllNull();
+
+        }
+
+        this.shield_active = this.controller.mRight.clicked && (!this.jumping || this.pu_shield_caught);
+        this.shooting = this.controller.mLeft.clicked && (!this.jumping || this.pu_shield_caught);
+
+    }
+
     move() {
-        
+
         if(this.controller.jump.pressed){
             if(!this.jumping) {
                 Player.jump_splash_sound.play();
@@ -119,18 +151,17 @@ class OnlinePlayer extends Player {
 
         this.directionVector.convertToUnitary();
 
-        var x = UMI.toPixel(Camera.translationX(this.x))+windowWidth/2;
-        var y = UMI.toPixel(Camera.translationY(this.y))+windowHeight/2;
-
 
     }
 
 
     draw(){
 
+
         drawingContext.shadowBlur = 0;
         textSize(UMI.toPixel(12));
         fill(255);
+        noStroke();
         text(this.name, UMI.toPixel(Camera.translationX(this.x)), UMI.toPixel(Camera.translationY(this.y-14))); 
         
         super.draw();

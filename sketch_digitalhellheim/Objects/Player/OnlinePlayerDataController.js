@@ -1,6 +1,11 @@
 class OnlinePlayerDataController {
 
-    mleft = {
+    mLeft = {
+        clicked:false
+    };
+
+    
+    mRight = {
         clicked:false
     };
 

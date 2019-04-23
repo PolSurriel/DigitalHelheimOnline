@@ -14,12 +14,16 @@ class Player extends RealObject {
     portal_y;
     portal_opened = false;
 
+    render_blur = true;
+
 
     health = 1;
 
     z = 0;
 
     radio = 5;
+
+    modifyLPos = true;
 
     speed;
 
@@ -151,13 +155,7 @@ class Player extends RealObject {
         this.y += this.forceVector.y*this.speed;
     }
 
-    update(){ 
-
-        for (let i = 0; i < particles.length; i++) {
-            if (particles[i] != null && particles[i].opacity <= 0) particles.destroy( i );
-            
-        }
-        
+    mousCkeck(){
         if(!this.jumping && !this.shield_active && Mouse.right.clicked){
             Player.shield_init_sound.play();
             Player.shield_feedback_sound.play();  
@@ -166,7 +164,6 @@ class Player extends RealObject {
 
         if(this.shield_active && !Mouse.right.clicked){
             
-          
             for (let i = 0; i < this.holding_on_draw.length; i++) {
                 
                 if(this.holding_on_draw[i] != null){
@@ -179,11 +176,21 @@ class Player extends RealObject {
             this.holding.setAllNull();
             this.holding_on_draw.setAllNull();
 
-
         }
 
         this.shield_active = Mouse.right.clicked && (!this.jumping || this.pu_shield_caught);
         this.shooting = Mouse.left.clicked && (!this.jumping || this.pu_shield_caught);
+
+    }
+
+    update(){ 
+
+        if(this.render_blur)
+            for (let i = 0; i < particles.length; i++)
+                if (particles[i] != null && particles[i].opacity <= 0) particles.destroy( i );
+        
+
+        this.mousCkeck();
         this.hand_closed = !this.shield_active && !this.shooting;
 
 
@@ -204,32 +211,31 @@ class Player extends RealObject {
 
         var r = this.radio*1.5;
 
-        if(this.particleState >= this.particlePointToGenerate){
+        if(this.render_blur && this.particleState >= this.particlePointToGenerate){
             new Particle(this.x+r + (Math.random() * (r +r) - r) - r, this.y+r+ (Math.random() * (r +r) - r)-r, this.z, this.directionVector.getAngle(), this.health, (this.pu_speed_caught) ? 2:1);
             this.particleState = 0;
             
         }  
 
-        if(this.particleState >= this.particlePointToGenerate/2){
+        if(this.render_blur && this.particleState >= this.particlePointToGenerate/2){
             this.fixedParticles.addObj(new Particle((Math.random() * (r +r) - r) - r, (Math.random() * (r +r) - r)-r, this.z, this.directionVector.getAngle(), this.health, (this.pu_speed_caught) ? 2:1));
         }
 
-        for (let i = 0; i < this.fixedParticles.length; i++) {
-         
-            if(this.fixedParticles[i] != null){
-                this.fixedParticles[i].reference_x = this.x+r;
-                this.fixedParticles[i].reference_y = this.y+r;
-                this.fixedParticles[i].z = this.z;
-
-                if(this.fixedParticles[i].opacity <= 0) this.fixedParticles.destroy(i);
-
+        if(this.render_blur) {
+            for (let i = 0; i < this.fixedParticles.length; i++) {
+             
+                if(this.fixedParticles[i] != null){
+                    this.fixedParticles[i].reference_x = this.x+r;
+                    this.fixedParticles[i].reference_y = this.y+r;
+                    this.fixedParticles[i].z = this.z;
+    
+                    if(this.fixedParticles[i].opacity <= 0) this.fixedParticles.destroy(i);
+                }
+    
             }
 
         }
         
-
-
-
         this.last_x = this.x;
         this.last_y = this.y;
 
@@ -339,16 +345,20 @@ class Player extends RealObject {
 
         if(this.shooting){
             
-            this.lighting.point2 = new SuperVector(this.x+this.directionVector.x*1000, this.y+this.directionVector.y*1000, 0);
+            if(this.modifyLPos){
+                this.lighting.point2 = new SuperVector(this.x+this.directionVector.x*1000, this.y+this.directionVector.y*1000, 0);   
+                this.lighting.point2.w=1;
+            }
             this.lighting.point1 = new SuperVector(this.x, this.y, 0);
     
             this.lighting.point1.w=1;
-            this.lighting.point2.w=1;
     
             this.lighting.point1.translate(this.directionVector.x*-7, this.directionVector.y*-7, this.directionVector.z);
             this.lighting.point1.translate(-this.directionVector.y*15, this.directionVector.x*15, this.directionVector.z);
 
-            this.lighting.update();
+
+
+            if(this.shooting) this.lighting.update();
 
         }
 
@@ -454,6 +464,7 @@ class Player extends RealObject {
     }
 
     draw(){
+        drawingContext.shadowBlur = 0;
         if(this.shooting)
             this.lighting.draw();
         //this.drawVectors();
@@ -465,7 +476,7 @@ class Player extends RealObject {
         else
             hand = (this.hand_closed) ? Player.mano_cerrada_pu :Player.mano_abierta_pu;
 
-        drawingContext.shadowBlur = 50;
+        if(this.render_blur)drawingContext.shadowBlur = 50;
         drawingContext.shadowColor = "yellow";
 
         fill(255, 204, 0);
@@ -477,11 +488,11 @@ class Player extends RealObject {
         rotate(this.directionVector.getAngle() - 90 * (180 / Math.PI));
         
         if(this.shield_active){
-            drawingContext.shadowBlur = 20;
+            if(this.render_blur)drawingContext.shadowBlur = 20;
             drawingContext.shadowColor = "red";
 
         }else{
-            drawingContext.shadowBlur = 10;
+            if(this.render_blur)drawingContext.shadowBlur = 10;
             
             if(this.health == 1) drawingContext.shadowColor = "blue";
             else if (this.health == 2) drawingContext.shadowColor = "orange";
@@ -494,7 +505,7 @@ class Player extends RealObject {
         Camera.zoom(-this.z*30);
         translate(-UMI.toPixel(Camera.translationX(this.x)) , -UMI.toPixel(Camera.translationY(this.y)));
       
-        //drawingContext.shadowBlur = 0;
+        drawingContext.shadowBlur = 0;
 
 
 
@@ -503,7 +514,7 @@ class Player extends RealObject {
             
             drawingContext.shadowOffsetX = 0;
             drawingContext.shadowOffsetY = 0;
-            drawingContext.shadowBlur = 40;
+            if(this.render_blur)drawingContext.shadowBlur = 40;
             drawingContext.shadowColor = "red";
             fill(100,0,0,Math.floor(Math.random() * 100) + 1  );
             noStroke();
