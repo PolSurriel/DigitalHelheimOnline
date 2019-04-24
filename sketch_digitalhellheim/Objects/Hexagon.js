@@ -15,8 +15,6 @@ class Hexagon extends RealObject {
         this.poly = poly;
         hexagons.addObj(this);
 
-        this.speed = UMI.getSpeed(800);
-
         this.center.x = poly[0][0] - Math.abs(poly[3][0] - poly[0][0])/2; 
         this.center.y = poly[0][1];
         
@@ -26,7 +24,7 @@ class Hexagon extends RealObject {
 
     
     update(){
-
+        this.speed = UMI.getSpeed(800);
 
         if(this.opacity < 255){
             this.opacity += this.speed;

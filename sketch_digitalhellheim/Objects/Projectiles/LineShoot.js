@@ -21,6 +21,7 @@ class LineShoot extends RealObject {
     }
 
     update(){
+        this.speed = UMI.getSpeed(230);
 
         this.x += this.direction.x*this.speed;
         this.y += this.direction.y*this.speed;        

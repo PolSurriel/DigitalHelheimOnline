@@ -1,10 +1,11 @@
 class Ball extends RealObject{
 
     radio;
-    forecVector;
-    default_force;
+    forceVector;
+    default_force = 300;
     force;
     gravity_force;
+    actual_force;
 
     last_x;
     last_y;
@@ -16,31 +17,35 @@ class Ball extends RealObject{
         super(x,y);
         this.radio = radio;
 
-        this.default_force = UMI.getSpeed(300);
-        this.force = this.default_force;
-        this.gravity_force = UMI.getSpeed(2);
+        this.actual_force = this.default_force;
+    }
+
+    setSpeed(){
+        this.force = UMI.getSpeed(this.actual_force);
+        this.gravity_force = UMI.getSpeed(120);
     }
 
     setForce(vector){
-        this.forecVector = vector;
-        this.forecVector.convertToUnitary();
+        this.forceVector = vector;
+        this.forceVector.convertToUnitary();
         this.moving = true;
 
     }
 
     update() {
+        this.setSpeed();
 
         this.last_x = this.x;
         this.last_y = this.y;
 
-        if(this.moving == true){
+        if(this.moving){
             
-            this.x += this.forecVector.x * this.force;
-            this.y += this.forecVector.y * this.force;
-            this.force -= this.gravity_force;
+            this.x += this.forceVector.x * this.force;
+            this.y += this.forceVector.y * this.force;
+            this.actual_force -= this.gravity_force;
             
-            if(this.force <= 0){
-                this.force = this.default_force;
+            if(this.actual_force <= 0){
+                this.actual_force = this.default_force;
                 this.moving = false;
             }
         }

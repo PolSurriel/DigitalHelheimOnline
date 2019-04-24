@@ -15,14 +15,15 @@ class Enemy extends RealObject {
     constructor(x, y) {
         super(x, y);
         
-        this.initialSpeed = Math.random() * (100 - 80) + 80;
+        // this.initialSpeed = Math.random() * (100 - 80) + 80;
+        this.initialSpeed = Math.random() * (90 - 70) + 70;
 
         this.forceVector = new Vector2D(x-pj.x, y-pj.y).getUnitaryVector();
         this.directionVector = new Vector2D(x-pj.x, y-pj.y);
     }
 
     setSpeed(){
-        this.speed = UMI.getSpeed(this.initialSpeed) * (CURRENT_FPS/60);
+        this.speed = UMI.getSpeed(this.initialSpeed);
         this.rotationDelay = UMI.getDelay(0.05);
     }
 

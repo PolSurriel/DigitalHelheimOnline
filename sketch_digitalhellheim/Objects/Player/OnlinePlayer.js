@@ -15,22 +15,11 @@ class OnlinePlayer extends Player {
         this.__proto__ = "OnlinePlayer";
 
         this.controller = new OnlinePlayerDataController();
-
-        this.speed = UMI.getSpeed(100);
-        this.rotationDelay = UMI.getDelay(0.05);
-        this.initialJumpingSpeed = UMI.getSpeed(800);
-        this.jumpingSpeed = this.initialJumpingSpeed;
-
-        this.gravityForce = this.initialJumpingSpeed/23;
-
-        this.particleGenerationSpeed = UMI.getSpeed(20);
-        this.particlePointToGenerate = UMI.getSpeed(100);
-
+        
         this.render_blur = false;
 
         this.lighting.render_blur = false;
     }
-
 
     mousCkeck(){
         if(!this.jumping && !this.shield_active && this.controller.mRight.clicked){

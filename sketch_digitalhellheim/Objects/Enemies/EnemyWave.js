@@ -13,17 +13,16 @@ class EnemyWave extends RealObject {
     radio = 10;
 
     normalSpeed = 190;
-
+    actualSpeed;
 
     constructor(x, y) {
         super(x, y);
-        this.setSpeed();
+        this.actualSpeed = this.normalSpeed;
         
         this.forceVector = new Vector2D(x-pj.x, y-pj.y).getUnitaryVector();
         this.directionVector = new Vector2D(x-pj.x, y-pj.y);
 
         this.rotationCompt = 0;
-
     }
 
     shootPlayer(){
@@ -31,7 +30,7 @@ class EnemyWave extends RealObject {
     }
 
     setSpeed(){
-        this.speed = UMI.getSpeed(this.normalSpeed);
+        this.speed = UMI.getSpeed(this.actualSpeed);
         this.rotationDelay = UMI.getDelay(0.05);
     }
 
@@ -56,7 +55,7 @@ class EnemyWave extends RealObject {
             if (this.rotationCompt > 0) {
                 this.rotationCompt--;
             } else {
-                //this.speed = UMI.getSpeed(this.normalSpeed);
+                this.actualSpeed = this.normalSpeed;
                 var randomAngle = Math.PI/2 * (Math.random() >= 0.5 ? 1 : -1);
                 this.last_rotation = randomAngle;
                 this.rotationCompt = Math.floor(Math.random()*180);
@@ -74,7 +73,7 @@ class EnemyWave extends RealObject {
             enemiesWaves.destroy( this.index_in_main_array );
         } else {
             this.forceVector = vectorToPlayer.getUnitaryVector();
-            //this.speed = UMI.getSpeed(Math.random() * (80 - 40) + 40);              
+            this.actualSpeed = Math.random() * (80 - 40) + 40;
         }
 
 
@@ -88,6 +87,8 @@ class EnemyWave extends RealObject {
     }
 
     update() {
+        this.setSpeed();
+
         this.move();
         if( new Vector2D(pj.x-this.x,pj.y-this.y).getMagnitude() > distance_to_destroy ){
             enemiesWaves.destroy( this.index_in_main_array );

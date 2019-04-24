@@ -22,7 +22,7 @@ class EnemyLine extends RealObject {
 
     constructor(x, y) {
         super(x, y);
-        this.setSpeed();
+        this.actualSpeed = this.normalSpeed;
         
         this.forceVector = new Vector2D(x-pj.x, y-pj.y).getUnitaryVector();
         this.directionVector = new Vector2D(x-pj.x, y-pj.y);
@@ -36,7 +36,7 @@ class EnemyLine extends RealObject {
     }
 
     setSpeed(){
-        this.speed = UMI.getSpeed(this.actualSpeed) * (CURRENT_FPS/60);
+        this.speed = UMI.getSpeed(this.actualSpeed);
         this.rotationDelay = UMI.getDelay(0.05);
     }
 
@@ -61,7 +61,7 @@ class EnemyLine extends RealObject {
             if (this.rotationCompt > 0) {
                 this.rotationCompt--;
             } else {
-                this.speed = UMI.getSpeed(this.normalSpeed);
+                // this.speed = UMI.getSpeed(this.normalSpeed);
                 var randomAngle = Math.PI/2 * (Math.random() >= 0.5 ? 1 : -1);
                 this.last_rotation = randomAngle;
                 this.rotationCompt = Math.floor(Math.random()*180);
@@ -72,7 +72,6 @@ class EnemyLine extends RealObject {
             }
 
             this.timeUntilLastShoot++;
-            // this.speed = UMI.getSpeed(this.normalSpeed);
             this.actualSpeed = this.normalSpeed;
             this.forceVector = vectorToPlayer.getUnitaryVector();
             this.forceVector.rotate(this.last_rotation);
@@ -80,7 +79,6 @@ class EnemyLine extends RealObject {
             enemiesLines.destroy( this.index_in_main_array );
         } else {
             this.forceVector = vectorToPlayer.getUnitaryVector();
-            // this.speed = UMI.getSpeed(Math.random() * (this.normalSpeed - 100) + 100);
             this.actualSpeed = Math.random() * (this.normalSpeed - 100) + 100;
         }
 

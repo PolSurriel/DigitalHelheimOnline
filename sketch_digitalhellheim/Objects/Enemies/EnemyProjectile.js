@@ -13,6 +13,7 @@ class EnemyProjectile extends RealObject {
     radio = 10;
 
     normalSpeed = 190;
+    actualSpeed;
 
     
     last_x;
@@ -21,17 +22,12 @@ class EnemyProjectile extends RealObject {
 
     constructor(x, y) {
         super(x, y);
-        this.setSpeed();
+        this.actualSpeed = this.normalSpeed;
         
-
-      
-
-
         this.forceVector = new Vector2D(x-pj.x, y-pj.y).getUnitaryVector();
         this.directionVector = new Vector2D(x-pj.x, y-pj.y);
 
         this.rotationCompt = 0;
-
 
     }
 
@@ -40,7 +36,7 @@ class EnemyProjectile extends RealObject {
     }
 
     setSpeed(){
-        this.speed = UMI.getSpeed(this.normalSpeed);
+        this.speed = UMI.getSpeed(this.actualSpeed);
         this.rotationDelay = UMI.getDelay(0.05);
     }
 
@@ -65,7 +61,6 @@ class EnemyProjectile extends RealObject {
             if (this.rotationCompt > 0) {
                 this.rotationCompt--;
             } else {
-                this.speed = UMI.getSpeed(this.normalSpeed);
                 var randomAngle = Math.PI/2 * (Math.random() >= 0.5 ? 1 : -1);
                 this.last_rotation = randomAngle;
                 this.rotationCompt = Math.floor(Math.random()*180);
@@ -76,16 +71,15 @@ class EnemyProjectile extends RealObject {
             }
 
             this.timeUntilLastShoot++;
-            this.speed = UMI.getSpeed(this.normalSpeed);
+            this.actualSpeed = this.normalSpeed;
             this.forceVector = vectorToPlayer.getUnitaryVector();
             this.forceVector.rotate(this.last_rotation);
         } else if(vectorToPlayer.getMagnitude() > this.maxDistance) {
             enemiesProjectiles.destroy( this.index_in_main_array );
         } else {
             this.forceVector = vectorToPlayer.getUnitaryVector();
-            this.speed = UMI.getSpeed(Math.random() * (this.normalSpeed - 100) + 100);              
+            this.actualSpeed = Math.random() * (this.normalSpeed - 100) + 100;
         }
-
 
         this.directionVector.x += this.forceVector.x/this.rotationDelay;
         this.directionVector.y += this.forceVector.y/this.rotationDelay;
@@ -93,10 +87,11 @@ class EnemyProjectile extends RealObject {
         this.directionVector.convertToUnitary();
 
         this.moveFront();
-
     }
 
     update() {
+        this.setSpeed();
+
         this.last_x = this.x;
         this.last_y = this.y;
         if( new Vector2D(pj.x-this.x,pj.y-this.y).getMagnitude() > distance_to_destroy ){

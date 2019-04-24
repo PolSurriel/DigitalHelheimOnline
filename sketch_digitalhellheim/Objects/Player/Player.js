@@ -92,19 +92,6 @@ class Player extends RealObject {
 
     mouse_vector;
 
-    setSpeed(){
-        this.speed = UMI.getSpeed(100);
-        this.rotationDelay = UMI.getDelay(0.05);
-        this.initialJumpingSpeed = UMI.getSpeed(800);
-        this.jumpingSpeed = this.initialJumpingSpeed;
-
-        this.gravityForce = this.initialJumpingSpeed*((60/23)/CURRENT_FPS);
-
-        this.particleGenerationSpeed = UMI.getSpeed(20);
-        this.particlePointToGenerate = UMI.getSpeed(100);
-
-    }
-
     constructor (x,y){
         super(x, y);
         this.forceVector = new Vector2D(Player.FORCE_TOP.x, Player.FORCE_TOP.y);
@@ -133,6 +120,18 @@ class Player extends RealObject {
 
     }
 
+    setSpeed(){
+        this.speed = UMI.getSpeed(100);
+        this.rotationDelay = UMI.getDelay(0.05);
+        this.initialJumpingSpeed = UMI.getSpeed(800);
+        this.jumpingSpeed = this.initialJumpingSpeed;
+
+        this.gravityForce = this.initialJumpingSpeed*((60/23)/CURRENT_FPS);
+
+        this.particleGenerationSpeed = UMI.getSpeed(20);
+        this.particlePointToGenerate = UMI.getSpeed(100);
+    }
+
     loadAssets(){
         Player.mano_abierta = loadImage('./src/mano-abierta.png'); 
         Player.mano_cerrada = loadImage('./src/mano-cerrada.png'); 
@@ -149,9 +148,6 @@ class Player extends RealObject {
         this.directionVector.convertToUnitary();
         this.x += this.directionVector.x*this.speed;
         this.y += this.directionVector.y*this.speed;
-
-
-        
     }
 
     moveToForce(){
@@ -189,7 +185,14 @@ class Player extends RealObject {
 
     update(){
         
+        if(!( this.orientation < Number.MAX_VALUE )) this.orientation = 0;
+        if(!( this.directionVector.x < Number.MAX_VALUE )) this.directionVector.x = 0;
+        if(!( this.directionVector.y < Number.MAX_VALUE )) this.directionVector.y = 0;
+        if(!( this.forceVector.x < Number.MAX_VALUE )) this.forceVector.x = 0;
+        if(!( this.forceVector.y < Number.MAX_VALUE )) this.forceVector.y = 0;
+        
         if (this.z == 0) this.setSpeed();
+        else this.gravityForce = UMI.getSpeed(800)*((60/23)/CURRENT_FPS);
 
         if(this.render_blur)
             for (let i = 0; i < particles.length; i++)
@@ -381,14 +384,6 @@ class Player extends RealObject {
     }
 
     move(){
-
-        if(!( this.orientation < Number.MAX_VALUE )) this.orientation = 0;
-        if(!( this.directionVector.x < Number.MAX_VALUE )) this.directionVector.x = 0;
-        if(!( this.directionVector.y < Number.MAX_VALUE )) this.directionVector.y = 0;
-        if(!( this.forceVector.x < Number.MAX_VALUE )) this.forceVector.x = 0;
-        if(!( this.forceVector.y < Number.MAX_VALUE )) this.forceVector.y = 0;
-
-        
 
 
         if(!this.shield_active && !this.shooting){

@@ -74,7 +74,7 @@ class EnemyAway extends RealObject {
     }
 
     setSpeed(){
-        this.speed = UMI.getSpeed(this.actualSpeed) * (CURRENT_FPS/60);
+        this.speed = UMI.getSpeed(this.actualSpeed);
         this.rotationDelay = UMI.getDelay(0.05);
     }
 
