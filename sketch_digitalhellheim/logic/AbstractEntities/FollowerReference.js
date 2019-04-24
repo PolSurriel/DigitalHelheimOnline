@@ -44,9 +44,7 @@ class FollowerReference {
         this.following = obj;
 
         //UMI.LogicObjects.push(this);
-
         this.speed_d = UMI.getSpeed(1);
-
     }
 
     random_zoom_transition(){
@@ -54,8 +52,7 @@ class FollowerReference {
         this.doing_zoom = true;
         this.zoom_state = 0;
 
-
-        if(!(this.zoom_state_count < -200) && this.last_zoom == 'negative' && this.zoom_state_count <= 200){
+        if(this.zoom_state_count >= -200 && this.last_zoom == 'negative' && this.zoom_state_count <= 200){
             this.last_zoom = 'positive';
             this.zoom_to_do = Math.floor(Math.random()*(100-41)+41);
         }else {
@@ -65,12 +62,12 @@ class FollowerReference {
             this.zoom_speed *= -1;
         }
 
-        this.speed_d = this.zoom_speed/Math.floor(Math.random()*(200-70)+70);
+        this.speed_d = this.zoom_speed/Math.floor(Math.random()*(200-70)+70) * (60/CURRENT_FPS);
     }
 
 
 
-    update(){
+    update(){        
 
         
 
@@ -92,8 +89,9 @@ class FollowerReference {
                     this.doing_zoom = false;
                 }
             }
-
             
+        } else {
+            this.speed_d = UMI.getSpeed(1);
         }
 
 

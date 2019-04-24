@@ -13,6 +13,7 @@ class EnemyLine extends RealObject {
     radio = 10;
 
     normalSpeed = 190;
+    actualSpeed;
 
     
     last_x;
@@ -22,8 +23,6 @@ class EnemyLine extends RealObject {
     constructor(x, y) {
         super(x, y);
         this.setSpeed();
-
-      
         
         this.forceVector = new Vector2D(x-pj.x, y-pj.y).getUnitaryVector();
         this.directionVector = new Vector2D(x-pj.x, y-pj.y);
@@ -37,7 +36,7 @@ class EnemyLine extends RealObject {
     }
 
     setSpeed(){
-        this.speed = UMI.getSpeed(this.normalSpeed);
+        this.speed = UMI.getSpeed(this.actualSpeed) * (CURRENT_FPS/60);
         this.rotationDelay = UMI.getDelay(0.05);
     }
 
@@ -73,14 +72,16 @@ class EnemyLine extends RealObject {
             }
 
             this.timeUntilLastShoot++;
-            this.speed = UMI.getSpeed(this.normalSpeed);
+            // this.speed = UMI.getSpeed(this.normalSpeed);
+            this.actualSpeed = this.normalSpeed;
             this.forceVector = vectorToPlayer.getUnitaryVector();
             this.forceVector.rotate(this.last_rotation);
         } else if(vectorToPlayer.getMagnitude() > this.maxDistance) {
             enemiesLines.destroy( this.index_in_main_array );
         } else {
             this.forceVector = vectorToPlayer.getUnitaryVector();
-            this.speed = UMI.getSpeed(Math.random() * (this.normalSpeed - 100) + 100);              
+            // this.speed = UMI.getSpeed(Math.random() * (this.normalSpeed - 100) + 100);
+            this.actualSpeed = Math.random() * (this.normalSpeed - 100) + 100;
         }
 
 
@@ -94,6 +95,7 @@ class EnemyLine extends RealObject {
     }
 
     update() {
+        this.setSpeed();
         this.last_x = this.x;
         this.last_y = this.y;
 

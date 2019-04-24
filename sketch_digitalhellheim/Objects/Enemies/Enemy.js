@@ -8,23 +8,22 @@ class Enemy extends RealObject {
     last_x;
     last_y;
 
+    initialSpeed;
+
 
 
     constructor(x, y) {
         super(x, y);
-        this.setSpeed();
-
-       
         
+        this.initialSpeed = Math.random() * (100 - 80) + 80;
+
         this.forceVector = new Vector2D(x-pj.x, y-pj.y).getUnitaryVector();
         this.directionVector = new Vector2D(x-pj.x, y-pj.y);
     }
 
     setSpeed(){
-        this.speed = UMI.getSpeed(Math.random() * (100 - 80) + 80);
+        this.speed = UMI.getSpeed(this.initialSpeed) * (CURRENT_FPS/60);
         this.rotationDelay = UMI.getDelay(0.05);
-
-
     }
 
     moveFront(){
@@ -50,6 +49,8 @@ class Enemy extends RealObject {
     }
 
     update() {
+        this.setSpeed();
+
         this.last_x = this.x;
         this.last_y = this.y;
 

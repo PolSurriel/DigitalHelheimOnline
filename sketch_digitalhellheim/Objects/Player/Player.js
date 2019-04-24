@@ -98,18 +98,17 @@ class Player extends RealObject {
         this.initialJumpingSpeed = UMI.getSpeed(800);
         this.jumpingSpeed = this.initialJumpingSpeed;
 
-        this.gravityForce = this.initialJumpingSpeed/23;
+        this.gravityForce = this.initialJumpingSpeed*((60/23)/CURRENT_FPS);
 
         this.particleGenerationSpeed = UMI.getSpeed(20);
         this.particlePointToGenerate = UMI.getSpeed(100);
+
     }
 
     constructor (x,y){
         super(x, y);
         this.forceVector = new Vector2D(Player.FORCE_TOP.x, Player.FORCE_TOP.y);
         this.directionVector = new Vector2D(this.forceVector.x,this.forceVector.y);
-
-        this.setSpeed();
 
         this.__proto__ = "Player";
 
@@ -147,7 +146,8 @@ class Player extends RealObject {
     }
 
     moveFront(){
-        this.x += this.directionVector.x*this.speed;    
+        this.directionVector.convertToUnitary();
+        this.x += this.directionVector.x*this.speed;
         this.y += this.directionVector.y*this.speed;
 
 
@@ -172,7 +172,7 @@ class Player extends RealObject {
                 
                 if(this.holding_on_draw[i] != null){
                 
-                    projectiles.addObj(new Projectile(this.holding_on_draw[i].x, this.holding_on_draw[i].y, new Vector2D(this.holding_on_draw[i].x-this.x, this.holding_on_draw[i].y-this.y,true).getUnitaryVector()));
+                    projectiles.addObj(new Projectile(this.holding_on_draw[i].x, this.holding_on_draw[i].y, new (this.holding_on_draw[i].x-this.x, this.holding_on_draw[i].y-this.y,true).getUnitaryVector()));
                     
                 }
             }
@@ -187,7 +187,9 @@ class Player extends RealObject {
 
     }
 
-    update(){ 
+    update(){
+        
+        if (this.z == 0) this.setSpeed();
 
         if(this.render_blur)
             for (let i = 0; i < particles.length; i++)
@@ -266,14 +268,8 @@ class Player extends RealObject {
             }
         }
 
-        
-        
-
-        
-
         if(this.jumping){
             this.jump();
-
         }
 
         this.move();
@@ -313,7 +309,7 @@ class Player extends RealObject {
                 var y = (this.shield[i][1]);
                 
                 var cos = Math.cos(this.shield_orientation);
-                var sin =  Math.sin(this.shield_orientation);
+                var sin = Math.sin(this.shield_orientation);
 
                 this.shield_on_draw[i][0] = this.x + cos * x - sin * y;
                 this.shield_on_draw[i][1] = this.y + sin * x + cos * y;  
@@ -333,7 +329,7 @@ class Player extends RealObject {
                     var y = (this.holding[i].y);
                     
                     var cos = Math.cos(this.orientation);
-                    var sin =  Math.sin(this.orientation);
+                    var sin = Math.sin(this.orientation);
     
                     this.holding_on_draw[i].x = this.x + cos * x - sin * y;
                     this.holding_on_draw[i].y = this.y + sin * x + cos * y;  
@@ -366,16 +362,14 @@ class Player extends RealObject {
             if(this.shooting) this.lighting.update();
 
         }
-
     }
 
     jump() {
-        this.jumpingState+= this.jumpingSpeed;
-        
         this.jumpingSpeed-= this.gravityForce;
 
-        this.z += this.jumpingSpeed/20;
+        this.jumpingState+= this.jumpingSpeed;
         
+        this.z += this.jumpingSpeed/20;
 
         if(this.jumpingState <= 0){
             this.jumping = false;
@@ -384,8 +378,6 @@ class Player extends RealObject {
             this.z = 0;
             this.can_splash = false;
         }
-
-
     }
 
     move(){
@@ -443,6 +435,8 @@ class Player extends RealObject {
             
             var x = UMI.toPixel(Camera.translationX(this.x))+windowWidth/2;
             var y = UMI.toPixel(Camera.translationY(this.y))+windowHeight/2;
+
+            this.forceVector = new Vector2D(mouseX-x,mouseY-y).getUnitaryVector();
 
             
             var AB = new Vector2D(mouseX-x,mouseY-y).getUnitaryVector();

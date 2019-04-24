@@ -10,6 +10,7 @@ class EnemyAway extends RealObject {
     radio = EnemyAway.radio;
 
     normalSpeed = 20;
+    actualSpeed;
     
 
     rotationCompt;
@@ -17,23 +18,17 @@ class EnemyAway extends RealObject {
 
     constructor(x, y) {
         super(x, y);
-        this.setSpeed();
         
         this.forceVector = new Vector2D(pj.x-x, pj.y-x).getUnitaryVector();
         this.directionVector = new Vector2D(x-pj.x, y-pj.y);
-    
 
         this.rotationCompt = 0;
 
-    }
+        this.actualSpeed = this.normalSpeed;
 
-    setSpeed(){
-        this.speed = UMI.getSpeed(this.normalSpeed);
-        this.rotationDelay = UMI.getDelay(0.05);
     }
 
     moveFront(){
-
         this.x += this.directionVector.x*this.speed;
         this.y += this.directionVector.y*this.speed;
     }
@@ -52,25 +47,22 @@ class EnemyAway extends RealObject {
 
         if(distanceToPlayer < pj.radio){
             enemiesAway.destroy( this.index_in_main_array );
-        }
-
-        else if (distanceToPlayer < this.distanceToRunAway){
+        } else if (distanceToPlayer < this.distanceToRunAway){
             this.forceVector = vectorToPlayer.getUnitaryVector();
-            this.speed = UMI.getSpeed(Math.random() * (120 - 80) + 80);
-        } else if(distanceToPlayer > this.maxDistance) {
+            this.actualSpeed = Math.random() * (120 - 80) + 80;
+        } else if (distanceToPlayer > this.maxDistance) {
             enemiesAway.destroy( this.index_in_main_array );
         } else {
             if (this.rotationCompt > 0) {
                 this.rotationCompt--;
             } else {
-                this.speed = UMI.getSpeed(this.normalSpeed);
+                this.actualSpeed = this.normalSpeed;
                 var randomAngle = Math.random()*(Math.PI/180)*2 - PI/180;
                 this.last_rotation = randomAngle;
                 this.rotationCompt = Math.floor(Math.random()*180);
             }
             this.forceVector.rotate(this.last_rotation);
         }
-
 
         this.directionVector.x += this.forceVector.x/this.rotationDelay;
         this.directionVector.y += this.forceVector.y/this.rotationDelay;
@@ -79,11 +71,15 @@ class EnemyAway extends RealObject {
 
 
         this.moveFront();
+    }
 
+    setSpeed(){
+        this.speed = UMI.getSpeed(this.actualSpeed) * (CURRENT_FPS/60);
+        this.rotationDelay = UMI.getDelay(0.05);
     }
 
     update() {
-        
+        this.setSpeed();
         this.move();
     }
 

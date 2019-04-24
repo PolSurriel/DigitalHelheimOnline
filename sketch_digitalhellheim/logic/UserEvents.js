@@ -263,11 +263,29 @@ if(!isMobileDevice()){
         }
 
 
-        
-        if(testModeActive && e.keyCode == 49) pause = !pause;
-
-
-
+        if (testModeActive) {
+            switch(e.keyCode) {
+                case 80:
+                    pause = !pause;
+                    break;
+                case 97:
+                    console.log("Current FPS: "+10+" fps");
+                    UMI.setFrameRate(10);
+                    break;
+                case 98:
+                    console.log("Current FPS: "+20+" fps");
+                    UMI.setFrameRate(20);
+                    break;
+                case 99:
+                    console.log("Current FPS: "+30+" fps");
+                    UMI.setFrameRate(30);
+                    break;
+                case 102:
+                    console.log("Current FPS: "+60+" fps");
+                    UMI.setFrameRate(60);
+                    break;
+            }
+        }
     }
 
     playing_onkeyup = function (e){

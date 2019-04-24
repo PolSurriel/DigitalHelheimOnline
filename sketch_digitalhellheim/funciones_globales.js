@@ -119,7 +119,13 @@ function testMode(){
     +getRandomChoice()
   -Camera.zoom(n/-n)
   
-  Press '1' to pause and resume the game execution.
+  Press 'P' to pause and resume the game execution.
+
+  To change FPS press:
+    '1' -> 10 fps
+    '2' -> 20 fps
+    '3' -> 30 fps
+    '6' -> 60 fps
   
   Game pause is not available in online modes`);
 

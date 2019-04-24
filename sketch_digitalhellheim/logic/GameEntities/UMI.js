@@ -52,6 +52,7 @@ class UMI {
 
     static getSpeed(umi){
         return umi/CURRENT_FPS;
+        // return umi/this.FPS;
     }
 
     static getDelay(umi){
@@ -61,10 +62,6 @@ class UMI {
     static setFrameRate(fps){
         this.FPS = fps;
         frameRate(this.FPS);
-
-        this.dynamicObjects.forEach(obj => {
-            obj.setSpeed();
-        });
     }
 
     static updateZoom(){

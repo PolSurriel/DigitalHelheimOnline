@@ -37,10 +37,14 @@ function setup(){
 
     setInterval(() => {
       
-      CURRENT_FPS = FPS_COUNT;
+      CURRENT_FPS = FPS_COUNT*10;
       FPS_COUNT = 0;
 
-    }, 1000);
+      // to debug
+      // print("--------------------------|\t"+Math.abs(pj.x - pj.lastXSecond));      
+      // pj.lastXSecond = pj.x;
+
+    }, 100);
 
     
 }
@@ -60,6 +64,9 @@ function draw(){
   }
 
   FPS_COUNT ++;
+
+  // to debug
+  // print(UMI.FPS+"\n"+CURRENT_FPS+"\n"+FPS_COUNT);
 
   textFont(PIXEL_ARIAL);
   textSize(10);
