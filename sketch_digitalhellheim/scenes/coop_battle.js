@@ -47,12 +47,31 @@ function coop_battle_update(){
     littleLightnings.update();
     boss.update();
 
-    
+   
+    var x = pj.x - boss.x;
+    var y = pj.y - boss.y;
+    if ( Collider2D.detector.circleToPolygon( x, y, pj.radio*2, boss.poly_arm1) ){
+        
+        
+    }
+    if ( Collider2D.detector.circleToPolygon( x, y, pj.radio *2, boss.poly_arm2) ){
+        
+
+    }
+    if ( Collider2D.detector.circleToPolygon( x, y, pj.radio*2, boss.poly_base) ){
+        
+
+    }
+    if ( Collider2D.detector.circleToPolygon( x, y, pj.radio*2, boss.poly_head) ){
+        
+
+    }
+
+
 
     var isTrue = false;
     var colPoints = new Array();
     var motors = [motor1, motor2, motor3];
-
     
     for (let i = 0; i < motors.length; i++) {
         var dist = new Vector2D(pj.x-motors[i].x,pj.y-motors[i].y).getMagnitude();
@@ -248,9 +267,29 @@ function coop_battle_draw(){
 
 }
 
+var beats = 0;
 function invoke_a_boss(){
     boss.invoking = true;
     a7_song.loop();
+
+    setTimeout(() => {
+        boss.dancing = true;
+        setInterval(() => {
+            beats++;
+            boss.dance_normal = true;
+            if (beats % 5 == 4){
+                beats++;
+                boss.dance_normal = false;
+                //PAM
+            }
+            boss.dance_direction = beats % 2;
+
+            
+        }, 451);
+            
+
+        
+    }, 15000);
     
     
 }

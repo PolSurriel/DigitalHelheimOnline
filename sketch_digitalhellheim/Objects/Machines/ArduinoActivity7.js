@@ -15,6 +15,7 @@ class ArduinoActivity7 {
         [50,-93],[43,-85],[43,-30],[-43,-30],
         [-43,-85],[-48,-93],[-95,-93]
     ];
+    base_pos = {x:0,y:0};
     
     poly_arm1 = [
         [-42,47],[-37,43],[-37,-70],
@@ -35,12 +36,16 @@ class ArduinoActivity7 {
         [-118, -374]
     ];
 
+    arm_pos = {x:0,y:0};
+
 
     poly_head = [
         [-25,64],[20,64],
         [20,-90],[-25,-90],
         [-25,64]
     ];
+
+    head_pos = {x:0,y:0};
 
     invoking_state = {
         img:0,
@@ -50,7 +55,8 @@ class ArduinoActivity7 {
 
     }
     
-
+    x;
+    y;
     constructor (x, y){
         this.x = x;
         this.y = y;
@@ -185,7 +191,6 @@ class ArduinoActivity7 {
         }else if (this.invoked){
             this.draw_boss();
             this.draw_health();
-            this.drawCollider();
         }
 
     }
@@ -193,9 +198,9 @@ class ArduinoActivity7 {
     draw_boss(){
 
         translate(-UMI.toPixel(this.size)/2, -UMI.toPixel(this.size)/2);
-        image(boss_base,  UMI.toPixel(Camera.translationX (this.x)), UMI.toPixel(Camera.translationY(this.y)),UMI.toPixel(this.size), UMI.toPixel(this.size) );
-        image(boss_brazos,  UMI.toPixel(Camera.translationX (this.x)), UMI.toPixel(Camera.translationY(this.y)),UMI.toPixel(this.size), UMI.toPixel(this.size) );
-        image(boss_cabeza,  UMI.toPixel(Camera.translationX (this.x)), UMI.toPixel(Camera.translationY(this.y)),UMI.toPixel(this.size), UMI.toPixel(this.size) );
+        image(boss_base,  UMI.toPixel(Camera.translationX (this.x+this.base_pos.x)), UMI.toPixel(Camera.translationY(this.y+this.base_pos.y)),UMI.toPixel(this.size), UMI.toPixel(this.size) );
+        image(boss_brazos,  UMI.toPixel(Camera.translationX (this.x+this.arm_pos.x)), UMI.toPixel(Camera.translationY(this.y+this.arm_pos.y)),UMI.toPixel(this.size), UMI.toPixel(this.size) );
+        image(boss_cabeza,  UMI.toPixel(Camera.translationX (this.x+this.head_pos.x)), UMI.toPixel(Camera.translationY(this.y+this.head_pos.x)),UMI.toPixel(this.size), UMI.toPixel(this.size) );
         translate(UMI.toPixel(this.size)/2, UMI.toPixel(this.size)/2);
         
     }
