@@ -206,7 +206,7 @@ function preload() {
     font_p = loadFont('https://fonts.gstatic.com/s/newscycle/v14/CSR54z1Qlv-GDxkbKVQ_dFsvWNRevA.ttf');
 
     TIMES_NEW_ARIAL = loadFont('fuentes/timesnewarial.ttf');
-    PIXEL_ARIAL = loadFont('fuentes/PIXEARG_.ttf');
+    PIXEL_ARIAL = loadFont('fuentes/Pixeltype.ttf');
 
 
     chispa_sound = new Sound('./src/chispas.mp3', 0.02);
