@@ -62,8 +62,10 @@ function draw(){
   FPS_COUNT ++;
 
   textFont(PIXEL_ARIAL);
-  textSize(10);
-  text( CURRENT_FPS+'FPS' , -innerWidth/2+40, -innerHeight/2+10);
+  // textSize(10);
+  // text( CURRENT_FPS+'FPS' , -innerWidth/2+40, -innerHeight/2+10);
+  textSize(40);
+  text( CURRENT_FPS+'FPS' , -innerWidth/2+90, -innerHeight/2+20);
 
   
   

@@ -19,7 +19,6 @@ class Lightning {
 
         var perpendicular = new Vector2D(this.point2.y - this.point1.y, -(this.point2.x - this.point1.x)).getUnitaryVector();
 
-
         var s = 0;
         var direction = 1;
         var changeEach = Math.floor(Math.random() * 30) + 10;
@@ -122,8 +121,7 @@ class Lightning {
                 
             }
 
-        }
-        
+        }       
 
         
         //drawingContext.shadowBlur = Math.floor(Math.random() * (30 - 10) ) + 10;

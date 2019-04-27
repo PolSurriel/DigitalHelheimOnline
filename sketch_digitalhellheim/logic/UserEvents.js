@@ -269,18 +269,22 @@ if(!isMobileDevice()){
                     pause = !pause;
                     break;
                 case 97:
+                case 49:
                     console.log("Current FPS: "+10+" fps");
                     UMI.setFrameRate(10);
                     break;
                 case 98:
+                case 50:
                     console.log("Current FPS: "+20+" fps");
                     UMI.setFrameRate(20);
                     break;
                 case 99:
+                case 51:
                     console.log("Current FPS: "+30+" fps");
                     UMI.setFrameRate(30);
                     break;
                 case 102:
+                case 54:
                     console.log("Current FPS: "+60+" fps");
                     UMI.setFrameRate(60);
                     break;

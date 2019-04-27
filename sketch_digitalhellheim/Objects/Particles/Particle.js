@@ -2,7 +2,7 @@ class Particle {
 
     z;
 
-    size = 2;
+    size = new SuperVector( 2,  2, 0);
     opacity = 200;
 
     reference_x = 0;
@@ -48,7 +48,9 @@ class Particle {
 
 
     update(){
-        this.size -= this.sizeSpeed;
+        var toScaleX = (this.size.x - UMI.getSpeed(this.sizeSpeed))/this.size.x;
+        var toScaleY = (this.size.y - UMI.getSpeed(this.sizeSpeed))/this.size.y;
+        this.size.scale(toScaleX, toScaleY, 1);
         this.opacity -= this.opSpeed;
 
     }
@@ -71,16 +73,16 @@ class Particle {
         var x_on_draw = UMI.toPixel(Camera.translationX(RP.x+this.reference_x));
         var y_on_draw = UMI.toPixel(Camera.translationY(RP.y+this.reference_y));
 
-        var size_on_draw = UMI.toPixel(this.size);
+        var size_on_draw_x = UMI.toPixel(this.size.x);
+        var size_on_draw_y = UMI.toPixel(this.size.y);
 
         var points = [ 
-            new SuperVector( x_on_draw-size_on_draw-this.z, y_on_draw-size_on_draw-this.z, 0),
-            new SuperVector( x_on_draw+size_on_draw+this.z, y_on_draw-size_on_draw-this.z, 0),
-            new SuperVector( x_on_draw+size_on_draw+this.z, y_on_draw+size_on_draw+this.z, 0),
-            new SuperVector( x_on_draw-size_on_draw-this.z, y_on_draw+size_on_draw+this.z, 0)
+            new SuperVector( x_on_draw-size_on_draw_x-this.z, y_on_draw-size_on_draw_y-this.z, 0),
+            new SuperVector( x_on_draw+size_on_draw_x+this.z, y_on_draw-size_on_draw_y-this.z, 0),
+            new SuperVector( x_on_draw+size_on_draw_x+this.z, y_on_draw+size_on_draw_y+this.z, 0),
+            new SuperVector( x_on_draw-size_on_draw_x-this.z, y_on_draw+size_on_draw_y+this.z, 0)
         ];
         
-
         points.forEach(point => {
             var old_x = point.x;
             var old_y = point.y;

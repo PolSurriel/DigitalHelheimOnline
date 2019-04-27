@@ -168,7 +168,7 @@ class Player extends RealObject {
                 
                 if(this.holding_on_draw[i] != null){
                 
-                    projectiles.addObj(new Projectile(this.holding_on_draw[i].x, this.holding_on_draw[i].y, new (this.holding_on_draw[i].x-this.x, this.holding_on_draw[i].y-this.y,true).getUnitaryVector()));
+                    projectiles.addObj(new Projectile(this.holding_on_draw[i].x, this.holding_on_draw[i].y, new Vector2D(this.holding_on_draw[i].x-this.x, this.holding_on_draw[i].y-this.y,true).getUnitaryVector()));
                     
                 }
             }
@@ -357,8 +357,8 @@ class Player extends RealObject {
     
             this.lighting.point1.w=1;
     
-            this.lighting.point1.translate(this.directionVector.x*-7, this.directionVector.y*-7, this.directionVector.z);
-            this.lighting.point1.translate(-this.directionVector.y*15, this.directionVector.x*15, this.directionVector.z);
+            this.lighting.point1.translate(this.directionVector.x*-7, this.directionVector.y*-7, 0);
+            this.lighting.point1.translate(-this.directionVector.y*15, this.directionVector.x*15, 0);
 
 
 

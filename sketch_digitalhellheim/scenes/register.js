@@ -18,6 +18,29 @@ var li_mode2 = 1;
 var li_speed = 100;
 var display_li = false;
 
+// var mBall = {
+//     position: new SuperVector(100, 100, 0),
+//     size:     new SuperVector( 20,  20, 0),
+// }
+
+// mBall.draw = function () {
+
+//     ellipse( 
+//         UMI.toPixel(Camera.translationX(this.position.x)), 
+//         UMI.toPixel(Camera.translationY(this.position.y)), 
+//         this.size.x, 
+//         this.size.y
+//     );
+
+//     ellipse( 
+//         UMI.toPixel(Camera.translationX(200)), 
+//         UMI.toPixel(Camera.translationY(200)), 
+//         5, 
+//         5
+//     );
+
+// }
+
 function register_setup(){
 
     menu_music.loop();
@@ -47,6 +70,19 @@ function getRndInteger(min, max) {
   }
 
 function register_update(){
+
+    // rotar entorno eje axis: ------------
+    // var axis = {x:200, y:200};
+    // var radians = 0.1;
+    // mBall.position.translate(0, 50, 0);
+    // mBall.position.rotateZ(radians);
+    // mBall.position.translate(axis.x, axis.y, 0);
+    // mBall.position.rotateAxisZ(axis, radians);
+
+
+    // scalar: -----------------
+    // mBall.size.scale(1.1, 1.1, 0);
+    
 
     li.update();
 
@@ -356,8 +392,4 @@ function register_draw(){
     
     textSize(UMI.toPixel(15));
     text('- Press ENTER to continue -', window.innerWidth/2, window.innerHeight/1.5);
-
-
-    
-
 }

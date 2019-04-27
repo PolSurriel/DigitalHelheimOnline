@@ -49,9 +49,9 @@ class SuperVector {
         this.x = x;
         this.y = y;
         this.z = z;
-    }
-
-    
+        // w = 1 porque es un vector 
+        this.w = 1;
+    }    
 
     getMagnitude(){
         return Math.sqrt(this.x*this.x+this.y*this.y+this.z*this.z);
@@ -80,100 +80,54 @@ class SuperVector {
         this.y = matrix[1];
         this.z = matrix[2];
 
-        
-
     }
 
-    multiply (matrix) {
-        this.assign(Matrix.GPUMultiplication4x4( 
-                matrix, this.getVectorMatrix()
-            ).toArray(gpu));
-    }
-
-    translate(tx,ty,tz){  
-        if(!isNaN(tx)){
-
-            this.assign(
-                Matrix.getTransform([0,0,0],
-                    Matrix.translate4x4( Matrix.getBasic4x4(),
-                        [
-                            1,0,0,tx,
-                            0,1,0,ty,
-                            0,0,1,tz,
-                            0,0,0, 1,
-
-                        ], this.x, this.y, this.z, this.w
-                    )             
-                )
-            );
-
-    }
+    translate(tx,ty,tz){
+        this.assign(
+            Matrix.multipy4x4Vector(
+                Matrix.getTranslationMatrix(tx,ty,tz),
+                this.x, this.y, this.z, this.w
+            )            
+        );
     }
 
 
-    scale(x,y,z){
-        this.multiply(  
-            [
-                [x,0,0,0],
-                [0,y,0,0],
-                [0,0,z,0],
-                [0,0,0,1]
-            ]
-        ); 
-
+    rotateAxisZ(axis, radians){
+        this.translate(-axis.x, -axis.y, 0);
+        this.rotateZ(radians);
+        this.translate(axis.x, axis.y, 0);
     }
 
-    rotateAroundX(radians){
-        var sin = Math.sin(radians);
-        var cos = Math.cos(radians);
-        
-        this.multiply(
-            [
-                [1, 0  , 0   , 0],
-                [0, cos, -sin, 0],
-                [0, sin, cos , 0],
-                [0, 0  , 0   , 1]
-            ]
-        ); 
-        
-    }
-
-    rotateAroundY(radians){
-        
-        var sin = Math.sin(radians);
-        var cos = Math.cos(radians);
-        
-        
-        this.multiply(  
-            [
-                [cos , 0, sin, 0],
-                [0   , 1, 0  , 0],
-                [-sin, 0, cos, 0],
-                [0   , 0, 0  , 1]
-            ]
-        ); 
+    scale(sx,sy,sz){
+        this.assign(
+            Matrix.multipy4x4Vector(
+                Matrix.getScalingMatrix(sx,sy,sz),
+                this.x, this.y, this.z, this.w
+            )            
+        );
     }
 
     rotateZ(radians){
-
-        var sin = Math.sin(radians);
-        var cos = Math.cos(radians);
-        
-        
         this.assign(
-            Matrix.getTransform([0,0,0],
-                Matrix.rotateZ(Matrix.getBasic4x4(),
-                [
-                    cos, -sin, 0, 0,
-                    sin,  cos, 0, 0,
-                    0  ,  0  , 1, 0,
-                    0  ,  0  , 0, 1
-                ],
-                this.x,this.y,this.z
-                )
-            )
+            Matrix.multipy4x4Vector(
+                Matrix.getRotationMatrix(Math.cos(radians),Math.sin(radians)),
+                this.x, this.y, this.z, this.w
+            )            
         );
     }
+
+    // rotateAxisZ(axis, radians){
+    //     var cos = Math.cos(radians);
+    //     var sin = Math.sin(radians);
+
+    //     var result = [
+    //         this.x*cos-this.y*sin+this.w*(-cos*axis.x+axis.x+sin*axis.y),
+    //         this.y*cos+this.x*sin+this.w*(-sin*axis.x-cos*axis.y+axis.y),
+    //         this.z
+    //     ];
+
+    //     this.assign(result);
+    // }
 
 }
 

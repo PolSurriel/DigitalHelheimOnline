@@ -1,6 +1,6 @@
 class Particle2 {
 
-    size = 2;
+    size = new SuperVector( 4,  4, 0);
     opacity = 200;
 
     sizeSpeed;
@@ -9,7 +9,7 @@ class Particle2 {
     orientation;
     
     force = new SuperVector(-2,-1,0);
-    upforce = new Vector2D(0,-1).getUnitaryVector();
+    upforce = new SuperVector(0,-1,0);
 
     position;
 
@@ -24,9 +24,8 @@ class Particle2 {
         this.opSpeed = 250;
 
         this.force.toUnitary2D();
-        this.force.w = 1;
-
-        this.upforce.y /= 100;
+        
+        this.upforce.scale(1,this.upforce.y/100,1);
         
     }
 
@@ -34,11 +33,14 @@ class Particle2 {
 
         var speed = UMI.getSpeed(this.speedMoving);
 
-        this.size -= UMI.getSpeed(this.sizeSpeed);
+        var toScaleX = (this.size.x - UMI.getSpeed(this.sizeSpeed))/this.size.x;
+        var toScaleY = (this.size.y - UMI.getSpeed(this.sizeSpeed))/this.size.y;
+        this.size.scale(toScaleX, toScaleY, 1);
+        
         this.opacity -= UMI.getSpeed(this.opSpeed);
         
         this.position.translate(this.force.x*speed, this.force.y*speed, 0);
-        this.force.translate(this.upforce.x, this.upforce.y);
+        this.force.translate(this.upforce.x, this.upforce.y, 0);
         this.force.toUnitary2D(); 
 
         if(this.opacity <= 0)
@@ -49,16 +51,6 @@ class Particle2 {
 
         var x_on_draw = window.innerWidth/2 + UMI.toPixel(this.position.x);
         var y_on_draw = UMI.toPixel(this.position.y);
-
-        var size_on_draw = UMI.toPixel(this.size);
-
-        var points = [ 
-            [x_on_draw-size_on_draw, y_on_draw-size_on_draw],
-            [x_on_draw+size_on_draw, y_on_draw-size_on_draw],
-            [x_on_draw+size_on_draw, y_on_draw+size_on_draw],
-            [x_on_draw-size_on_draw, y_on_draw+size_on_draw]
-        ];
-
         
         drawingContext.shadowOffsetX = 0;
         drawingContext.shadowOffsetY = 0;
@@ -69,14 +61,8 @@ class Particle2 {
         fill(255,255,255,this.opacity);
 
         stroke(0,0,0,this.opacity);
-    
-        beginShape();
-        vertex(points[0][0], points[0][1]);
-        vertex(points[1][0], points[1][1]);
-        vertex(points[2][0], points[2][1]);
-        vertex(points[3][0], points[3][1]);
-        vertex(points[0][0], points[0][1]);
-        endShape();
+
+        rect(x_on_draw, y_on_draw, UMI.toPixel(this.size.x), UMI.toPixel(this.size.y));
 
 
         fill(255);
