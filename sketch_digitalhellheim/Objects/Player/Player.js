@@ -355,30 +355,7 @@ class Player extends RealObject {
         this.last_x = this.x;
         this.last_y = this.y;
 
-        if(Keyboard.jump.pressed){
-            if(!this.jumping) {
-                Player.jump_init_sound.play();
-                this.jumping = true;
-                
-            }else {
-                if(this.can_splash){
-                    Player.jump_splash_sound.play();
-                }
-            }
-            
-            this.loading_splash = 0;
-
-            if(this.can_splash){
-                this.can_splash = false;
-                this.jumping = false;
-                this.jumpingSpeed = this.initialJumpingSpeed;
-                this.jumpingState = 0;
-                this.z = 0;
-                this.can_splash = false;
-            }
-
-            
-        }
+        
 
         if(this.jumping){
             this.jump();
@@ -495,6 +472,30 @@ class Player extends RealObject {
 
     move(){
 
+        if(Keyboard.jump.pressed){
+            if(!this.jumping) {
+                Player.jump_init_sound.play();
+                this.jumping = true;
+                
+            }else {
+                if(this.can_splash){
+                    Player.jump_splash_sound.play();
+                }
+            }
+            
+            this.loading_splash = 0;
+
+            if(this.can_splash){
+                this.can_splash = false;
+                this.jumping = false;
+                this.jumpingSpeed = this.initialJumpingSpeed;
+                this.jumpingState = 0;
+                this.z = 0;
+                this.can_splash = false;
+            }
+
+            
+        }
 
         if(!this.shield_active && !this.shooting){
             this.directionVector.x += this.forceVector.x/this.rotationDelay;

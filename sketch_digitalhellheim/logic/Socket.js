@@ -289,8 +289,6 @@ function activeMotorDamage(i){
 }
 
 function desactiveMotorDamage(i){
-
-
     socket.emit('motorDesactivation', {
         i:i
     });

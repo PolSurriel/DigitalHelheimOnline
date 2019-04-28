@@ -230,7 +230,7 @@ class ArduinoActivity7 {
 
         }else if (this.invoked){
             this.draw_boss();
-            this.draw_shield();
+            if(this.shield_active)this.draw_shield();
             this.draw_health();
             //this.drawCollider();
         }

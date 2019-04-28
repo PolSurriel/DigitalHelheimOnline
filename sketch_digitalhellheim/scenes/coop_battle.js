@@ -10,10 +10,22 @@ var invocation_has_been_called = false;
 
 var motorsDamage = [ false,false,false,false,false,false ];
 
+var time = {
+    sec:0,
+    min:10
+}
+
+function incrementTime(){
+    if (--time.sec < 0){
+        time.sec = 59;
+        time.min--;
+    }
+}
+
 function allDamageActive(){
 
-    for (let i = 0; i < array.length; i++) {
-        if(motorsDamage[i]) return false;
+    for (let i = 0; i < motorsDamage.length; i++) {
+        if(motorsDamage[i] == false) return false;
     }
 
     return true;
@@ -21,6 +33,10 @@ function allDamageActive(){
 
 window.el_punto = new Vector2D(0,0);
 function coop_battle_setup(){
+
+
+
+
     online = true;
     initSocket();
     window.onmousedown = online_playing_onmousedown; 
@@ -56,6 +72,20 @@ function coop_battle_setup(){
 }
 
 function coop_battle_update(){
+
+    if(!boss.invoked && allDamageActive()){
+        invoke_a_boss();
+    }
+
+
+    if(boss.shield_active && boss.in_floor && allDamageActive()){
+        boss.shield_active = false;
+        setTimeout(() => {
+            boss.shield_active = true;
+        }, 20 * 1000);
+
+    }
+
 
     if (boss.health <= 0){
         boss.invoked = false;
@@ -303,7 +333,7 @@ function coop_battle_update(){
             if (!boss.shield_active && damagenumbersControl % 20  == 1){
                 damagenumbers.addObj( new DamageNumber(point.x+ Math.random() * 50 -20,point.y - 10 - Math.random() * 30, 300 + Math.floor(Math.random()*77), true) );
                 boss.health -= UMI.getSpeed(damage_to_boss);
-                damageToA7(damage_to_boss);
+                damageToA7(UMI.getSpeed(damage_to_boss));
             }
         }else if (!boss.shield_active && Collider2D.detector.pointToCircle(point.x, point.y,boss.x,boss.y,180) ) {
 
@@ -421,15 +451,15 @@ function coop_battle_update(){
             if (!motors[i].damaging1Blocked) motors[i].damaging2 = false;
 
 
-            if(haveToAdviceDesactivation1 && motors[i].damaging1 == false ){
+            if(haveToAdviceDesactivation1 ){
                 if (i == 0)
-                   desactiveMotorDamage(1);
+                    desactiveMotorDamage(0);
                 else if (i == 1)
-                    desactiveMotorDamage(3);
+                    desactiveMotorDamage(2);
                 else if (i == 2)
-                    desactiveMotorDamage(5);
+                    desactiveMotorDamage(4);
             }
-            if(haveToAdviceDesactivation2 && motors[i].damaging2 == false ){
+            if(haveToAdviceDesactivation2 ){
                 if (i == 0)
                    desactiveMotorDamage(1);
                 else if (i == 1)
@@ -508,7 +538,7 @@ function coop_battle_draw(){
     textAlign(RIGHT);
     noStroke();
     textSize(2*10);
-    text('DigitalHelheim - ENTI-UB AA2 Álgebra 1º CDI Grupo A (Mañanas) / Alumnos: Pol Surriel y Eric Garcia',window.innerWidth/2.02,-window.innerHeight/2.05);
+    text('DigitalHelheim - ENTI-UB AA2 Algebra 1ro CDI Grupo A (Mananas) / Alumnos: Pol Surriel y Eric Garcia',window.innerWidth/2.02,-window.innerHeight/2.05);
 
     restorer.draw();
     damagenumbers.draw();
@@ -534,6 +564,21 @@ function coop_battle_draw(){
     );
 
     */
+
+
+   stroke(255);
+   fill(150,0,0);
+   textSize(UMI.toPixel(100));
+    textAlign(CENTER);
+
+   var txt = time.min+':'+time.sec; 
+   if (time.sec == 0) txt += '0';
+   if ((time.min < 10)) txt = '0'+txt; 
+   text(txt, UMI.toPixel(  0  ),UMI.toPixel(  -340  ));
+
+   textAlign(LEFT);
+
+
 }
 
 
@@ -542,6 +587,11 @@ var beats = 0;
 function invoke_a_boss(){
 
     if(!invocation_has_been_called){
+
+        setInterval(() => {
+            incrementTime();
+        }, 1000);
+
         shareA7Invocation();
         boss.invoking = true;
         a7_song.loop();
