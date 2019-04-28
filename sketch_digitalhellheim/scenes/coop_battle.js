@@ -73,6 +73,8 @@ function coop_battle_update(){
         restorer.following = true;
         restorer.inComing = true;
         pj.infected = true;
+
+        iGotTheRestorer();
     }
 
 
@@ -288,12 +290,12 @@ function coop_battle_update(){
         if ( Collider2D.detector.pointToCircle(point.x,point.y, 25+boss.poly_damage_point[0][0]+boss.x,boss.poly_damage_point[0][1]+boss.y, 15 ) ){
             damagenumbersControl += Math.floor(UMI.getSpeed(100));
 
-            if (damagenumbersControl % 20  == 1){
+            if (!boss.shield_active && damagenumbersControl % 20  == 1){
                 damagenumbers.addObj( new DamageNumber(point.x+ Math.random() * 50 -20,point.y - 10 - Math.random() * 30, 300 + Math.floor(Math.random()*77), true) );
                 boss.health -= UMI.getSpeed(damage_to_boss);
                 damageToA7(damage_to_boss);
             }
-        }else if ( Collider2D.detector.pointToCircle(point.x, point.y,boss.x,boss.y,180) ) {
+        }else if (!boss.shield_active && Collider2D.detector.pointToCircle(point.x, point.y,boss.x,boss.y,180) ) {
 
             damagenumbersControl += Math.floor(UMI.getSpeed(100));
 
@@ -444,6 +446,7 @@ function coop_battle_draw(){
         
     }
 
+    /*
     ellipse(  
         UMI.toPixel( Camera.translationX(el_punto.x) ) ,   
         UMI.toPixel( Camera.translationY(el_punto.y) ),
@@ -451,6 +454,7 @@ function coop_battle_draw(){
 
     );
 
+    */
 }
 
 

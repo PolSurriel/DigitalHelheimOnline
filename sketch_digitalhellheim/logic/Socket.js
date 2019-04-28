@@ -191,6 +191,23 @@ initSocket = function () {
         }
     });
 
+
+    
+    socket.on('heGotTheRestorer', function(data){
+        if(data.token != token){
+            for (let i = 0; i < online_players.length; i++) {
+                if(online_players[i] != null && online_players[i].token == data.playerToken){
+                    restorer.reference = online_players[i];
+                    restorer.following = true;
+                    restorer.inComing = true;
+                    
+                }
+                
+            }
+
+        }
+    });
+
     socket.on('youCantShoot', function(data){
         if(data.token != token){
             for (let i = 0; i < online_players.length; i++) {
@@ -248,6 +265,12 @@ function respawn(){
 
     sharePosition(pj.x,pj.y);
 
+}
+
+function iGotTheRestorer(){
+    socket.emit('iGotTheRestorer', {
+        token:token
+    });
 }
 
 function shareA7Invocation () {

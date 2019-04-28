@@ -67,7 +67,12 @@ io.on('connection', function(socket){
 
     // GAMEPLAY EVENTS
 
-    
+    socket.on('iGotTheRestorer',function (data) {
+        io.emit('heGotTheRestorer', { 
+            playerToken:data.token
+        });
+    });
+
     socket.on('damageToA7',function (data) {
         io.emit('damageToA7', { 
             playerToken:data.token,
