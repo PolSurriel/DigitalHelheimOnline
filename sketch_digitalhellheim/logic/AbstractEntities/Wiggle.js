@@ -28,7 +28,7 @@ class Wiggle {
 
         this.radio = radio;
 
-        this.direction = new Vector2D (Math.random() * 10, Math.random() * 10).getUnitaryVector();
+        this.direction = new Vector2D(Math.random() * 10, Math.random() * 10).getUnitaryVector();
 
         this.last_rotation = 0;
         this.rotationCompt = Math.floor(Math.random()*180);
@@ -56,9 +56,17 @@ class Wiggle {
         this.x += this.direction.x*(UMI.getSpeed(this.speed));
         this.y += this.direction.y*(UMI.getSpeed(this.speed));
         
-        
         var dist = AB.getMagnitude();
         AB = AB.getUnitaryVector();
+
+        // print("x: "+this.x+"\ny: "+this.y+
+        //     "\ndX> "+this.direction.x+
+        //     "\ndY> "+this.direction.y+
+        //     "\nABx> "+AB.x+
+        //     "\nABy> "+AB.y+
+        //     "\ndist: "+dist+
+        //     "\nspeed: "+UMI.getSpeed(this.speed)
+        //     );
         
         
         if(!isNaN(AB.x)){

@@ -135,8 +135,30 @@ function world_update(){
             
             for (let j = 0; j < hexagons.length; j++) {
                 if(hexagons[j] != null && projectiles[i] != null && Collider2D.detector.pointToCircle(projectiles[i].x, projectiles[i].y, hexagons[j].x, hexagons[j].y, 180)  && Collider2D.detector.circleToPolygon( projectiles[i].x, projectiles[i].y, projectiles[i].radio,hexagons[j].poly ) ){
-                    projectiles[i].direction.x = -projectiles[i].direction.x; 
-                    projectiles[i].direction.y = -projectiles[i].direction.y; 
+                    
+                    var founded = false;
+                    var x1,y1;
+                    var x2,y2;
+
+                    var polygon = hexagons[j].poly;
+                    var x_circle = projectiles[i].x;
+                    var y_circle = projectiles[i].y;
+                    var radio = projectiles[i].radio;
+
+                    for (let i=0, j = polygon.length -1; i < polygon.length && !founded; j = i++) {
+
+                        if ( Collider2D.detector.lineToCircle(polygon[i][0],polygon[i][1], polygon[j][0],polygon[j][1], x_circle,y_circle,radio)) {
+                            x1 = polygon[i][0];
+                            y1 = polygon[i][1];
+                            x2 = polygon[j][0];
+                            y2 = polygon[j][1];
+                            founded = true;
+                        }
+                    }
+
+                    var u = projectiles[i].direction;
+                    var v = new Vector2D(x2 - x1, y2 - y1);
+                    projectiles[i].direction = Vector2D.getReboundVector(u,v);
                     projectiles[i].rebounds++;
                 }
 

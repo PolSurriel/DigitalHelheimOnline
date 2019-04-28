@@ -444,14 +444,15 @@ class Player extends RealObject {
     
             this.lighting.point1.w=1;
     
-            this.lighting.point1.translate(this.directionVector.x*-7, this.directionVector.y*-7, this.directionVector.z);
-            this.lighting.point1.translate(-this.directionVector.y*15, this.directionVector.x*15, this.directionVector.z);
+            this.lighting.point1.translate(this.directionVector.x*-7, this.directionVector.y*-7, 0);
+            this.lighting.point1.translate(-this.directionVector.y*15, this.directionVector.x*15, 0);
 
 
 
             if(this.shooting) this.lighting.update();
 
         }
+
     }
 
     jump() {

@@ -1,6 +1,6 @@
 class Particle3 {
 
-    size = 4;
+    size = new SuperVector( 4,  4, 0);
     opacity = 200;
 
     sizeSpeed;
@@ -9,7 +9,7 @@ class Particle3 {
     orientation;
     
     force = new SuperVector(-2,-1,0);
-    upforce = new Vector2D(0,1).getUnitaryVector();
+    upforce = new SuperVector(0,1,0);
 
     position;
 
@@ -25,7 +25,7 @@ class Particle3 {
         this.opSpeed = 250;
 
         this.force.toUnitary2D();    
-        this.upforce.y = this.upforce.y/100;
+        this.upforce.scale(1,this.upforce.y/100,1);
         
     }
 
@@ -35,15 +35,19 @@ class Particle3 {
         
 
         this.position.translate(this.force.x*speed, this.force.y*speed, 0);        
-        this.force.translate(this.upforce.x/100, this.upforce.y);
+        this.force.translate(this.upforce.x/100, this.upforce.y, 0);
         this.force.toUnitary2D();
         
-        
+        var toScaleX = (this.size.x - UMI.getSpeed(this.sizeSpeed))/this.size.x;
+        var toScaleY = (this.size.y - UMI.getSpeed(this.sizeSpeed))/this.size.y;
+        this.size.scale(toScaleX, toScaleY, 1);
 
-        this.size -= UMI.getSpeed(this.sizeSpeed);
         this.opacity -= UMI.getSpeed(this.opSpeed);
-        if(this.upforce.x < 10) this.upforce.x++;
-        else this.upforce.x = 10;
+        if(this.upforce.x < 10) {
+            this.upforce.translate(1,0,0);
+        } else {
+            this.upforce.translate(10,0,0);                        
+        }
      
 
         if(this.opacity <= 0)
@@ -54,9 +58,6 @@ class Particle3 {
 
         var x_on_draw = UMI.toPixel(this.position.x);
         var y_on_draw = UMI.toPixel(this.position.y);
-
-        var size_on_draw = UMI.toPixel(this.size);
-
         
         drawingContext.shadowOffsetX = 0;
         drawingContext.shadowOffsetY = 0;
@@ -67,7 +68,7 @@ class Particle3 {
         fill(0,0,0,this.opacity);
         stroke(0,0,0,this.opacity);
         
-        ellipse(x_on_draw, y_on_draw, size_on_draw, size_on_draw);
+        ellipse(x_on_draw, y_on_draw, UMI.toPixel(this.size.x), UMI.toPixel(this.size.y));
 
 
         fill(255);

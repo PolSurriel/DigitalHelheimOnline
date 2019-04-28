@@ -10,6 +10,8 @@ class Projectile extends RealObject {
 
     radio = EnemyAway.radio;
 
+    size = new SuperVector(this.radio*2, this.radio*2, 0);
+
     closed = false;
 
     following = false;
@@ -20,11 +22,10 @@ class Projectile extends RealObject {
 
         this.destroyEnemy = destroyEnemy;
 
-        if(destroyEnemy == true){
-            this.radio *= 4;
+        if(destroyEnemy){
+            this.size.scale(4,4,1);
+            this.radio = this.size.x/2;
         }
-
-        
 
         //UMI.realObjects.addObj(this);
         //UMI.LogicObjects.addObj(this);
@@ -56,8 +57,7 @@ class Projectile extends RealObject {
             }  
 
         }
-      
-
+        
     }
 
     draw(){
@@ -68,7 +68,7 @@ class Projectile extends RealObject {
         else
             fill('orange');
         
-        ellipse(UMI.toPixel(Camera.translationX(this.x)),UMI.toPixel(Camera.translationY(this.y)),this.radio*2,this.radio*2);
+        ellipse(UMI.toPixel(Camera.translationX(this.x)),UMI.toPixel(Camera.translationY(this.y)),this.size.x,this.size.y);
     }
 
     destroy(){
