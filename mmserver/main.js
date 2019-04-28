@@ -67,6 +67,14 @@ io.on('connection', function(socket){
 
     // GAMEPLAY EVENTS
 
+    socket.on('throwRestorer',function (data) {
+        io.emit('throwRestorer', { 
+            playerToken:data.token,
+            force:data.force,
+            position:data.position
+        });
+    });
+
     socket.on('iGotTheRestorer',function (data) {
         io.emit('heGotTheRestorer', { 
             playerToken:data.token

@@ -241,6 +241,22 @@ initSocket = function () {
         }
     });
 
+    socket.on('throwRestorer', function (data) {
+        if(data.murder != token){
+            if(data.killedToken != token){
+                
+                restorer.following = false;
+                restorer.inComing = false;
+                clearInterval(restorer.contdown_interval);
+                restorer.reference = false;
+                restorer.contdown = 5;
+                restorer.force = data.force
+                restorer.speed = 300;
+
+            }
+        }
+    });
+
 
     socket.on('a7invoke', function (data) {
         invoke_a_boss();
@@ -265,6 +281,14 @@ function respawn(){
 
     sharePosition(pj.x,pj.y);
 
+}
+
+function throwRestorer(force, position){
+    socket.emit('throwRestorer', {
+        token:token,
+        force:force,
+        position:position
+    });
 }
 
 function iGotTheRestorer(){

@@ -147,6 +147,7 @@ class Player extends RealObject {
             clearInterval(restorer.contdown_interval);
             restorer.reference = false;
             restorer.contdown = 5;
+
         }
         
         this.infected = false;
@@ -281,6 +282,9 @@ class Player extends RealObject {
             restorer.contdown = 5;
             restorer.force = Vector2D.createVectoByAngle(this.orientation).getUnitaryVector();
             restorer.speed = 300;
+            
+            throwRestorer(restorer.force, {x:restorer.x, y:restorer.y});
+
             setTimeout(() => {
                 this.inmune = false;
             }, 7000);

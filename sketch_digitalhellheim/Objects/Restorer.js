@@ -52,7 +52,7 @@ class Restorer{
 
                 if( magnitude <= 3 ){
                     this.inComing = false;
-                    damagenumbers.addObj( new DamageNumber (this.x, this.y,this.contdown+1,false,true) );
+                    if(this.reference == pj)damagenumbers.addObj( new DamageNumber (this.x, this.y,this.contdown+1,false,true) );
                     this.contdown_interval = setInterval(() => {
                         
                         if ( this.contdown == 0 ){
@@ -61,7 +61,7 @@ class Restorer{
                             this.reference.die();
                             clearInterval(this.contdown_interval);
                         }else{
-                            damagenumbers.addObj( new DamageNumber (this.x, this.y,this.contdown,false,true) );
+                            if(this.reference == pj)damagenumbers.addObj( new DamageNumber (this.x, this.y,this.contdown,false,true) );
                             this.contdown --;
                         }
                         

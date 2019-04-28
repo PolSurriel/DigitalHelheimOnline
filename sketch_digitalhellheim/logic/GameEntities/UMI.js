@@ -52,8 +52,8 @@ class UMI {
 
     static getSpeed(umi){
         var r = umi/CURRENT_FPS;
-        return (r != Infinity ) ? r:0;
-        // return umi/this.FPS;
+        return (r != Infinity &&  r < Number.MAX_VALUE  ) ? r:0;
+        
     }
 
     static getDelay(umi){
