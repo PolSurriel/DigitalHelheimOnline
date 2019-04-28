@@ -73,6 +73,11 @@ function coop_battle_setup(){
 
 function coop_battle_update(){
 
+    if (time.min == 0 && time.sec <= 0){
+
+        location.reload();
+    }
+
     if(!boss.invoked && allDamageActive()){
         invoke_a_boss();
     }
@@ -573,6 +578,7 @@ function coop_battle_draw(){
 
    var txt = time.min+':'+time.sec; 
    if (time.sec == 0) txt += '0';
+   else if ((time.sec+'').length == 1) txt = time.min+':0'+time.sec;
    if ((time.min < 10)) txt = '0'+txt; 
    text(txt, UMI.toPixel(  0  ),UMI.toPixel(  -340  ));
 
