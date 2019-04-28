@@ -503,49 +503,77 @@ function ball_update(){
 
 
     //throne colision
+    // dalt
     if( Collider2D.detector.circleToRect(ball.x,ball.y,ball.radio,10,-230,70,30)){
-        
+        // var u = ball.forceVector;
+        // var v = Player.FORCE_BOTTOM;
+        // var forceRebound = Vector2D.getReboundVector(u,v);
+        // ball.setForce(forceRebound);
         ball.setForce(new Vector2D ( ball.last_x-ball.x , ball.last_y-ball.y ));
         ball.x = ball.last_x;
         ball.y = ball.last_y;
+        print("AAAAA");
     }
 
     if(Collider2D.detector.circleToRect(ball.x,ball.y,ball.radio,10,-230,30,80)){
-        
+        // var u = ball.forceVector;
+        // var v = Player.FORCE_BOTTOM;
+        // var forceRebound = Vector2D.getReboundVector(u,v);
+        // ball.setForce(forceRebound);
         ball.setForce(new Vector2D ( ball.last_x-ball.x , ball.last_y-ball.y ));
         ball.x = ball.last_x;
         ball.y = ball.last_y;
+        print("EEEEEEE");
+
     }
 
     if(Collider2D.detector.circleToRect(ball.x,ball.y,ball.radio,60,-230,20,80)){
-        
+        // var u = ball.forceVector;
+        // var v = Player.FORCE_RIGHT;
+        // var forceRebound = Vector2D.getReboundVector(u,v);
+        // ball.setForce(forceRebound);
         ball.setForce(new Vector2D ( ball.last_x-ball.x , ball.last_y-ball.y ));
         ball.x = ball.last_x;
         ball.y = ball.last_y;
+        print("OOOOOOO");
+
     }
 
 
     //wall collision
     if(UMI.toPixel(ball.x) <= -window.innerWidth/2+UMI.toPixel(ball.radio) ){
-        ball.setForce(new Vector2D ( ball.last_x-ball.x , ball.last_y-ball.y ));
-        ball.x = ball.last_x;
-        ball.y = ball.last_y;
+        var u = ball.forceVector;
+        var v = Player.FORCE_BOTTOM;
+        var forceRebound = Vector2D.getReboundVector(u,v);
+        ball.setForce(forceRebound);
 
     }else if(UMI.toPixel(ball.x) >= window.innerWidth/2-UMI.toPixel(ball.radio)){
-        ball.setForce(new Vector2D ( ball.last_x-ball.x , ball.last_y-ball.y ));
-        ball.x = ball.last_x;
-        ball.y = ball.last_y;
+        var u = ball.forceVector;
+        var v = Player.FORCE_BOTTOM;
+        var forceRebound = Vector2D.getReboundVector(u,v);
+        ball.setForce(forceRebound);
+        // ball.setForce(new Vector2D ( ball.last_x-ball.x , ball.last_y-ball.y ));
+        // ball.x = ball.last_x;
+        // ball.y = ball.last_y;
     }
 
     if(UMI.toPixel(ball.y) <= -window.innerHeight/2+UMI.toPixel(ball.radio) ){
-        ball.setForce(new Vector2D ( ball.last_x-ball.x , ball.last_y-ball.y ));
-        ball.x = ball.last_x;
-        ball.y = ball.last_y;
+        var u = ball.forceVector;
+        var v = Player.FORCE_RIGHT;
+        var forceRebound = Vector2D.getReboundVector(u,v);
+        ball.setForce(forceRebound);
+        // ball.setForce(new Vector2D ( ball.last_x-ball.x , ball.last_y-ball.y ));
+        // ball.x = ball.last_x;
+        // ball.y = ball.last_y;
 
     }else if(UMI.toPixel(ball.y) >= window.innerHeight/2-UMI.toPixel(ball.radio)){
-        ball.setForce(new Vector2D ( ball.last_x-ball.x , ball.last_y-ball.y ));
-        ball.x = ball.last_x;
-        ball.y = ball.last_y;
+        var u = ball.forceVector;
+        var v = Player.FORCE_RIGHT;
+        var forceRebound = Vector2D.getReboundVector(u,v);
+        ball.setForce(forceRebound);
+        // ball.setForce(new Vector2D ( ball.last_x-ball.x , ball.last_y-ball.y ));
+        // ball.x = ball.last_x;
+        // ball.y = ball.last_y;
     }
 
 

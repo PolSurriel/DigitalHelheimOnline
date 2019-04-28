@@ -52,6 +52,26 @@ class Vector2D {
         this.y *= -1;
     }
 
+    static getProjetionVector(u,v){
+        var numerador = u.x * v.x + u.y * v.y;
+        var denominador = v.getMagnitude() * v.getMagnitude();
+        var escalar = numerador / denominador;
+
+        return new Vector2D(escalar * v.x, escalar * v.y);
+    }
+
+    static getNormalVector(u,v){
+        var projection = Vector2D.getProjetionVector(u,v);
+        return new Vector2D(u.x - projection.x, u.y - projection.y);
+    }
+
+    static getReboundVector(u,v){
+        var projectionVector = Vector2D.getProjetionVector(u,v);
+        var normalVector = Vector2D.getNormalVector(u,v);
+        
+        return new Vector2D(projectionVector.x - normalVector.x, projectionVector.y - normalVector.y);
+    }
+
     static getAngleBetweenTwoVectors(u,v){
         var magnitudeU = u.getMagnitude();
         var magnitudeV = v.getMagnitude();
@@ -61,6 +81,4 @@ class Vector2D {
     static createVectoByAngle(angle){
         return new Vector2D(Math.cos(angle),Math.sin(angle));
     }
-
-
 }
