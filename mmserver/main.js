@@ -75,6 +75,18 @@ io.on('connection', function(socket){
         });
     });
 
+    socket.on('motorActivation',function (data) {
+        io.emit('motorActivation', { 
+            i:data.i
+        });
+    });
+
+    socket.on('motorDesactivation',function (data) {
+        io.emit('motorDesactivation', { 
+            i:data.i
+        });
+    });
+
     socket.on('iGotTheRestorer',function (data) {
         io.emit('heGotTheRestorer', { 
             playerToken:data.token

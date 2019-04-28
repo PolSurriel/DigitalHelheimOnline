@@ -179,6 +179,14 @@ initSocket = function () {
         }
     });
 
+    socket.on('motorActivation', function(data){
+        motorsDamage[data.i] = true;
+    });
+
+    socket.on('motorDesactivation', function(data){
+        motorsDamage[data.i] = false;
+    });
+
     socket.on('youCanShoot', function(data){
         if(data.token != token){
             for (let i = 0; i < online_players.length; i++) {
@@ -273,6 +281,18 @@ initSocket = function () {
 
 
 // Envios
+
+function activeMotorDamage(i){
+    socket.emit('motorActivation', {
+        i:i
+    });
+}
+
+function desactiveMotorDamage(i){
+    socket.emit('motorDesactivation', {
+        i:i
+    });
+}
 
 function respawn(){
     socket.emit('respawn', {

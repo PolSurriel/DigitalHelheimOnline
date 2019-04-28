@@ -8,6 +8,16 @@ var damage_to_boss;
 
 var invocation_has_been_called = false;
 
+var motorsDamage = [ false,false,false,false,false,false ];
+
+function allDamageActive(){
+
+    for (let i = 0; i < array.length; i++) {
+        if(motorsDamage[i]) return false;
+    }
+
+    return true;
+}
 
 window.el_punto = new Vector2D(0,0);
 function coop_battle_setup(){
@@ -330,9 +340,16 @@ function coop_battle_update(){
     
     if(pj.shooting){
         for (let i = 0; i < motors.length; i++) {
+
+            var haveToAdviceActivation1 = !motors[i].damaging1; 
+            var haveToAdviceActivation2 = !motors[i].damaging2;
+
+            var haveToAdviceDesactivation1 = motors[i].damaging1; 
+            var haveToAdviceDesactivation2 = motors[i].damaging2; 
             
             motors[i].damaging2 = false;
             motors[i].damaging1 = false;
+
 
             if (Collider2D.detector.pointToCircle(pj.lighting.point2.x,pj.lighting.point2.y, 
                 motors[i].point1[0],motors[i].point1[1], 
@@ -340,6 +357,7 @@ function coop_battle_update(){
                     pj.lighting.point2.x = motors[i].point1[0];
                     pj.lighting.point2.y = motors[i].point1[1];
                     motors[i].damaging1 = true;
+
                     break;
 
 
@@ -349,9 +367,27 @@ function coop_battle_update(){
                         pj.lighting.point2.x = motors[i].point2[0];
                         pj.lighting.point2.y = motors[i].point2[1];
                         motors[i].damaging2 = true;
+
                         break;
 
             }
+
+            if(haveToAdviceActivation1 && motors[i].damaging1 == true ){
+                activeMotorDamage(i);
+            }
+            if(haveToAdviceActivation2 && motors[i].damaging2 == true ){
+                activeMotorDamage(i+1);
+            }
+
+            if(haveToAdviceDesactivation1 && motors[i].damaging1 == false ){
+                desactiveMotorDamage(i);
+            }
+            if(haveToAdviceDesactivation2 && motors[i].damaging2 == false ){
+                desactiveMotorDamage(i+1);
+            }
+
+            
+
         }
 
     }else {
