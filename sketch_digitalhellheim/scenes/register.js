@@ -344,17 +344,17 @@ function register_draw(){
     
     drawingContext.shadowBlur = 0;
     textFont(PIXEL_ARIAL);
-    textSize(UMI.toPixel(25));
+    textSize(UMI.toPixel(50));
     text('Display name:', window.innerWidth/2, window.innerHeight/1.9);
     
     
-    textSize(UMI.toPixel(40));
+    textSize(UMI.toPixel(80));
     if(cursorON)
         text(name+'|', window.innerWidth/2, window.innerHeight/1.7);
     else
         text(name+' ', window.innerWidth/2, window.innerHeight/1.7);
     
-    textSize(UMI.toPixel(15));
+    textSize(UMI.toPixel(30));
     text('- Press ENTER to continue -', window.innerWidth/2, window.innerHeight/1.5);
 
 

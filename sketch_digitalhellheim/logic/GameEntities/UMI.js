@@ -51,7 +51,8 @@ class UMI {
     }
 
     static getSpeed(umi){
-        return umi/CURRENT_FPS;
+        var r = umi/CURRENT_FPS;
+        return (r != Infinity ) ? r:0;
         // return umi/this.FPS;
     }
 

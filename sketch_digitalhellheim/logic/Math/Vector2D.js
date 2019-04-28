@@ -62,5 +62,8 @@ class Vector2D {
         return new Vector2D(Math.cos(angle),Math.sin(angle));
     }
 
+    getAngle360(){
+        return Math.atan(this.y/this.x);
+    }
 
 }

@@ -15,7 +15,7 @@ io.on('connection', function(socket){
     setInterval(function() {
         for (var i = 0; i < players.length; i++) {
             if(io.sockets.sockets[players[i].socketId] == undefined){
-                io.sockets.emit('playerLeft',{id: players[i].id, text:'Un jugador ha abandonado la sesion'});
+                io.sockets.emit('playerLeft',{playerToken: players[i].id, text:'Un jugador ha abandonado la sesion'});
                 players.splice(i, 1);
                 
             }
@@ -68,7 +68,43 @@ io.on('connection', function(socket){
     // GAMEPLAY EVENTS
 
     
+    socket.on('damageToA7',function (data) {
+        io.emit('damageToA7', { 
+            playerToken:data.token,
+            damage:data.damage
+        });
+    });
 
+    socket.on('killMe',function (data) {
+        io.emit('die', { 
+            playerToken:data.token,
+        });
+    });
+
+    socket.on('iCanShoot',function (data) {
+        io.emit('youCanShoot', { 
+            playerToken:data.token,
+        });
+    });
+    socket.on('iCantShoot',function (data) {
+        io.emit('youCantShoot', { 
+            playerToken:data.token,
+        });
+    });
+
+    socket.on('a7invoke',function (data) {
+        io.emit('a7invoke', { 
+            playerToken:data.token,
+        });
+    });
+
+    socket.on('respawn',function (data) {
+        io.emit('respawn', { 
+            playerToken:data.token,
+        });
+    });
+
+    
     socket.on('unlockMe',function (data) {
         io.emit('unlockPlayer', { 
             playerToken:data.token,

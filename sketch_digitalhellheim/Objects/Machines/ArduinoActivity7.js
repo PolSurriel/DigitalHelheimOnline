@@ -1,12 +1,20 @@
+var m1Dir = new Vector2D (-2,-2).getUnitaryVector();
+var m2Dir = new Vector2D (2,-2).getUnitaryVector();
+var m3Dir = new Vector2D (0,1).getUnitaryVector();
+
 class ArduinoActivity7 {
 
 
     invoked = false;
     invoking = false;
+    in_floor = false;
 
     health = 100;
 
     size = 200;
+
+    shield_active = false;
+
 
     poly_base = [
         [-95,-93],[-100,-85],[-100,85],[-95,93],
@@ -45,13 +53,20 @@ class ArduinoActivity7 {
         [-25,64]
     ];
 
+    poly_damage_point = [
+        [-25,64],[20,64],
+        [20,60],[-25,60],
+        [-25,64]
+    ];
+
     head_pos = {x:0,y:0};
 
     invoking_state = {
         img:0,
         blackBar:0,
         redBar:0,
-        asset:900
+        asset:900,
+        mState:0,
 
     }
     
@@ -103,18 +118,42 @@ class ArduinoActivity7 {
 
     invoke(){
 
+        this.invoking_state.mState += UMI.getSpeed(300);
+        var mSpeed = 0;
+
+        if (this.invoking_state.mState < 300){
+            mSpeed = this.invoking_state.mState;
+        }else{
+            mSpeed = 300 - (this.invoking_state.mState-300);
+            if (mSpeed < 0) mSpeed = 0;
+        }
+
+
+        motor1.x += m1Dir.x * UMI.getSpeed(mSpeed);
+        motor1.y += m1Dir.y * UMI.getSpeed(mSpeed);
+        motor2.x += m2Dir.x * UMI.getSpeed(mSpeed);
+        motor2.y += m2Dir.y * UMI.getSpeed(mSpeed);
+        motor3.x += m3Dir.x * UMI.getSpeed(mSpeed);
+        motor3.y += m3Dir.y * UMI.getSpeed(mSpeed);
+
+        motor1.updatePoly(m1Dir.x * UMI.getSpeed(mSpeed), m1Dir.y * UMI.getSpeed(mSpeed));
+        motor2.updatePoly(m2Dir.x * UMI.getSpeed(mSpeed), m2Dir.y * UMI.getSpeed(mSpeed));
+        motor3.updatePoly(m3Dir.x * UMI.getSpeed(mSpeed), m3Dir.y * UMI.getSpeed(mSpeed));
+
         if(this.invoking_state.asset > 0){
             this.invoking_state.asset -= UMI.getSpeed(1000);
 
             
         }else {
             this.invoking_state.asset = 0;
+            this.in_floor = true;
         }
 
         if(this.invoking_state.img >= 110){
             if( this.invoking_state.blackBar < 255 ) this.invoking_state.blackBar += UMI.getSpeed(120);
             else{
              this.invoking_state.blackBar = 255;
+             
 
             }    
         
@@ -124,6 +163,7 @@ class ArduinoActivity7 {
                  this.invoking_state.redBar = 100;
                     this.invoking = false;
                     this.invoked = true;
+                    this.shield_active = true;
                 }  
             }
         }
@@ -169,7 +209,7 @@ class ArduinoActivity7 {
 
         fill(255,255,255,this.invoking_state.blackBar);
         noStroke();
-        textSize(UMI.toPixel(20));
+        textSize(2*UMI.toPixel(20));
         text('Arduino Activity 7', -innerWidth/3 + UMI.toPixel(320), innerHeight/2 - UMI.toPixel(110));
 
     }
@@ -190,9 +230,20 @@ class ArduinoActivity7 {
 
         }else if (this.invoked){
             this.draw_boss();
+            this.draw_shield();
             this.draw_health();
+            //this.drawCollider();
         }
 
+    }
+
+    draw_shield(){
+
+        var size = this.size*1.8;
+        translate(-UMI.toPixel(size)/2, -UMI.toPixel(size)/2);
+        image(boss_shield,  UMI.toPixel(Camera.translationX (this.x)), UMI.toPixel(Camera.translationY(this.y)),UMI.toPixel(size), UMI.toPixel(size) );
+        translate(UMI.toPixel(size)/2, UMI.toPixel(size)/2);
+        
     }
 
     draw_boss(){
@@ -213,12 +264,15 @@ class ArduinoActivity7 {
         line(-innerWidth/3 + UMI.toPixel(100),innerHeight/2- UMI.toPixel(80), innerWidth/3, innerHeight/2 - UMI.toPixel(80) );
         stroke(221, 0, 29, this.invoking_state.blackBar);
         strokeWeight(10);
-        line(-innerWidth/3 + UMI.toPixel(100),innerHeight/2- UMI.toPixel(80), innerWidth/3, innerHeight/2 - UMI.toPixel(80) );
+        line(-innerWidth/3 + UMI.toPixel(100),
+             innerHeight/2- UMI.toPixel(80), 
+             map(this.health, 0, 100,-innerWidth/3 + UMI.toPixel(100),  innerWidth/3), 
+             innerHeight/2 - UMI.toPixel(80) );
         strokeWeight(1);
 
         fill(255,255,255,this.invoking_state.blackBar);
         noStroke();
-        textSize(UMI.toPixel(20));
+        textSize(2*UMI.toPixel(20));
         text('Arduino Activity 7', -innerWidth/3 + UMI.toPixel(320), innerHeight/2 - UMI.toPixel(110));
 
     }

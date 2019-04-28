@@ -33,22 +33,18 @@ class Wiggle {
         this.last_rotation = 0;
         this.rotationCompt = Math.floor(Math.random()*180);
 
-
-        this.speed = UMI.getSpeed(10);
+        this.speed = 10;
 
     }
 
 
     update(){
 
-        this.last_x = this.x;
-        this.last_y = this.y;
-
         if (this.rotationCompt > 0) {
             this.rotationCompt--;
         } else {
-            var randomAngle = Math.random()*(Math.PI/60)*2 - PI/60;
-            this.last_rotation = randomAngle;
+            var randomAngle = Math.random()*(PI/60)*2 - PI/60;
+            this.last_rotation = UMI.getSpeed(randomAngle*60);
             this.rotationCompt = Math.floor(Math.random()*180);
         }
 
@@ -57,8 +53,8 @@ class Wiggle {
         
         this.direction.rotate(this.last_rotation);
         
-        this.x += this.direction.x*(this.speed);
-        this.y += this.direction.y*(this.speed);
+        this.x += this.direction.x*(UMI.getSpeed(this.speed));
+        this.y += this.direction.y*(UMI.getSpeed(this.speed));
         
         
         var dist = AB.getMagnitude();
@@ -68,7 +64,6 @@ class Wiggle {
         if(!isNaN(AB.x)){
             this.x += AB.x*(dist/20);
             this.y += AB.y*(dist/20);
-
         }
 
 

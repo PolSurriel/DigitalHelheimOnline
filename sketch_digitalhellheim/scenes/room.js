@@ -1,5 +1,8 @@
 function room_setup(){
 
+    pj.y = 0;
+    pj.x = 0;
+
     window.onmousedown = playing_onmousedown; 
     window.onmouseup   = playing_onmouseup; 
     window.onkeydown   = playing_onkeydown; 
@@ -55,12 +58,12 @@ function room_gameloop(){
         room_draw();
         background(0,0,0,255-game_over_status);
         textAlign(CENTER,CENTER);
-        textSize(UMI.toPixel(50));
+        textSize(2*UMI.toPixel(50));
         if(game_over_status < 150) fill(255,255,255,game_over_status);
         else fill(255,255,255,150-(game_over_status*1.2-140));
         translate(-window.innerWidth/2,-window.innerHeight/2);
         text('Haha! Helheim is no place for mercy.', UMI.toPixel(window.innerWidth/2.5), UMI.toPixel(window.innerHeight/2));
-        textSize(UMI.toPixel(200));
+        textSize(2*UMI.toPixel(200));
         text('<3', UMI.toPixel(window.innerWidth/2.5), UMI.toPixel(window.innerHeight/3));
 
         game_over_status+= game_over_speed*3;
@@ -337,14 +340,14 @@ function room_draw(){
     image(stairs,UMI.toPixel(140),UMI.toPixel(-100), UMI.toPixel(40),UMI.toPixel(40));
     fill(255);
     noStroke();
-    textSize(UMI.toPixel(12));
+    textSize(2*UMI.toPixel(12));
     textAlign(CENTER, CENTER);  
     text('Go to Helheim', UMI.toPixel(160), UMI.toPixel(-50));
 
     image(stairs,UMI.toPixel(100+140),UMI.toPixel(-100), UMI.toPixel(40),UMI.toPixel(40));
     fill(255);
     noStroke();
-    textSize(UMI.toPixel(12));
+    textSize(2*UMI.toPixel(12));
     textAlign(CENTER, CENTER);  
     text('Coop. Battle', UMI.toPixel(100+160), UMI.toPixel(-50));
 
@@ -362,7 +365,7 @@ function room_draw(){
     rect(UMI.toPixel(-300), UMI.toPixel(0), UMI.toPixel(20), UMI.toPixel(20));
 
     
-    textSize(UMI.toPixel(12));
+    textSize(2*UMI.toPixel(12));
 
     (dificultad == 1) ? fill(0,255,0, 100):fill(255,0,0, 100);
     text('    Noob', UMI.toPixel(-350), UMI.toPixel(-130));
@@ -388,9 +391,9 @@ function room_draw(){
      if(!pj.pu_speed_caught){
         image(power_up_speed_img_layer_1, UMI.toPixel(pu_1_w.x),UMI.toPixel(pu_1_w.y), UMI.toPixel(40),UMI.toPixel(40));
         image(power_up_speed_img_layer_2, UMI.toPixel(pu_1_w_l2.x),UMI.toPixel(pu_1_w_l2.y), UMI.toPixel(40),UMI.toPixel(40));
-         textSize(UMI.toPixel(12));
+         textSize(2*UMI.toPixel(12));
          text('Speed x1.5', UMI.toPixel(-190), UMI.toPixel(125));
-         textSize(UMI.toPixel(9));
+         textSize(2*UMI.toPixel(9));
          text('Price: 1.000', UMI.toPixel(-190), UMI.toPixel(138));
      }
  
@@ -398,9 +401,9 @@ function room_draw(){
      if(!pj.pu_doubleproj_caught){
          image(power_up_duplicate_img_layer_1, UMI.toPixel(pu_2_w.x),UMI.toPixel(pu_2_w.y), UMI.toPixel(40),UMI.toPixel(40));
          image(power_up_duplicate_img_layer_2, UMI.toPixel(pu_2_w_l2.x),UMI.toPixel(pu_2_w_l2.y), UMI.toPixel(40),UMI.toPixel(40));
-         textSize(UMI.toPixel(12));
+         textSize(2*UMI.toPixel(12));
          text('Duplicate projectiles', UMI.toPixel(0), UMI.toPixel(125));
-         textSize(UMI.toPixel(9));
+         textSize(2*UMI.toPixel(9));
          text('Price: 5.000', UMI.toPixel(0), UMI.toPixel(138));
      }
  
@@ -408,14 +411,14 @@ function room_draw(){
      if(!pj.pu_health_caught){
          image(power_up_health_img_layer_1, UMI.toPixel(pu_3_w.x),UMI.toPixel(pu_3_w.y), UMI.toPixel(40),UMI.toPixel(40));
          image(power_up_health_img_layer_2, UMI.toPixel(pu_3_w_l2.x),UMI.toPixel(pu_3_w_l2.y), UMI.toPixel(40),UMI.toPixel(40));
-         textSize(UMI.toPixel(12));
+         textSize(2*UMI.toPixel(12));
          text('Health x2', UMI.toPixel(190), UMI.toPixel(125));
-         textSize(UMI.toPixel(9));
+         textSize(2*UMI.toPixel(9));
          text('Price: 10.000', UMI.toPixel(190), UMI.toPixel(138));
      }
  
      if(pj.pu_health_caught && pj.pu_doubleproj_caught && pj.pu_speed_caught && pj.pu_shield_caught){
-        textSize(UMI.toPixel(40));
+        textSize(2*UMI.toPixel(40));
         fill(255,255,255,100);
         text('Oh, did they ever stand a chance?', UMI.toPixel(130), UMI.toPixel(138));
     }
@@ -424,18 +427,18 @@ function room_draw(){
     if(!pj.pu_shield_caught){
         image(power_up_shield_img_layer_1, UMI.toPixel(pu_4_w.x),UMI.toPixel(pu_4_w.y), UMI.toPixel(40),UMI.toPixel(40));
         image(power_up_shield_img_layer_2, UMI.toPixel(pu_4_w_l2.x),UMI.toPixel(pu_4_w_l2.y), UMI.toPixel(40),UMI.toPixel(40));
-        textSize(UMI.toPixel(12));
+        textSize(2*UMI.toPixel(12));
         text('Unlimited shield', UMI.toPixel(-100), UMI.toPixel(225));
-        textSize(UMI.toPixel(9));
+        textSize(2*UMI.toPixel(9));
         text('Price: 700', UMI.toPixel(-100), UMI.toPixel(238));
     }
 
     if(!pj.pu_random_caught && !(pj.pu_health_caught && pj.pu_doubleproj_caught && pj.pu_speed_caught && pj.pu_shield_caught)){
         image(power_up_random_img_layer_1, UMI.toPixel(pu_5_w.x),UMI.toPixel(pu_5_w.y), UMI.toPixel(40),UMI.toPixel(40));
         image(power_up_random_img_layer_2, UMI.toPixel(pu_5_w_l2.x),UMI.toPixel(pu_5_w_l2.y), UMI.toPixel(40),UMI.toPixel(40));
-        textSize(UMI.toPixel(12));
+        textSize(2*UMI.toPixel(12));
         text('Random choice', UMI.toPixel(100), UMI.toPixel(225));
-        textSize(UMI.toPixel(9));
+        textSize(2*UMI.toPixel(9));
         text('Price: 500', UMI.toPixel(100), UMI.toPixel(238));
     }
     
@@ -449,7 +452,7 @@ function room_draw(){
     fill('red');
     textAlign(RIGHT);
     noStroke();
-    textSize(UMI.toPixel(40));
+    textSize(2*UMI.toPixel(40));
     text('x'+score+'    ',window.innerWidth/2,-window.innerHeight/2.2);
 
     if(display_controls && !game_over){
@@ -460,8 +463,32 @@ function room_draw(){
         fill('white');
         textAlign(LEFT);
         noStroke();
-        textSize(UMI.toPixel(20));
-        text('Controls: \n Movement keys: A W D S / arrow keys \n Jump: Space \n Splash: Space (while jumping) \n Click: Active shield',UMI.toPixel(0),UMI.toPixel(0));
+        textSize(2*UMI.toPixel(20));
+        var y = -100;
+        var x = -15;
+        var increment = 25;;
+        text('Controls:',UMI.toPixel(x),UMI.toPixel(y));
+        
+        textSize(1.2*UMI.toPixel(20));
+        y+= increment;
+
+        text(' Jump: Space',UMI.toPixel(x),UMI.toPixel(y));
+        y+= increment;
+
+        text(' Left Click: Shoot',UMI.toPixel(x),UMI.toPixel(y));
+        y+= increment;
+        
+        text(' Right Click: Active shield',UMI.toPixel(x),UMI.toPixel(y));
+        y+= increment;
+
+        text(' Movement keys: A W D S / arrow keys',UMI.toPixel(x),UMI.toPixel(y));
+        y+= increment;
+        
+        text(' Splash: Space (while jumping)',UMI.toPixel(x),UMI.toPixel(y));
+        y+= increment;
+        
+        
+        
         
         
 
@@ -474,7 +501,7 @@ function room_draw(){
     fill(255,255,255,100);
     textAlign(RIGHT);
     noStroke();
-    textSize(12);
+    textSize(2*12);
     text('DigitalHelheim - ENTI-UB AA2 Álgebra 1º CDI Grupo A (Mañanas) / Alumnos: Pol Surriel y Eric Garcia',window.innerWidth/2.02,-window.innerHeight/2.05);
 
     //textAlign(LEFT);

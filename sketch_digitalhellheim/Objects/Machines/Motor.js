@@ -1,6 +1,7 @@
 class Motor {
 
     poly = [[14,15], [3,64],[30,78],[85,78],[112,64], [101,15],[90,10],[90,5],[25,5], [25,10],[14,15]];
+    original_poly;
     aiming = 0;
 
     point1 = [22,15];
@@ -11,10 +12,14 @@ class Motor {
     damaging1 = false;
     damaging2 = false;
 
+    damaging1Blocked = false;
+    damaging2Blocked = false;
+
     constructor (x, y, orientation){
         this.x = x;
         this.y = y;
         this.orientation = orientation;
+        this.original_poly = this.poly;
 
         this.sx = UMI.toPixel(228.0/2);
         this.sy = UMI.toPixel(178.6/2);
@@ -40,6 +45,18 @@ class Motor {
 
     }
 
+    updatePoly(x, y){
+
+        this.point1[0] += x;
+        this.point1[1] += y;
+        this.point2[0] += x;
+        this.point2[1] += y;
+
+        for (let i = 0; i < this.poly.length; i++) {
+            this.poly[i][0] += x;
+            this.poly[i][1] += y;
+        }
+    }
 
     update(){
 

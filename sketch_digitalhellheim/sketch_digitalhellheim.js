@@ -37,8 +37,8 @@ function setup(){
 
     setInterval(() => {
       
-      CURRENT_FPS = FPS_COUNT*10;
-      FPS_COUNT = 0;
+      CURRENT_FPS = (FPS_COUNT-1)*10;
+      FPS_COUNT = 1;
 
     }, 100);
 
@@ -62,7 +62,7 @@ function draw(){
   FPS_COUNT ++;
 
   textFont(PIXEL_ARIAL);
-  textSize(10);
+  textSize(20);
   text( CURRENT_FPS+'FPS' , -innerWidth/2+40, -innerHeight/2+10);
 
   

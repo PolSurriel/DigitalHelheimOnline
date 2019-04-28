@@ -4,6 +4,8 @@ var socket;
 var id;
 var token;
 
+var online = false;
+
 var SERVER_IP = 'localhost';
 
 
@@ -127,6 +129,19 @@ initSocket = function () {
         }
     });
 
+    socket.on('playerLeft', function(data){
+        if(data.token != token){
+            for (let i = 0; i < online_players.length; i++) {
+                if(online_players[i] != null && online_players[i].token == data.playerToken){
+                    
+                    online_players.destroy(i);
+                }
+                
+            }
+
+        }
+    });
+
     socket.on('unlockPlayer', function(data){
         if(data.token != token){
             for (let i = 0; i < online_players.length; i++) {
@@ -139,7 +154,54 @@ initSocket = function () {
         }
     });
 
+    socket.on('die', function(data){
+        if(data.token != token){
+            for (let i = 0; i < online_players.length; i++) {
+                if(online_players[i] != null && online_players[i].token == data.playerToken){
+                    online_players[i].alive = false;
+                }
+                
+            }
+
+        }
+    });
     
+
+    socket.on('respawn', function(data){
+        if(data.token != token){
+            for (let i = 0; i < online_players.length; i++) {
+                if(online_players[i] != null && online_players[i].token == data.playerToken){
+                    online_players[i].alive = true;
+                }
+                
+            }
+
+        }
+    });
+
+    socket.on('youCanShoot', function(data){
+        if(data.token != token){
+            for (let i = 0; i < online_players.length; i++) {
+                if(online_players[i] != null && online_players[i].token == data.playerToken){
+                    online_players[i].can_shoot = true;
+                }
+                
+            }
+
+        }
+    });
+
+    socket.on('youCantShoot', function(data){
+        if(data.token != token){
+            for (let i = 0; i < online_players.length; i++) {
+                if(online_players[i] != null && online_players[i].token == data.playerToken){
+                    online_players[i].can_shoot = false;
+                }
+                
+            }
+
+        }
+    });
     
     socket.on('kill', function (data) {
         if(data.murder != token){
@@ -152,6 +214,22 @@ initSocket = function () {
             }
         }
     });
+
+    socket.on('damageToA7', function (data) {
+        if(data.murder != token){
+            if(data.killedToken != token){
+                boss.health -= data.damage;
+
+            }
+        }
+    });
+
+
+    socket.on('a7invoke', function (data) {
+        invoke_a_boss();
+    });
+
+    
     
 
     setInterval(() => {
@@ -163,8 +241,41 @@ initSocket = function () {
 
 // Envios
 
+function respawn(){
+    socket.emit('respawn', {
+        token:token
+    });
+
+    sharePosition(pj.x,pj.y);
+
+}
+
+function shareA7Invocation () {
+    socket.emit('a7invoke', {
+        token:token
+    });
+}
+
+function shareDeath(){
+    socket.emit('killMe', {
+        token:token
+    });
+}
+
+
 function unlockMyselfToOthers () {
     socket.emit('unlockMe', {
+        token:token
+    });
+}
+
+function iCanShoot () {
+    socket.emit('iCanShoot', {
+        token:token
+    });
+}
+function iCantShoot () {
+    socket.emit('iCantShoot', {
         token:token
     });
 }
@@ -175,6 +286,13 @@ function shareLightningPos(point){
         token:token
     });
 
+}
+
+function damageToA7(damage){
+    socket.emit('damageToA7', {
+        damage:damage,
+        token:token
+    });
 }
 
 

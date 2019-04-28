@@ -19,8 +19,8 @@ class EnemyAway extends RealObject {
     constructor(x, y) {
         super(x, y);
         
-        this.forceVector = new Vector2D(pj.x-x, pj.y-x).getUnitaryVector();
-        this.directionVector = new Vector2D(x-pj.x, y-pj.y);
+        this.forceVector = new Vector2D(pj.x-x, pj.y-y).getUnitaryVector();
+        this.directionVector = new Vector2D(pj.x-x, pj.y-y);
 
         this.rotationCompt = 0;
 
@@ -47,9 +47,11 @@ class EnemyAway extends RealObject {
 
         if(distanceToPlayer < pj.radio){
             enemiesAway.destroy( this.index_in_main_array );
+            pj.incrementEnergy(pj.increment_on_grab_away);
+
         } else if (distanceToPlayer < this.distanceToRunAway){
             this.forceVector = vectorToPlayer.getUnitaryVector();
-            this.actualSpeed = Math.random() * (120 - 80) + 80;
+            this.actualSpeed = 150;
         } else if (distanceToPlayer > this.maxDistance) {
             enemiesAway.destroy( this.index_in_main_array );
         } else {

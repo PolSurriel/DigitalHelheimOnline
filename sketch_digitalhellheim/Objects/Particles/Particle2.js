@@ -39,7 +39,7 @@ class Particle2 {
         
         this.position.translate(this.force.x*speed, this.force.y*speed, 0);
         this.force.translate(this.upforce.x, this.upforce.y);
-        this.force.toUnitary2D(); 
+        this.force.toUnitary2D();
 
         if(this.opacity <= 0)
             title_particles.destroy(this.index_in_main_array);

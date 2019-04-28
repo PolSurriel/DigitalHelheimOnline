@@ -1,12 +1,24 @@
 var canmove = true;
 class Player extends RealObject {
 
+    alive = true;
+    infected = false;
     
+    inmune = false;
+
+    they_know_icanshoot = true;
+    they_know_icantshoot = false;
+
     pu_speed_caught = false;
     pu_doubleproj_caught = false;
     pu_health_caught = false;
     pu_shield_caught = false;
     pu_random_caught = false; 
+
+    increment_on_grab_away = 10;
+    energy_increment_infected = function () {return UMI.getSpeed(40)};
+
+    energy = 0;
 
     last_x;
     last_y;
@@ -17,6 +29,7 @@ class Player extends RealObject {
 
     render_blur = true;
 
+    energy_dec_speed = 25;
 
     health = 1;
 
@@ -46,8 +59,12 @@ class Player extends RealObject {
 
     fixedParticles = new Array();
 
+    max_energy = 100;
+
     static mano_abierta; 
     static mano_cerrada;
+
+    respawn_countdown = 5;
     
     static mano_abierta_pu; 
     static mano_cerrada_pu;
@@ -55,6 +72,8 @@ class Player extends RealObject {
     hand_closed = true;
 
     shield_active = false;
+
+    respawn_interval;
 
     fall = false;
 
@@ -120,6 +139,41 @@ class Player extends RealObject {
 
     }
 
+    die (){
+
+        if(restorer.reference == this){
+            restorer.following = false;
+            restorer.inComing = false;
+            clearInterval(restorer.contdown_interval);
+            restorer.reference = false;
+            restorer.contdown = 5;
+        }
+        
+        this.infected = false;
+        this.alive = false;
+
+        this.x = Math.random() * 1400 - 700;
+        this.y = 300;
+
+        this.respawn_interval = setInterval(() => {
+            this.respawn_countdown--;
+            if (this.respawn_countdown == 0){
+                this.respawn_countdown = 5;
+                this.alive = true;
+                clearInterval(this.respawn_interval);
+            }
+
+        }, 1000);
+
+
+
+    }
+
+    incrementEnergy(value){
+        this.energy += value;
+        if ( this.energy > 100) this.energy = 100;
+    }
+
     setSpeed(){
         this.speed = UMI.getSpeed(100);
         this.rotationDelay = UMI.getDelay(0.05);
@@ -168,8 +222,9 @@ class Player extends RealObject {
                 
                 if(this.holding_on_draw[i] != null){
                 
-                    projectiles.addObj(new Projectile(this.holding_on_draw[i].x, this.holding_on_draw[i].y, new (this.holding_on_draw[i].x-this.x, this.holding_on_draw[i].y-this.y,true).getUnitaryVector()));
-                    
+                    //projectiles.addObj(new Projectile(this.holding_on_draw[i].x, this.holding_on_draw[i].y, new (this.holding_on_draw[i].x-this.x, this.holding_on_draw[i].y-this.y,true).getUnitaryVector()));
+                    enemiesAway.addObj( new EnemyAway (this.holding_on_draw[i].x, this.holding_on_draw[i].y) );
+
                 }
             }
 
@@ -179,12 +234,60 @@ class Player extends RealObject {
         }
 
         this.shield_active = Mouse.right.clicked && (!this.jumping || this.pu_shield_caught);
-        this.shooting = Mouse.left.clicked && (!this.jumping || this.pu_shield_caught);
+        this.shooting = this.energy > 0  && (Mouse.left.clicked && (!this.jumping || this.pu_shield_caught));
 
+        if (this.shooting){
+           this.energy -= UMI.getSpeed(this.energy_dec_speed);
+           if (this.energy < 0){
+                this.energy = 0;
+                
+           }  
+        }
+
+        if (online && this.energy > 0 && !this.they_know_icanshoot){
+            this.they_know_icantshoot = false;
+            this.they_know_icanshoot = true;
+            iCanShoot();
+
+        }
+
+        else if(online && this.energy <= 0 && !this.they_know_icantshoot){
+            this.they_know_icantshoot = true;
+            this.they_know_icanshoot = false;
+            iCantShoot();
+            
+
+        }
     }
 
     update(){
+        if (this.alive){
+            this.alive_update();
+        }else {
+            
+        }
+    }
+
+    alive_update(){
+
+        if ( this.infected && (this.shooting || this.shield_active)){
+            this.infected = false;
+            this.inmune = true;
+
+            restorer.following = false;
+            restorer.inComing = false;
+            clearInterval(restorer.contdown_interval);
+            restorer.reference = false;
+            restorer.contdown = 5;
+            restorer.force = Vector2D.createVectoByAngle(this.orientation).getUnitaryVector();
+            restorer.speed = 300;
+            setTimeout(() => {
+                this.inmune = false;
+            }, 7000);
+        }
         
+        if(!( this.x < Number.MAX_VALUE )) this.x = 0;
+        if(!( this.y < Number.MAX_VALUE )) this.y = 0;
         if(!( this.orientation < Number.MAX_VALUE )) this.orientation = 0;
         if(!( this.directionVector.x < Number.MAX_VALUE )) this.directionVector.x = 0;
         if(!( this.directionVector.y < Number.MAX_VALUE )) this.directionVector.y = 0;
@@ -269,6 +372,8 @@ class Player extends RealObject {
                 this.z = 0;
                 this.can_splash = false;
             }
+
+            
         }
 
         if(this.jumping){
@@ -288,7 +393,8 @@ class Player extends RealObject {
             for (let i = 0; i < this.holding_on_draw.length; i++) {
                 
                 if (this.holding_on_draw[i] != null) {
-                    projectiles.addObj(new Projectile(this.holding_on_draw[i].x, this.holding_on_draw[i].y, new Vector2D(this.holding_on_draw[i].x-this.x, this.holding_on_draw[i].y-this.y,true).getUnitaryVector()));
+                    enemiesAway.addObj( new EnemyAway (this.holding_on_draw[i].x, this.holding_on_draw[i].y) );
+                    //projectiles.addObj(new Projectile(this.holding_on_draw[i].x, this.holding_on_draw[i].y, new Vector2D(this.holding_on_draw[i].x-this.x, this.holding_on_draw[i].y-this.y,true).getUnitaryVector()));
                 }
             }
 
@@ -460,12 +566,18 @@ class Player extends RealObject {
         }
 
         this.directionVector.convertToUnitary();
-        //this.mouse_vector = new Vector2D(mouseX-x,mouseY-y).getUnitaryVector();
+        this.mouse_vector = new Vector2D(mouseX-x,mouseY-y).getUnitaryVector();
 
         
     }
 
-    draw(){
+    draw () {
+        if(this.alive){
+            this.alive_draw();
+        }
+    }
+
+    alive_draw(){
         
         drawingContext.shadowBlur = 0;
         if(this.shooting)
@@ -537,6 +649,30 @@ class Player extends RealObject {
             });
         }
         
+        var firstAngle = this.orientation + HALF_PI + 0.4;
+
+        if(this.energy > 0){
+
+            noFill();
+            stroke(80,255,0,150);
+            strokeWeight(4);
+            arc(UMI.toPixel( Camera.translationX(this.x) ),
+            UMI.toPixel( Camera.translationY(this.y) ),
+            60, 
+            60, firstAngle, firstAngle + map(this.energy, 0, this.max_energy, 0, 1.2));
+            strokeWeight(1);
+        }
+
+        if (this.inmune){
+            noStroke();
+
+            fill(255);
+    
+            textSize(UMI.toPixel(20));
+            text('inmune', UMI.toPixel(Camera.translationX(this.x)), UMI.toPixel(Camera.translationY(this.y+30)));
+        }
+
+
     }
 
     drawVectors(){

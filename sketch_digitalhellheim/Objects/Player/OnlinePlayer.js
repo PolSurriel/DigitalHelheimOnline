@@ -6,6 +6,8 @@ class OnlinePlayer extends Player {
 
     name;
 
+    alive = true;
+
     constructor(name,token, x, y){
         super(x,y);
         this.token = token;
@@ -19,6 +21,8 @@ class OnlinePlayer extends Player {
         this.render_blur = false;
 
         this.lighting.render_blur = false;
+
+        this.can_shoot = false;
     }
 
     mousCkeck(){
@@ -45,7 +49,7 @@ class OnlinePlayer extends Player {
         }
 
         this.shield_active = this.controller.mRight.clicked && (!this.jumping || this.pu_shield_caught);
-        this.shooting = this.controller.mLeft.clicked && (!this.jumping || this.pu_shield_caught);
+        this.shooting = this.can_shoot  && (this.controller.mLeft.clicked && (!this.jumping || this.pu_shield_caught));
 
     }
 
@@ -147,13 +151,16 @@ class OnlinePlayer extends Player {
     draw(){
 
 
-        drawingContext.shadowBlur = 0;
-        textSize(UMI.toPixel(12));
-        fill(255);
-        noStroke();
-        text(this.name, UMI.toPixel(Camera.translationX(this.x)), UMI.toPixel(Camera.translationY(this.y-14))); 
+        if(this.alive){
+            super.draw();
+            drawingContext.shadowBlur = 0;
+            textSize(UMI.toPixel(22));
+            fill(255);
+            noStroke();
+            text(this.name, UMI.toPixel(Camera.translationX(this.x)), UMI.toPixel(Camera.translationY(this.y-14))); 
         
-        super.draw();
+        }
+
 
     }
 

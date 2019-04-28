@@ -12,7 +12,8 @@ function world_setup(){
     pj.portal_y = 0;
 
     pj.z = 0;
-
+    pj.y = 0;
+    pj.x = 0;
     
     particles.setAllNull();
     pj.fixedParticles.setAllNull();
@@ -223,11 +224,7 @@ function world_update(){
                 for (let i = 0; i < hexagons.length && positionValid; i++) {
                     if (hexagons[i]) positionValid = ( Math.abs(hexagons[i].x - x_on_create) > 300 || Math.abs(hexagons[i].y - y_on_create) > 300 );
                 
-                }
-
-
-                    
-                
+                }   
             }
             
             pj.portal_x = x_on_create;
@@ -373,7 +370,7 @@ function world_draw(){
         image(stairs_2,UMI.toPixel( Camera.translationX(pj.portal_x) ),UMI.toPixel( Camera.translationY(pj.portal_y)), UMI.toPixel(40),UMI.toPixel(40));
         fill(255);
         noStroke();
-        textSize(UMI.toPixel(12));
+        textSize(2*UMI.toPixel(12));
         textAlign(CENTER, CENTER);  
         text('Go home', UMI.toPixel(Camera.translationX(portal_X)), UMI.toPixel(Camera.translationY(portal_y)));
     
@@ -390,7 +387,7 @@ function world_draw(){
     fill('red');
     textAlign(RIGHT);
     noStroke();
-    textSize(UMI.toPixel(40));
+    textSize(2*UMI.toPixel(40));
     text('x'+score+'    ',window.innerWidth/2,-window.innerHeight/2.2);
 
 
@@ -402,7 +399,7 @@ function world_draw(){
     fill(255,255,255,100);
     textAlign(RIGHT);
     noStroke();
-    textSize(10);
+    textSize(2*10);
     text('DigitalHelheim - ENTI-UB AA1 Álgebra 1º CDI Grupo A (Mañanas) / Alumnos: Pol Surriel y Eric Garcia',window.innerWidth/2.02,-window.innerHeight/2.05);
 
 

@@ -47,11 +47,13 @@ Array.prototype.added = 0;
 
 var registrado = false;
 
-
+p5.disableFriendlyErrors = true; // disables FES
 
 var FPS_COUNT = 0;
 var CURRENT_FPS = 60;
 
+var restorer_asset;
+var restorer_mid_asset;
 
 document.addEventListener('contextmenu', event => event.preventDefault());
 
@@ -96,6 +98,7 @@ var linesShoot = new Array(120);
 var waves = new Array(120);
 var particles = new Array(100);
 var quemaduras = new Array(100);
+var damagenumbers = new Array(100);
 var littleLightnings = new Array(50);
 
 enemies.setAllNull();
@@ -112,6 +115,7 @@ particles.setAllNull();
 online_players.setAllNull();
 quemaduras.setAllNull();
 littleLightnings.setAllNull();
+damagenumbers.setAllNull();
 
 var pu_count = 0;
 var hunted = 0;
@@ -197,6 +201,7 @@ var bossAssets_all;
 var boss_base;
 var boss_brazos;
 var boss_cabeza;
+var boss_shield;
 
 
 function preload() {
@@ -210,6 +215,7 @@ function preload() {
 
 
     chispa_sound = new Sound('./src/chispas.mp3', 0.02);
+    
     chispa2_sound = new Sound('./src/chispas.mp3', 0.015);
     power_up_sound = new Sound('./src/get_power_up.mp3',1);
     a7_song = new Sound('./src/a7_song.mp3',0.7);
@@ -227,6 +233,10 @@ function preload() {
     power_up_duplicate_img_layer_2 = loadImage('./src/power_up_duplicate_layer_2.png'); 
     power_up_health_img_layer_1 =    loadImage('./src/power_up_health_layer_1.png'   );
     power_up_health_img_layer_2 =    loadImage('./src/power_up_health_layer_2.png'   );
+
+    boss_shield =                    loadImage('./src/boss_shield.png');
+    restorer_asset              =    loadImage('./src/moc.png'); 
+    restorer_mid_asset              =    loadImage('./src/moc_mid.png'); 
 
     boss_base = loadImage('./src/boss_base.png');
     boss_brazos = loadImage('./src/boss_brazos.png');
