@@ -339,6 +339,7 @@ function coop_battle_update(){
 
     
     if(pj.shooting){
+
         for (let i = 0; i < motors.length; i++) {
 
             var haveToAdviceActivation1 = !motors[i].damaging1; 
@@ -357,7 +358,14 @@ function coop_battle_update(){
                     pj.lighting.point2.x = motors[i].point1[0];
                     pj.lighting.point2.y = motors[i].point1[1];
                     motors[i].damaging1 = true;
-
+                    if(haveToAdviceActivation1 ){
+                        if (i == 0)
+                            activeMotorDamage(0);
+                        else if (i == 1)
+                            activeMotorDamage(2);
+                        else if (i == 2)
+                            activeMotorDamage(4);
+                    }
                     break;
 
 
@@ -367,23 +375,36 @@ function coop_battle_update(){
                         pj.lighting.point2.x = motors[i].point2[0];
                         pj.lighting.point2.y = motors[i].point2[1];
                         motors[i].damaging2 = true;
-
+                        if(haveToAdviceActivation2 ){
+                            if (i == 0)
+                            activeMotorDamage(1);
+                        else if (i == 1)
+                            activeMotorDamage(2);
+                        else if (i == 2)
+                            activeMotorDamage(5);
+                        }
                         break;
 
             }
 
-            if(haveToAdviceActivation1 && motors[i].damaging1 == true ){
-                activeMotorDamage(i);
-            }
-            if(haveToAdviceActivation2 && motors[i].damaging2 == true ){
-                activeMotorDamage(i+1);
-            }
+
+            
 
             if(haveToAdviceDesactivation1 && motors[i].damaging1 == false ){
-                desactiveMotorDamage(i);
+                if (i == 0)
+                    desactiveMotorDamage(0);
+                else if (i == 1)
+                    desactiveMotorDamage(2);
+                else if (i == 2)
+                    desactiveMotorDamage(4);
             }
             if(haveToAdviceDesactivation2 && motors[i].damaging2 == false ){
-                desactiveMotorDamage(i+1);
+                if (i == 0)
+                   desactiveMotorDamage(1);
+                else if (i == 1)
+                    desactiveMotorDamage(3);
+                else if (i == 2)
+                    desactiveMotorDamage(5);
             }
 
             
@@ -392,8 +413,30 @@ function coop_battle_update(){
 
     }else {
         for (let i = 0; i < motors.length; i++) {
+
+            var haveToAdviceDesactivation1 = motors[i].damaging1; 
+            var haveToAdviceDesactivation2 = motors[i].damaging2; 
+            
             if (!motors[i].damaging1Blocked) motors[i].damaging1 = false;
             if (!motors[i].damaging1Blocked) motors[i].damaging2 = false;
+
+
+            if(haveToAdviceDesactivation1 && motors[i].damaging1 == false ){
+                if (i == 0)
+                   desactiveMotorDamage(1);
+                else if (i == 1)
+                    desactiveMotorDamage(3);
+                else if (i == 2)
+                    desactiveMotorDamage(5);
+            }
+            if(haveToAdviceDesactivation2 && motors[i].damaging2 == false ){
+                if (i == 0)
+                   desactiveMotorDamage(1);
+                else if (i == 1)
+                    desactiveMotorDamage(3);
+                else if (i == 2)
+                    desactiveMotorDamage(5);
+            }
         }
 
         //hay que enviar desbloqueo cuando deje de disparar
