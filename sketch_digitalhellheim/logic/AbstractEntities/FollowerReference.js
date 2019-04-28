@@ -120,6 +120,9 @@ class FollowerReference {
 
         if(!( this.x < Number.MAX_VALUE )) this.x = 0;
         if(!( this.y < Number.MAX_VALUE )) this.y = 0;
+        if(this.x == Infinity ||this.x == -Infinity) this.x = 0;
+        if(this.y == Infinity ||this.y == -Infinity) this.y = 0;
+
         
 
         
