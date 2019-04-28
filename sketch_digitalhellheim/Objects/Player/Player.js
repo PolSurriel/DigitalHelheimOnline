@@ -365,6 +365,7 @@ class Player extends RealObject {
             if(this.shooting) this.lighting.update();
 
         }
+
     }
 
     jump() {
