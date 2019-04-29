@@ -477,6 +477,280 @@ function coop_battle_update(){
         //hay que enviar desbloqueo cuando deje de disparar
     }
 
+    //PROJECTILES COLLISION
+    for (let i = 0; i < projectiles.length; i++) {
+
+       
+        if(projectiles[i] != null){
+            // if(!pj.jumping && Collider2D.detector.circleToCircle( pj.x, pj.y,projectiles[i].x, projectiles[i].y, pj.radio,projectiles[i].radio ) ){
+            //     // TODO: PJ -> GAME OVER
+                
+            //     projectiles.destroy(i);
+            //     print("pj");
+            // }
+
+            // COLISION CON ENEMIGOS
+            // for (let j = 0; j < enemies.length; j++) {
+            
+            //     if(enemies[j] != null && projectiles[i] != null && Collider2D.detector.circleToCircle(projectiles[i].x,projectiles[i].y,enemies[j].x,enemies[j].y,projectiles[i].radio,enemies[j].radio) ){
+            //         enemies.destroy(j)
+                    
+            //         projectiles.destroy(i);
+
+            //         // score += 100;
+            //         print("ENEMY");
+            //     }
+            // }
+
+            // for (let j = 0; j < enemiesLines.length; j++) {
+            //     if( enemiesLines[j] != null && projectiles[i] != null  && Collider2D.detector.circleToCircle(projectiles[i].x,projectiles[i].y,enemiesLines[j].x,enemiesLines[j].y,projectiles[i].radio*2.3,enemiesLines[j].radio) ){
+            //         enemiesLines.destroy(j);
+            //         projectiles.destroy(i);
+
+            //         // score += 150;
+            //         print("ENEMY_LINE");
+            //     }
+            // }
+
+            // for (let j = 0; j < enemiesProjectiles.length; j++) {
+            //     if(enemiesProjectiles[j] != null && projectiles[i] != null  && projectiles[i].destroyEnemy && Collider2D.detector.circleToCircle(projectiles[i].x,projectiles[i].y,enemiesProjectiles[j].x,enemiesProjectiles[j].y,projectiles[i].radio*2,enemiesProjectiles[j].radio) ){
+            //         enemiesProjectiles.destroy(j);
+            //         projectiles.destroy(i);
+
+            //         // score += 120;
+            //         print("ENEMY_PROJECTILES");                    
+            //     }
+            // }
+
+            // for (let j = 0; j < enemiesWaves.length; j++) {
+            //     if(enemiesWaves[j] != null && projectiles[i] != null  && Collider2D.detector.circleToCircle(projectiles[i].x,projectiles[i].y,enemiesWaves[j].x,enemiesWaves[j].y,projectiles[i].radio,enemiesWaves[j].radio) ){
+            //         enemiesWaves.destroy(j);
+            //         projectiles.destroy(i);
+
+            //         // score += 120;
+            //         print("ENEMY_WAVE");                    
+            //     }
+            // }
+
+            pj.x = 50.79132281527465;
+            pj.y = -49.6390392809254;
+            
+            // COLISION CON EL BOSS
+            var bossDetections = 0 ;
+            var forceRebound = new Vector2D(0,0);
+            if(Collider2D.detector.circleToPolygon( projectiles[i].x, projectiles[i].y, projectiles[i].radio,boss.poly_base ) ){
+                
+                var founded = false;
+                var x1,y1;
+                var x2,y2;
+
+                var polygon = boss.poly_base;
+                var x_circle = projectiles[i].x;
+                var y_circle = projectiles[i].y;
+                var radio = projectiles[i].radio;
+
+                for (let i=0, j = polygon.length -1; i < polygon.length && !founded; j = i++) {
+
+                    if ( Collider2D.detector.lineToCircle(polygon[i][0],polygon[i][1], polygon[j][0],polygon[j][1], x_circle,y_circle,radio)) {
+                        x1 = polygon[i][0];
+                        y1 = polygon[i][1];
+                        x2 = polygon[j][0];
+                        y2 = polygon[j][1];
+                        founded = true;
+                    }
+                }
+
+                var u = projectiles[i].direction;
+                var v = new Vector2D(x2 - x1, y2 - y1);
+                var vectorRebound = Vector2D.getReboundVector(u,v);
+                forceRebound.x += vectorRebound.x;
+                forceRebound.y += vectorRebound.y;
+                bossDetections++;
+                // projectiles[i].direction = Vector2D.getReboundVector(u,v);
+                // projectiles[i].rebounds++;
+            }
+
+            if(Collider2D.detector.circleToPolygon( projectiles[i].x, projectiles[i].y, projectiles[i].radio,boss.poly_arm1 ) ){
+                
+                var founded = false;
+                var x1,y1;
+                var x2,y2;
+
+                var polygon = boss.poly_arm1;
+                var x_circle = projectiles[i].x;
+                var y_circle = projectiles[i].y;
+                var radio = projectiles[i].radio;
+
+                for (let i=0, j = polygon.length -1; i < polygon.length && !founded; j = i++) {
+
+                    if ( Collider2D.detector.lineToCircle(polygon[i][0],polygon[i][1], polygon[j][0],polygon[j][1], x_circle,y_circle,radio)) {
+                        x1 = polygon[i][0];
+                        y1 = polygon[i][1];
+                        x2 = polygon[j][0];
+                        y2 = polygon[j][1];
+                        founded = true;
+                    }
+                }
+
+                var u = projectiles[i].direction;
+                var v = new Vector2D(x2 - x1, y2 - y1);
+                var vectorRebound = Vector2D.getReboundVector(u,v);
+                forceRebound.x += vectorRebound.x;
+                forceRebound.y += vectorRebound.y;
+                bossDetections++;
+                // projectiles[i].direction = Vector2D.getReboundVector(u,v);
+                // projectiles[i].rebounds++;
+            }
+
+            if(Collider2D.detector.circleToPolygon( projectiles[i].x, projectiles[i].y, projectiles[i].radio,boss.poly_arm2 ) ){
+                
+                var founded = false;
+                var x1,y1;
+                var x2,y2;
+
+                var polygon = boss.poly_arm2;
+                var x_circle = projectiles[i].x;
+                var y_circle = projectiles[i].y;
+                var radio = projectiles[i].radio;
+
+                for (let i=0, j = polygon.length -1; i < polygon.length && !founded; j = i++) {
+
+                    if ( Collider2D.detector.lineToCircle(polygon[i][0],polygon[i][1], polygon[j][0],polygon[j][1], x_circle,y_circle,radio)) {
+                        x1 = polygon[i][0];
+                        y1 = polygon[i][1];
+                        x2 = polygon[j][0];
+                        y2 = polygon[j][1];
+                        founded = true;
+                    }
+                }
+
+                var u = projectiles[i].direction;
+                var v = new Vector2D(x2 - x1, y2 - y1);
+                var vectorRebound = Vector2D.getReboundVector(u,v);
+                forceRebound.x += vectorRebound.x;
+                forceRebound.y += vectorRebound.y;
+                bossDetections++;
+                // projectiles[i].direction = Vector2D.getReboundVector(u,v);
+                // projectiles[i].rebounds++;
+            }
+
+            if(Collider2D.detector.circleToPolygon( projectiles[i].x, projectiles[i].y, projectiles[i].radio,boss.poly_head ) ){
+                
+                var founded = false;
+                var x1,y1;
+                var x2,y2;
+
+                var polygon = boss.poly_head;
+                var x_circle = projectiles[i].x;
+                var y_circle = projectiles[i].y;
+                var radio = projectiles[i].radio;
+
+                for (let i=0, j = polygon.length -1; i < polygon.length && !founded; j = i++) {
+
+                    if ( Collider2D.detector.lineToCircle(polygon[i][0],polygon[i][1], polygon[j][0],polygon[j][1], x_circle,y_circle,radio)) {
+                        x1 = polygon[i][0];
+                        y1 = polygon[i][1];
+                        x2 = polygon[j][0];
+                        y2 = polygon[j][1];
+                        founded = true;
+                    }
+                }
+
+                var u = projectiles[i].direction;
+                var v = new Vector2D(x2 - x1, y2 - y1);
+                var vectorRebound = Vector2D.getReboundVector(u,v);
+                forceRebound.x += vectorRebound.x;
+                forceRebound.y += vectorRebound.y;
+                bossDetections++;
+                // projectiles[i].direction = Vector2D.getReboundVector(u,v);
+                // projectiles[i].rebounds++;
+            }
+
+            if (bossDetections != 0) {
+                projectiles[i].direction = forceRebound;
+                projectiles[i].rebounds++;
+                if (bossDetections > 1) print("holi");
+            }
+
+            // switch (bossDetections) {
+            //     case 3:
+            //     case 2:
+            //         forceRebound
+            // }
+
+            if(projectiles[i]!= null && projectiles[i].rebounds > 3){
+                projectiles.destroy( i );
+            }
+            
+            if(projectiles[i]!= null && new Vector2D(pj.x-projectiles[i].x,pj.y-projectiles[i].y).getMagnitude() > distance_to_destroy ){
+                print(new Vector2D(pj.x-projectiles[i].x,pj.y-projectiles[i].y).getMagnitude());
+                print(distance_to_destroy);
+                projectiles.destroy( i );
+            }
+
+        }
+          
+    }
+
+    //SHIELD CAPTION
+    if (pj.shield_active){
+        for (let i = 0; i < enemiesAway.length; i++) {
+         
+            if(enemiesAway[i]!= null && Collider2D.detector.circleToPolygon( enemiesAway[i].x, enemiesAway[i].y, enemiesAway[i].radio, pj.shield_on_draw )){
+              
+              pj.holding.addObj({
+                x: Math.random()* (55 - 27) + 27,
+                y: Math.random()* (30 - 10) + 10
+              });
+              
+              if(pj.pu_doubleproj_caught){
+                  pj.holding.addObj({
+                    x: Math.random()* (55 - 27) + 27,
+                    y: Math.random()* (30 - 10) + 10
+                  });
+              }
+              hunted++;
+              score += 20;
+              enemiesAway.destroy(i);
+
+              
+    
+            }
+        }
+
+        for (let i = 0; i < projectiles.length; i++) {            
+         
+            if(projectiles[i]!= null && Collider2D.detector.circleToPolygon( projectiles[i].x, projectiles[i].y, projectiles[i].radio*2, pj.shield_on_draw )){
+              
+              pj.holding.addObj({
+                x: Math.random()* (55 - 17) + 17,
+                y: Math.random()* (20 - 10) + 10
+              });
+              
+              if(pj.pu_doubleproj_caught){
+                  pj.holding.addObj({
+                      x: Math.random()* (55 - 17) + 17,
+                      y: Math.random()* (20 - 10) + 10
+                  });
+              }
+
+  
+              score += 100;
+              projectiles.destroy(i);
+
+              
+      
+    
+            }
+        }
+        
+    }
+
+    if(Math.floor((Math.random() * 450) + 1) == 1){
+        cameraReference.random_zoom_transition();
+        
+    }
+
 }
 
 function coop_battle_draw(){
@@ -604,37 +878,24 @@ function invoke_a_boss(){
 
         setTimeout(() => {
             boss.dancing = true;
-
-
             setInterval(() => {
                 beats++;
                 boss.dance_normal = true;
-
                 if (beats % 5 == 4){
                     beats++;
                     boss.dance_normal = false;
-                    
-                }else if (beats % 2){
-                    boss.arm_pos.x = -10;
-                    boss.dance_direction = 1;
-
-                    boss.arms_orientation = -0.02;
-                    
-                }else {
-                    boss.arm_pos.x = 10;
-                    boss.dance_direction = -1;
-
-                    boss.arms_orientation = 0.02;
+                    //PAM
                 }
+                boss.dance_direction = beats % 2;
+
                 
             }, 451);
                     
         }, 15000);
-            
-    }
-    
-    invocation_has_been_called = true;
 
+    }
+
+    invocation_has_been_called = true;
     
 }
 

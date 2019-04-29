@@ -227,35 +227,31 @@ initSocket = function () {
 
         }
     });
+    
+    socket.on('kill', function (data) {
+        if(data.murder != token){
+            if(data.killedToken == token){
+                //TODO
 
-    socket.on('heisthehost', function(data){
-        if(data.token != token){
-            for (let i = 0; i < online_players.length; i++) {
-                if(online_players[i] != null && online_players[i].token == data.playerToken){
-                    online_players.destroy(i);
-                }
-                
+            }else {
+                //TODO
+
             }
-
         }
     });
-    
 
     socket.on('damageToA7', function (data) {
-        if(data.token != token){
-            if(data.playerToken != token){
+        if(data.murder != token){
+            if(data.killedToken != token){
                 boss.health -= data.damage;
 
             }
         }
     });
 
-
-    
-
     socket.on('throwRestorer', function (data) {
-        if(data.token != token){
-            if(data.playerToken != token){
+        if(data.murder != token){
+            if(data.killedToken != token){
                 
                 restorer.following = false;
                 restorer.inComing = false;
@@ -285,12 +281,6 @@ initSocket = function () {
 
 
 // Envios
-
-function shareimhost(){
-    socket.emit('imthehost', {
-        token:token
-    });
-}
 
 function activeMotorDamage(i){
     socket.emit('motorActivation', {

@@ -80,7 +80,6 @@ function world_update(){
 
 
       //PROJECTILES COLISION
-
       for (let i = 0; i < projectiles.length; i++) {
 
        
@@ -170,6 +169,14 @@ function world_update(){
         }
           
       }
+
+        if(projectiles[i]!= null && projectiles[i].rebounds > 3){
+            projectiles.destroy( i );
+        }
+        
+        if(projectiles[i]!= null && new Vector2D(pj.x-projectiles[i].x,pj.y-projectiles[i].y).getMagnitude() > distance_to_destroy ){
+            projectiles.destroy( i );
+        }
 
 
 
@@ -289,17 +296,6 @@ function world_update(){
           for (let i = 0; i < projectiles.length; i++) {
 
          
-    
-            if(projectiles[i]!= null && projectiles[i].rebounds > 3){
-                projectiles.destroy( i );
-            }
-            
-            if(projectiles[i]!= null && new Vector2D(pj.x-projectiles[i].x,pj.y-projectiles[i].y).getMagnitude() > distance_to_destroy ){
-                projectiles.destroy( i );
-            }
-
-
-            
             
          
             if(projectiles[i]!= null && Collider2D.detector.circleToPolygon( projectiles[i].x, projectiles[i].y, projectiles[i].radio*2, pj.shield_on_draw )){

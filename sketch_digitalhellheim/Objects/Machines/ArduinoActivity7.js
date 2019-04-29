@@ -2,10 +2,9 @@ var m1Dir = new Vector2D (-2,-2).getUnitaryVector();
 var m2Dir = new Vector2D (2,-2).getUnitaryVector();
 var m3Dir = new Vector2D (0,1).getUnitaryVector();
 
-
 class ArduinoActivity7 {
 
-    arms_orientation = 0;
+
     invoked = false;
     invoking = false;
     in_floor = false;
@@ -208,7 +207,6 @@ class ArduinoActivity7 {
         line(-innerWidth/3 + UMI.toPixel(100),innerHeight/2- UMI.toPixel(80), innerWidth/3 - UMI.toPixel(innerWidth/3-((innerWidth/3)*this.invoking_state.redBar)/100), innerHeight/2 - UMI.toPixel(80) );
         strokeWeight(1);
 
-        textAlign(RIGHT);
         fill(255,255,255,this.invoking_state.blackBar);
         noStroke();
         textSize(2*UMI.toPixel(20));
@@ -221,21 +219,13 @@ class ArduinoActivity7 {
         if(this.invoking){
             this.invoke();
         }else if (this.invoked) {
-            if(this.dancing){
-                if(this.dance_normal){
-                    if (this.dance_direction == 1){
-                        this.arm_pos.x += UMI.getSpeed(30);
-                        this.arms_orientation += UMI.getSpeed(0.05);
+            this.shootPlayer()
+        }
+    }
 
-                    }else {
-                        this.arm_pos.x -= UMI.getSpeed(30);
-                        this.arms_orientation -= UMI.getSpeed(0.05);
-
-                    }
-
-                }
-            }
-
+    shootPlayer(){
+        if( projectiles.added < projectiles.length-2 ){
+            projectiles.addObj(new Projectile(this.x, this.y, new Vector2D(pj.x-this.x, pj.y-this.y, false).getUnitaryVector()));        
         }
     }
 
@@ -248,7 +238,7 @@ class ArduinoActivity7 {
             this.draw_boss();
             if(this.shield_active)this.draw_shield();
             this.draw_health();
-            //this.drawCollider();
+            this.drawCollider();
         }
 
     }
@@ -265,7 +255,6 @@ class ArduinoActivity7 {
     draw_boss(){
 
         translate(-UMI.toPixel(this.size)/2, -UMI.toPixel(this.size)/2);
-        
         image(boss_base,  UMI.toPixel(Camera.translationX (this.x+this.base_pos.x)), UMI.toPixel(Camera.translationY(this.y+this.base_pos.y)),UMI.toPixel(this.size), UMI.toPixel(this.size) );
         image(boss_brazos,  UMI.toPixel(Camera.translationX (this.x+this.arm_pos.x)), UMI.toPixel(Camera.translationY(this.y+this.arm_pos.y)),UMI.toPixel(this.size), UMI.toPixel(this.size) );
         image(boss_cabeza,  UMI.toPixel(Camera.translationX (this.x+this.head_pos.x)), UMI.toPixel(Camera.translationY(this.y+this.head_pos.x)),UMI.toPixel(this.size), UMI.toPixel(this.size) );
@@ -287,7 +276,6 @@ class ArduinoActivity7 {
              innerHeight/2 - UMI.toPixel(80) );
         strokeWeight(1);
 
-        textAlign(RIGHT);
         fill(255,255,255,this.invoking_state.blackBar);
         noStroke();
         textSize(2*UMI.toPixel(20));
