@@ -117,6 +117,14 @@ io.on('connection', function(socket){
         });
     });
 
+    socket.on('imthehost',function (data) {
+        io.emit('heisthehost', { 
+            playerToken:data.token,
+        });
+    });
+
+    
+
     socket.on('a7invoke',function (data) {
         io.emit('a7invoke', { 
             playerToken:data.token,

@@ -604,16 +604,28 @@ function invoke_a_boss(){
 
         setTimeout(() => {
             boss.dancing = true;
+
+
             setInterval(() => {
                 beats++;
                 boss.dance_normal = true;
+
                 if (beats % 5 == 4){
                     beats++;
                     boss.dance_normal = false;
-                    //PAM
-                }
-                boss.dance_direction = beats % 2;
+                    
+                }else if (beats % 2){
+                    boss.arm_pos.x = -10;
+                    boss.dance_direction = 1;
 
+                    boss.arms_orientation = -0.02;
+                    
+                }else {
+                    boss.arm_pos.x = 10;
+                    boss.dance_direction = -1;
+
+                    boss.arms_orientation = 0.02;
+                }
                 
             }, 451);
                     

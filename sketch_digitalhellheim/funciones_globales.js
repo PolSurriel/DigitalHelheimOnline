@@ -55,6 +55,19 @@
 
 }
 
+var in_host_mode = false;
+
+function host_mode(){
+  pj.update = function() {};
+  pj.draw = function () {};
+
+  cameraReference.following = restorer;
+  shareimhost();
+
+  Camera.zoom(-300);
+
+}
+
 function draw_all(){
     
     drawingContext.shadowBlur = 0;
