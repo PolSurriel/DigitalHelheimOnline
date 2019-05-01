@@ -64,7 +64,15 @@ function host_mode(){
   cameraReference.following = restorer;
   shareimhost();
 
+  in_host_mode= true;
+
   Camera.zoom(-300);
+
+  window.onmousedown = () => {}; 
+  window.onmouseup   = () => {}; 
+  window.onkeydown   = () => {}; 
+  window.onkeyup     = () => {}; 
+  window.onmousemove = () => {};
 
 }
 

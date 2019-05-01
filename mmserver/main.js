@@ -4,6 +4,21 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var players = new Array();
 
+
+var roomData = {
+    boss_invoked:false,
+    invoked_moment:null,
+    restorer_reference:null,
+    boss_health:100,
+    motors_broken:false,
+    motors_broken_moment:null,
+    motors_state:[false,false,false,false,false,false],
+    restorer_position:null,
+    restorer_force:null,
+    time_reference:new Date(),
+    
+}
+
 app.use(express.static('../sketch_digitalhellheim'));
 
 var tokens = 0;
@@ -73,23 +88,39 @@ io.on('connection', function(socket){
             force:data.force,
             position:data.position
         });
+
+        roomData.restorer_force = data.force;
+        roomData.restorer_position = data.position;
     });
 
     socket.on('motorActivation',function (data) {
         io.emit('motorActivation', { 
             i:data.i
         });
+
+        roomData[data.i] = true;
     });
 
     socket.on('motorDesactivation',function (data) {
         io.emit('motorDesactivation', { 
             i:data.i
         });
+
+        roomData[data.i] = false;
     });
 
     socket.on('iGotTheRestorer',function (data) {
         io.emit('heGotTheRestorer', { 
             playerToken:data.token
+        });
+
+        roomData.restorer_reference = data.token;
+    });
+
+    
+    socket.on('askForRoomState',function (data) {
+        io.emit('setRoomState', { 
+            room_data:roomData
         });
     });
 
@@ -98,6 +129,8 @@ io.on('connection', function(socket){
             playerToken:data.token,
             damage:data.damage
         });
+
+        roomData.boss_health -= data.damage;
     });
 
     socket.on('killMe',function (data) {
@@ -129,6 +162,11 @@ io.on('connection', function(socket){
         io.emit('a7invoke', { 
             playerToken:data.token,
         });
+
+        roomData.boss_invoked = true;
+        roomData.invoked_moment = new Date();
+
+
     });
 
     socket.on('respawn',function (data) {

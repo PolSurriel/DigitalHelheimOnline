@@ -19,8 +19,7 @@ class Particle {
     reference;
 
     setSpeed(){
-        this.sizeSpeed = UMI.getSpeed(1.5);
-        this.opSpeed = UMI.getSpeed(250);
+
     
     }
 
@@ -48,6 +47,9 @@ class Particle {
 
 
     update(){
+        this.sizeSpeed = UMI.getSpeed(1.5);
+        this.opSpeed = UMI.getSpeed(250);
+
         var toScaleX = (this.size.x - UMI.getSpeed(this.sizeSpeed))/this.size.x;
         var toScaleY = (this.size.y - UMI.getSpeed(this.sizeSpeed))/this.size.y;
         this.size.scale(toScaleX, toScaleY, 1);

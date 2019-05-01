@@ -6,7 +6,20 @@ var token;
 
 var online = false;
 
+var loga7 = new Array();
+
 var SERVER_IP = 'localhost';
+
+function saveInfo() {
+    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(loga7));
+    
+    var hiddenElement = document.createElement('a');
+
+    hiddenElement.href = dataStr;
+    hiddenElement.target = '_blank';
+    hiddenElement.download = 'a7_log.json';
+    hiddenElement.click();
+}
 
 
 initSocket = function () {
@@ -30,6 +43,10 @@ initSocket = function () {
     socket.on('userJoin', function(data){
         console.log(data.text+' - '+data.name);
         online_players.addObj(new OnlinePlayer(data.name, data.token, -1000,-1000));
+
+        if (in_host_mode) loga7.push({ 
+            type:'server-event', name:'userJoin', info:data, time:new Date()
+        });
         
     });
 
@@ -83,6 +100,10 @@ initSocket = function () {
                 }
             }
 
+            
+            if (in_host_mode) loga7.push({ 
+                type:'server-event', name:'playerAction', info:data, time:new Date()
+            });
         }
 
     });
@@ -93,7 +114,6 @@ initSocket = function () {
             
 
         }else{
-            //TODO
             
             for (let i = 0; i < online_players.length; i++) {
                 if(online_players[i] != null && online_players[i].token == data.playerToken){
@@ -103,6 +123,11 @@ initSocket = function () {
                 }
                 
             }
+
+            
+            if (in_host_mode) loga7.push({ 
+                type:'server-event', name:'playerSetPosition', info:data, time:new Date()
+            });
 
 
         }
@@ -120,14 +145,15 @@ initSocket = function () {
                 }
                 
             }
+
+            
+            if (in_host_mode) loga7.push({ 
+                type:'server-event', name:'setLightningPos', info:data, time:new Date()
+            });
         }
     });
 
-    socket.on('die', function(data){
-        if(data.token != token){
-            // TODO
-        }
-    });
+
 
     socket.on('playerLeft', function(data){
         if(data.token != token){
@@ -138,6 +164,11 @@ initSocket = function () {
                 }
                 
             }
+
+            
+            if (in_host_mode) loga7.push({ 
+                type:'server-event', name:'playerLeft', info:data, time:new Date()
+            });
 
         }
     });
@@ -151,6 +182,10 @@ initSocket = function () {
                 }
                 
             }
+
+            if (in_host_mode) loga7.push({ 
+                type:'server-event', name:'unlockPlayer', info:data, time:new Date()
+            });
         }
     });
 
@@ -162,6 +197,10 @@ initSocket = function () {
                 }
                 
             }
+
+            if (in_host_mode) loga7.push({ 
+                type:'server-event', name:'die', info:data, time:new Date()
+            });
 
         }
     });
@@ -176,15 +215,25 @@ initSocket = function () {
                 
             }
 
+            if (in_host_mode) loga7.push({ 
+                type:'server-event', name:'respawn', info:data, time:new Date()
+            });
+
         }
     });
 
     socket.on('motorActivation', function(data){
         motorsDamage[data.i] = true;
+        if (in_host_mode) loga7.push({ 
+            type:'server-event', name:'motorActivation', info:data, time:new Date()
+        });
     });
 
     socket.on('motorDesactivation', function(data){
         motorsDamage[data.i] = false;
+        if (in_host_mode) loga7.push({ 
+            type:'server-event', name:'motorDesactivation', info:data, time:new Date()
+        });
     });
 
     socket.on('youCanShoot', function(data){
@@ -195,6 +244,10 @@ initSocket = function () {
                 }
                 
             }
+
+            if (in_host_mode) loga7.push({ 
+                type:'server-event', name:'youCanShoot', info:data, time:new Date()
+            });
 
         }
     });
@@ -213,7 +266,22 @@ initSocket = function () {
                 
             }
 
+            if (in_host_mode) loga7.push({ 
+                type:'server-event', name:'heGotTheRestorer', info:data, time:new Date()
+            });
+
         }
+    });
+
+    
+
+    socket.on('setRoomState', function(data){
+        
+        console.log(data);
+        
+        boss.health = data.room_data.boss_health;
+        boss.invoked = data.room_data.boss_invoked;
+        
     });
 
     socket.on('youCantShoot', function(data){
@@ -224,6 +292,10 @@ initSocket = function () {
                 }
                 
             }
+
+            if (in_host_mode) loga7.push({ 
+                type:'server-event', name:'youCantShoot', info:data, time:new Date()
+            });
 
         }
     });
@@ -237,6 +309,10 @@ initSocket = function () {
                 
             }
 
+            if (in_host_mode) loga7.push({ 
+                type:'server-event', name:'heisthehost', info:data, time:new Date()
+            });
+
         }
     });
     
@@ -247,6 +323,10 @@ initSocket = function () {
                 boss.health -= data.damage;
 
             }
+
+            if (in_host_mode) loga7.push({ 
+                type:'server-event', name:'damageToA7', info:data, time:new Date()
+            });
         }
     });
 
@@ -254,24 +334,30 @@ initSocket = function () {
     
 
     socket.on('throwRestorer', function (data) {
-        if(data.token != token){
-            if(data.playerToken != token){
-                
-                restorer.following = false;
-                restorer.inComing = false;
-                clearInterval(restorer.contdown_interval);
-                restorer.reference = false;
-                restorer.contdown = 5;
-                restorer.force = data.force
-                restorer.speed = 300;
+        if(data.playerToken != token){
+            restorer.reference.setInmuneState();
+            restorer.following = false;
+            restorer.inComing = false;
+            clearInterval(restorer.contdown_interval);
+            restorer.reference = false;
+            restorer.contdown = 5;
+            restorer.force = data.force
+            restorer.speed = 300;
 
-            }
+            if (in_host_mode) loga7.push({ 
+                type:'server-event', name:'throwRestorer', info:data, time:new Date()
+            });
         }
+        
     });
 
 
     socket.on('a7invoke', function (data) {
         invoke_a_boss();
+
+        if (in_host_mode) loga7.push({ 
+            type:'server-event', name:'a7invoke', info:data, time:new Date()
+        });
     });
 
     
@@ -285,6 +371,12 @@ initSocket = function () {
 
 
 // Envios
+
+function askForRoomState(){
+    socket.emit('askForRoomState', {
+        token:token
+    });
+}
 
 function shareimhost(){
     socket.emit('imthehost', {
@@ -393,12 +485,15 @@ function kill(killedToken){
         murder:token,
         killedToken:killedToken
     });
+
+    
 }
 
 function die () {
     socket.emit('die', {
         token:token
     });
+
 }
 
 

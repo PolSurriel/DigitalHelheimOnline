@@ -15,6 +15,8 @@ class Player extends RealObject {
     pu_shield_caught = false;
     pu_random_caught = false; 
 
+    is_online = false;
+
     increment_on_grab_away = 10;
     energy_increment_infected = function () {return UMI.getSpeed(40)};
 
@@ -657,7 +659,7 @@ class Player extends RealObject {
         
         var firstAngle = this.orientation + HALF_PI + 0.4;
 
-        if(this.energy > 0){
+        if(!this.is_online && this.energy > 0){
 
             noFill();
             stroke(80,255,0,150);

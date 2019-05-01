@@ -11,7 +11,7 @@ class OnlinePlayer extends Player {
     constructor(name,token, x, y){
         super(x,y);
         this.token = token;
-
+        this.is_online = true;
         this.name = name;
 
         this.__proto__ = "OnlinePlayer";
@@ -23,6 +23,13 @@ class OnlinePlayer extends Player {
         this.lighting.render_blur = false;
 
         this.can_shoot = false;
+    }
+
+    setInmuneState(){
+        this.inmune = true;
+        setTimeout(() => {
+            this.inmune = false;
+        }, 7000);
     }
 
     mousCkeck(){
@@ -157,7 +164,9 @@ class OnlinePlayer extends Player {
             textSize(UMI.toPixel(22));
             fill(255);
             noStroke();
-            text(this.name, UMI.toPixel(Camera.translationX(this.x)), UMI.toPixel(Camera.translationY(this.y-14))); 
+            textAlign(CENTER);
+            text(this.name, UMI.toPixel(Camera.translationX(this.x)), UMI.toPixel(Camera.translationY(this.y-17))); 
+            textAlign(RIGHT);
         
         }
 

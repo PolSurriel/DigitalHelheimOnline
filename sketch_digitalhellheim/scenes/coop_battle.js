@@ -39,6 +39,9 @@ function coop_battle_setup(){
 
     online = true;
     initSocket();
+
+    askForRoomState();
+
     window.onmousedown = online_playing_onmousedown; 
     window.onmouseup   = online_playing_onmouseup; 
     window.onkeydown   = online_playing_onkeydown; 
@@ -68,6 +71,8 @@ function coop_battle_setup(){
 
     boss = new ArduinoActivity7(-157,-300);
     restorer = new Restorer(-195+37,-336+37);
+
+    
    
 }
 
@@ -84,6 +89,7 @@ function coop_battle_update(){
 
 
     if(boss.shield_active && boss.in_floor && allDamageActive()){
+        
         boss.shield_active = false;
         setTimeout(() => {
             boss.shield_active = true;
@@ -573,15 +579,22 @@ function coop_battle_draw(){
 
    stroke(255);
    fill(150,0,0);
-   textSize(UMI.toPixel(100));
-    textAlign(CENTER);
-
+   textAlign(CENTER);
+   
    var txt = time.min+':'+time.sec; 
    if (time.sec == 0) txt += '0';
    else if ((time.sec+'').length == 1) txt = time.min+':0'+time.sec;
    if ((time.min < 10)) txt = '0'+txt; 
-   text(txt, UMI.toPixel(  0  ),UMI.toPixel(  -340  ));
+   
+   if (in_host_mode) {
+    textSize(UMI.toPixel(200));
+    text(txt, UMI.toPixel(  0  ),UMI.toPixel(  -440  ));
+       
+   }else {
+       textSize(UMI.toPixel(100));
+       text(txt, UMI.toPixel(  0  ),UMI.toPixel(  -340  ));
 
+   }
    textAlign(LEFT);
 
 
