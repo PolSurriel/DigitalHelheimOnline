@@ -219,13 +219,13 @@ class ArduinoActivity7 {
         if(this.invoking){
             this.invoke();
         }else if (this.invoked) {
-            this.shootPlayer()
+            // this.shootPlayer()
         }
     }
 
     shootPlayer(){
         if( projectiles.added < projectiles.length-2 ){
-            projectiles.addObj(new Projectile(this.x, this.y, new Vector2D(pj.x-this.x, pj.y-this.y, false).getUnitaryVector()));        
+            projectiles.addObj(new Projectile(this.x, this.y+100, new Vector2D(pj.x-this.x, pj.y-this.y, false).getUnitaryVector()));        
         }
     }
 
@@ -238,7 +238,7 @@ class ArduinoActivity7 {
             this.draw_boss();
             if(this.shield_active)this.draw_shield();
             this.draw_health();
-            this.drawCollider();
+            // this.drawCollider();
         }
 
     }

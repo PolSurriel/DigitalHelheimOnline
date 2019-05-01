@@ -159,24 +159,23 @@ function world_update(){
                     var v = new Vector2D(x2 - x1, y2 - y1);
                     projectiles[i].direction = Vector2D.getReboundVector(u,v);
                     projectiles[i].rebounds++;
-                }
+                }               
 
+            }
 
-                
-
+            if(projectiles[i]!= null && projectiles[i].rebounds > 3){
+                projectiles.destroy( i );
+            }
+            
+            if(projectiles[i]!= null && new Vector2D(pj.x-projectiles[i].x,pj.y-projectiles[i].y).getMagnitude() > distance_to_destroy ){
+                projectiles.destroy( i );
             }
 
         }
           
       }
 
-        if(projectiles[i]!= null && projectiles[i].rebounds > 3){
-            projectiles.destroy( i );
-        }
         
-        if(projectiles[i]!= null && new Vector2D(pj.x-projectiles[i].x,pj.y-projectiles[i].y).getMagnitude() > distance_to_destroy ){
-            projectiles.destroy( i );
-        }
 
 
 
