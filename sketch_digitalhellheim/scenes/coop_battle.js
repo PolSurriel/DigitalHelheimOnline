@@ -110,6 +110,7 @@ function coop_battle_update(){
     damagenumbers.update();
     restorer.update();
     update_all();
+    a7Projectiles.update();
     
     motor1.update();
     motor2.update();
@@ -541,6 +542,7 @@ function coop_battle_draw(){
     quemaduras.draw();
     littleLightnings.draw();
     boss.draw();
+    a7Projectiles.draw();
     
 
     Cursor.draw();

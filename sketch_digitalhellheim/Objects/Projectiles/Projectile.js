@@ -23,7 +23,7 @@ class Projectile extends RealObject {
         this.destroyEnemy = destroyEnemy;
 
         if(destroyEnemy){
-            this.size.scale(4,4,1);
+            this.size.scale(2,2,1);
             this.radio = this.size.x/2;
         }
 

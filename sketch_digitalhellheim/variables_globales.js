@@ -100,6 +100,7 @@ var particles = new Array(100);
 var quemaduras = new Array(100);
 var damagenumbers = new Array(100);
 var littleLightnings = new Array(50);
+var a7Projectiles  = new Array(200);
 
 enemies.setAllNull();
 enemiesAway.setAllNull();
@@ -116,6 +117,7 @@ online_players.setAllNull();
 quemaduras.setAllNull();
 littleLightnings.setAllNull();
 damagenumbers.setAllNull();
+a7Projectiles.setAllNull();
 
 var pu_count = 0;
 var hunted = 0;
