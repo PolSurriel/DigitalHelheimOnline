@@ -28,6 +28,21 @@ io.on('connection', function(socket){
     
     // Check sockets disconnected
     setInterval(function() {
+        if (players.length == 0)
+            roomData = {
+                boss_invoked:false,
+                invoked_moment:null,
+                restorer_reference:null,
+                boss_health:100,
+                motors_broken:false,
+                motors_broken_moment:null,
+                motors_state:[false,false,false,false,false,false],
+                restorer_position:null,
+                restorer_force:null,
+                time_reference:new Date(),
+                
+            }
+
         for (var i = 0; i < players.length; i++) {
             if(io.sockets.sockets[players[i].socketId] == undefined){
                 io.sockets.emit('playerLeft',{playerToken: players[i].id, text:'Un jugador ha abandonado la sesion'});
@@ -144,6 +159,28 @@ io.on('connection', function(socket){
             playerToken:data.token,
         });
     });
+
+    socket.on('createA7Projectile',function (data) {
+        io.emit('createA7Projectile', { 
+            playerToken:data.token,
+            parameters:data.parameters,
+            obj_id:data.obj_id
+        });
+    });
+
+
+    
+    socket.on('destroyA7Projectile',function (data) {
+        io.emit('destroyA7Projectile', { 
+            token:token,
+            obj_id:data.obj_id,
+            addHolding:data.addHolding
+        });
+    });
+
+
+
+    
     socket.on('iCantShoot',function (data) {
         io.emit('youCantShoot', { 
             playerToken:data.token,

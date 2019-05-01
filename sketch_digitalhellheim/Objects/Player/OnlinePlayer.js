@@ -33,6 +33,26 @@ class OnlinePlayer extends Player {
     }
 
     mousCkeck(){
+
+        
+        if(!this.shield_active || !this.controller.mRight.clicked){
+            
+            for (let i = 0; i < this.holding_on_draw.length; i++) {
+                
+                if(this.holding_on_draw[i] != null){
+                
+                    //projectiles.addObj(new Projectile(this.holding_on_draw[i].x, this.holding_on_draw[i].y, new (this.holding_on_draw[i].x-this.x, this.holding_on_draw[i].y-this.y,true).getUnitaryVector()));
+                    enemiesAway.addObj( new EnemyAway (this.holding_on_draw[i].x, this.holding_on_draw[i].y) );
+
+                }
+            }
+
+            this.holding.setAllNull();
+            this.holding_on_draw.setAllNull();
+
+        }
+
+
         if(!this.jumping && !this.shield_active && this.controller.mRight.clicked){
             Player.shield_init_sound.play();
             Player.shield_feedback_sound.play();  

@@ -35,11 +35,11 @@ class EnemyAway extends RealObject {
 
     move() {
 
-        var x = this.x+window.innerWidth/2;
-        var y = this.y+window.innerHeight/2;
+        var x = this.x;
+        var y = this.y;
 
-        var playerX = pj.x+window.innerWidth/2;
-        var playerY = pj.y+window.innerHeight/2;
+        var playerX = pj.x;
+        var playerY = pj.y;
 
 
         var vectorToPlayer = new Vector2D(playerX-x,playerY-y);
@@ -55,6 +55,32 @@ class EnemyAway extends RealObject {
         } else if (distanceToPlayer > this.maxDistance) {
             enemiesAway.destroy( this.index_in_main_array );
         } else {
+
+            var gotten = false;
+
+            if(online){
+
+                for (let e = 0; e < online_players.length; e++) {
+                    if(online_players[e] != null){
+                        var toPlayer = new Vector2D( online_players[e].x - this.x, online_players[e].y - this.y );
+                        var distToPlayer = toPlayer.getMagnitude();
+                        if(distToPlayer < online_players[e].radio ){
+                            enemiesAway.destroy( this.index_in_main_array );
+                            gotten = true;
+                        }
+                        else if(distToPlayer < this.distanceToRunAway) {
+                            this.forceVector = toPlayer.getUnitaryVector();
+                            this.actualSpeed = 150;
+                            gotten = true;
+                        }
+                        
+    
+                    }
+                    
+                }
+            }
+
+            
             if (this.rotationCompt > 0) {
                 this.rotationCompt--;
             } else {

@@ -143,6 +143,23 @@ class Player extends RealObject {
 
     die (){
 
+        for (let i = 0; i < this.holding_on_draw.length; i++) {
+                
+            if(this.holding_on_draw[i] != null){
+            
+                //projectiles.addObj(new Projectile(this.holding_on_draw[i].x, this.holding_on_draw[i].y, new (this.holding_on_draw[i].x-this.x, this.holding_on_draw[i].y-this.y,true).getUnitaryVector()));
+                enemiesAway.addObj( new EnemyAway (this.holding_on_draw[i].x, this.holding_on_draw[i].y) );
+                if(online){
+                    createAway();
+                }
+
+            }
+        }
+
+        this.holding.setAllNull();
+        this.holding_on_draw.setAllNull();
+
+
         if(restorer.reference == this){
             restorer.following = false;
             restorer.inComing = false;
@@ -378,6 +395,9 @@ class Player extends RealObject {
                 
                 if (this.holding_on_draw[i] != null) {
                     enemiesAway.addObj( new EnemyAway (this.holding_on_draw[i].x, this.holding_on_draw[i].y) );
+                    if(online){
+                        createAway();
+                    }
                     //projectiles.addObj(new Projectile(this.holding_on_draw[i].x, this.holding_on_draw[i].y, new Vector2D(this.holding_on_draw[i].x-this.x, this.holding_on_draw[i].y-this.y,true).getUnitaryVector()));
                 }
             }

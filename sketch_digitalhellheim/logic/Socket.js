@@ -190,19 +190,23 @@ initSocket = function () {
     });
 
     socket.on('die', function(data){
-        if(data.token != token){
-            for (let i = 0; i < online_players.length; i++) {
-                if(online_players[i] != null && online_players[i].token == data.playerToken){
-                    online_players[i].alive = false;
+        
+        for (let i = 0; i < online_players.length; i++) {
+            if(online_players[i] != null && online_players[i].token == data.playerToken){
+                online_players[i].alive = false;
+                if (restorer.reference == online_players[i]){
+                    restorer.reference = null;
+                    restorer.following = false;
                 }
-                
             }
-
-            if (in_host_mode) loga7.push({ 
-                type:'server-event', name:'die', info:data, time:new Date()
-            });
-
+            
         }
+
+        if (in_host_mode) loga7.push({ 
+            type:'server-event', name:'die', info:data, time:new Date()
+        });
+
+        
     });
     
 
@@ -278,9 +282,61 @@ initSocket = function () {
     socket.on('setRoomState', function(data){
         
         console.log(data);
-        
+        /*
         boss.health = data.room_data.boss_health;
         boss.invoked = data.room_data.boss_invoked;
+        */
+        
+    });
+
+    socket.on('destroyA7Projectile',function (data) {
+
+        if(data.token != token){
+            for (let i = 0; i < a7Projectiles.length; i++) {
+                
+                if(a7Projectiles[i] != null && a7Projectiles[i].creator_id == data.token && a7Projectiles[i].obj_id == data.obj_id){
+                    a7Projectiles.destroy(i);
+                    break;
+                }
+            }
+
+            if(data.addHolding){
+
+                for (let i = 0; i < online_players.length; i++) {
+                    if(online_players[i] != null && online_players[i].token == data.token){
+                        online_players[i].holding.addObj({
+                            x: Math.random()* (55 - 27) + 27,
+                            y: Math.random()* (30 - 10) + 10
+                        });
+                    }
+                }
+            }
+
+            if (in_host_mode) loga7.push({ 
+                type:'server-event', name:'unlockPlayer', info:data, time:new Date()
+            });
+        }
+
+    });
+
+
+    socket.on('createA7Projectile',function (data) {
+        if(data.playerToken != token){
+            for (let i = 0; i < online_players.length; i++) {
+                if(online_players[i] != null && online_players[i].token == data.playerToken){
+                    var projectile = new A7Projectile( data.parameters[0], data.parameters[1], new Vector2D (data.parameters[2],data.parameters[3]).getUnitaryVector(), online_players[i] );
+                    projectile.creator_id = data.playerToken;
+                    projectile.obj_id = data.obj_id;
+                    a7Projectiles.addObj ( projectile );
+                    
+                }
+            }
+            
+
+            if (in_host_mode) loga7.push({ 
+                type:'server-event', name:'createA7Projectile', info:data, time:new Date()
+            });
+        }
         
     });
 
@@ -373,6 +429,10 @@ initSocket = function () {
 
 // Envios
 
+function createAway(){
+
+}
+
 function askForRoomState(){
     socket.emit('askForRoomState', {
         token:token
@@ -405,6 +465,25 @@ function respawn(){
     sharePosition(pj.x,pj.y);
 
 }
+
+function createA7Projectile(parameters, obj_id){
+    socket.emit('createA7Projectile', {
+        token:token,
+        parameters:parameters,
+        obj_id:obj_id
+    });
+}
+
+function destroyA7Projectile(projectile,addHolding){
+    socket.emit('destroyA7Projectile', {
+        token:token,
+        obj_id:projectile.obj_id,
+        addHolding:addHolding
+    });
+
+}
+
+
 
 function throwRestorer(force, position){
     socket.emit('throwRestorer', {

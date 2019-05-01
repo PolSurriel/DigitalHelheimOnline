@@ -60,10 +60,12 @@ class Restorer{
                             this.following = false;
                             this.inComing = false;
                             this.reference.die();
+                            
                             clearInterval(this.contdown_interval);
                         }else{
                             if(this.reference == pj)damagenumbers.addObj( new DamageNumber (this.x, this.y,this.contdown,false,true) );
                             this.contdown --;
+                            
                         }
                         
                     }, 1000);

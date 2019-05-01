@@ -1,3 +1,5 @@
+var projID = 0;
+
 class A7Projectile {
 
     direction;
@@ -16,15 +18,25 @@ class A7Projectile {
 
     following = true;
 
+    boss_is_shooting = true;
+    creator_id;
+    obj_id;
+
     constructor(x, y,direction, reference){
         this.x = x;
         this.y = y;
         this.direction = direction;
+        this.obj_id = projID++;
+        this.creator_id = token;
 
         this.reference = reference;
 
         this.size.scale(1.5,1.5,1);
         this.radio = this.size.x/2;
+
+        setTimeout(() => {
+            this.boss_is_shooting = false;
+        }, 1000);
         
 
     }

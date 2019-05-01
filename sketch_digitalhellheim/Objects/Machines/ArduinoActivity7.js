@@ -248,7 +248,7 @@ class ArduinoActivity7 {
             this.draw_boss();
             if(this.shield_active)this.draw_shield();
             this.draw_health();
-            this.drawCollider();
+            //this.drawCollider();
         }
 
     }

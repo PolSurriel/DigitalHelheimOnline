@@ -141,23 +141,28 @@ function coop_battle_update(){
         if(boss.shield_active){
             if ( Collider2D.detector.circleToCircle(pj.x,pj.y,boss.x,boss.y,180, pj.radio) ){
                 pj.die();
+                shareDeath();
             }
         }else {
             
             if ( Collider2D.detector.circleToPolygon( x, y, pj.radio*2, boss.poly_arm1) ){
                 pj.die();
+                shareDeath();
                 
             }
             if ( Collider2D.detector.circleToPolygon( x, y, pj.radio *2, boss.poly_arm2)){
                 pj.die();
+                shareDeath();
                 
             }
             if ( Collider2D.detector.circleToPolygon( x, y, pj.radio*2, boss.poly_base) ){
                 pj.die();
+                shareDeath();
                 
             }
             if ( Collider2D.detector.circleToPolygon( x, y, pj.radio*2, boss.poly_head) ){
                 pj.die();
+                shareDeath();
                 
             }
         }
@@ -578,11 +583,11 @@ function coop_battle_draw(){
     enemiesAway.draw();
     enemiesWaves.draw();
     enemiesLines.draw();
-    projectiles.draw();
     waves.draw();
     linesShoot.draw();
     enemiesProjectiles.draw();
 
+    a7Projectiles.draw();
     online_players.draw();
     pj.draw();
     particles.draw();
@@ -594,8 +599,8 @@ function coop_battle_draw(){
     motor3.draw();
     quemaduras.draw();
     littleLightnings.draw();
+    restorer.draw();    
     boss.draw();
-    a7Projectiles.draw();
     
 
     Cursor.draw();
@@ -606,7 +611,6 @@ function coop_battle_draw(){
     textSize(2*10);
     text('DigitalHelheim - ENTI-UB AA2 Algebra 1ro CDI Grupo A (Mananas) / Alumnos: Pol Surriel y Eric Garcia',window.innerWidth/2.02,-window.innerHeight/2.05);
 
-    restorer.draw();
     damagenumbers.draw();
 
     if(!pj.alive){
@@ -682,6 +686,21 @@ function invoke_a_boss(){
                     beats++;
                     boss.dance_normal = false;
                     
+                    // BOSS SHOOTING
+                    if(Math.random() * 100 > 70 ){
+                        var aux = new A7Projectile( boss.x+boss.arm_pos.x-50, boss.y+boss.arm_pos.y+60, new Vector2D(-3,4).getUnitaryVector(),pj );
+
+                        a7Projectiles.addObj (  aux );
+                        createA7Projectile([boss.x+boss.arm_pos.x-50, boss.y+boss.arm_pos.y+60, -3,4], aux.obj_id);
+                    }
+
+                    if(Math.random() * 100 > 70 ){
+                        var aux = new A7Projectile( boss.x+boss.arm_pos.x+50, boss.y+boss.arm_pos.y+60, new Vector2D(3,4).getUnitaryVector(),pj );
+
+                        a7Projectiles.addObj (  aux );
+                        createA7Projectile([boss.x+boss.arm_pos.x+50, boss.y+boss.arm_pos.y+60, 3,4], aux.obj_id);
+                    }
+                    
                 }else if (beats % 2){
                     boss.arm_pos.x = -10;
                     boss.dance_direction = 1;
@@ -694,6 +713,7 @@ function invoke_a_boss(){
 
                     boss.arms_orientation = 0.02;
                 }
+
                 
             }, 451);
                     
@@ -716,158 +736,72 @@ function a7Projectiles_Collision(){
     //PROJECTILES COLLISION
     for (let i = 0; i < a7Projectiles.length; i++) {
 
-        if(a7Projectiles[i] != null){
+        if(a7Projectiles[i] != null && !pj.jumping){
+
+            if(!a7Projectiles[i].reference.alive) a7Projectiles[i].following = false;
             if (Collider2D.detector.circleToCircle(a7Projectiles[i].x, a7Projectiles[i].y, pj.x, pj.y, pj.radio, a7Projectiles[i].radio*3)  ){
                 pj.die();
+                shareDeath();
+
+                destroyA7Projectile(a7Projectiles[i]);
                 a7Projectiles.destroy(i);
             }
         }
 
-        if(a7Projectiles[i] != null){
+        if(a7Projectiles[i] != null && !a7Projectiles[i].boss_is_shooting){
 
             // COLISION CON EL BOSS
-            var bossDetections = 0 ;
+            var polygonDetections = 0;
             var forceRebound = new Vector2D(0,0);
-            if(Collider2D.detector.circleToPolygon( a7Projectiles[i].x, a7Projectiles[i].y, a7Projectiles[i].radio,boss.poly_base ) ){
-                
-                var founded = false;
-                var x1,y1;
-                var x2,y2;
+            var polygonsToRebound = [boss.poly_head, boss.poly_base, boss.poly_arm2,boss.poly_arm1];
 
-                var polygon = boss.poly_base;
-                var x_circle = a7Projectiles[i].x;
-                var y_circle = a7Projectiles[i].y;
-                var radio = a7Projectiles[i].radio;
+            for (let k = 0; k < polygonsToRebound.length; k++) {
 
-                for (let i=0, j = polygon.length -1; i < polygon.length && !founded; j = i++) {
+                if(Collider2D.detector.circleToPolygon( a7Projectiles[i].x-boss.x, a7Projectiles[i].y-boss.y, a7Projectiles[i].radio,polygonsToRebound[k] ) ){
+                    
+                    var founded = false;
+                    var x1,y1;
+                    var x2,y2;
 
-                    if ( Collider2D.detector.lineToCircle(polygon[i][0],polygon[i][1], polygon[j][0],polygon[j][1], x_circle,y_circle,radio)) {
-                        x1 = polygon[i][0];
-                        y1 = polygon[i][1];
-                        x2 = polygon[j][0];
-                        y2 = polygon[j][1];
-                        founded = true;
+                    var polygon = polygonsToRebound[k];
+                    var x_circle = a7Projectiles[i].x-boss.x;
+                    var y_circle = a7Projectiles[i].y-boss.y;
+                    var radio = a7Projectiles[i].radio;
+
+                    for (let l=0, j = polygon.length -1; l < polygon.length && !founded; j = l++) {
+
+                        if ( Collider2D.detector.lineToCircle(polygon[l][0],polygon[l][1], polygon[j][0],polygon[j][1], x_circle,y_circle,radio)) {
+                            x1 = polygon[l][0];
+                            y1 = polygon[l][1];
+                            x2 = polygon[j][0];
+                            y2 = polygon[j][1];
+                            founded = true;
+                        }
+                    }
+
+                    if(founded){
+                        var u = a7Projectiles[i].direction;
+                        var v = new Vector2D(x2 - x1, y2 - y1);
+                        var vectorRebound = Vector2D.getReboundVector(u,v);
+                        forceRebound.x += vectorRebound.x;
+                        forceRebound.y += vectorRebound.y;
+                        polygonDetections++;
                     }
                 }
-
-                var u = a7Projectiles[i].direction;
-                var v = new Vector2D(x2 - x1, y2 - y1);
-                var vectorRebound = Vector2D.getReboundVector(u,v);
-                forceRebound.x += vectorRebound.x;
-                forceRebound.y += vectorRebound.y;
-                bossDetections++;
-                // projectiles[i].direction = Vector2D.getReboundVector(u,v);
-                // projectiles[i].rebounds++;
             }
 
-            if(Collider2D.detector.circleToPolygon( a7Projectiles[i].x, a7Projectiles[i].y, a7Projectiles[i].radio,boss.poly_arm1 ) ){
-                
-                var founded = false;
-                var x1,y1;
-                var x2,y2;
-
-                var polygon = boss.poly_arm1;
-                var x_circle = a7Projectiles[i].x;
-                var y_circle = a7Projectiles[i].y;
-                var radio = a7Projectiles[i].radio;
-
-                for (let i=0, j = polygon.length -1; i < polygon.length && !founded; j = i++) {
-
-                    if ( Collider2D.detector.lineToCircle(polygon[i][0],polygon[i][1], polygon[j][0],polygon[j][1], x_circle,y_circle,radio)) {
-                        x1 = polygon[i][0];
-                        y1 = polygon[i][1];
-                        x2 = polygon[j][0];
-                        y2 = polygon[j][1];
-                        founded = true;
-                    }
-                }
-
-                var u = a7Projectiles[i].direction;
-                var v = new Vector2D(x2 - x1, y2 - y1);
-                var vectorRebound = Vector2D.getReboundVector(u,v);
-                forceRebound.x += vectorRebound.x;
-                forceRebound.y += vectorRebound.y;
-                bossDetections++;
-
-            }
-
-            if(Collider2D.detector.circleToPolygon( a7Projectiles[i].x, a7Projectiles[i].y, a7Projectiles[i].radio,boss.poly_arm2 ) ){
-                
-                var founded = false;
-                var x1,y1;
-                var x2,y2;
-
-                var polygon = boss.poly_arm2;
-                var x_circle = projectiles[i].x;
-                var y_circle = projectiles[i].y;
-                var radio = projectiles[i].radio;
-
-                for (let i=0, j = polygon.length -1; i < polygon.length && !founded; j = i++) {
-
-                    if ( Collider2D.detector.lineToCircle(polygon[i][0],polygon[i][1], polygon[j][0],polygon[j][1], x_circle,y_circle,radio)) {
-                        x1 = polygon[i][0];
-                        y1 = polygon[i][1];
-                        x2 = polygon[j][0];
-                        y2 = polygon[j][1];
-                        founded = true;
-                    }
-                }
-
-                var u = projectiles[i].direction;
-                var v = new Vector2D(x2 - x1, y2 - y1);
-                var vectorRebound = Vector2D.getReboundVector(u,v);
-                forceRebound.x += vectorRebound.x;
-                forceRebound.y += vectorRebound.y;
-                bossDetections++;
-                // projectiles[i].direction = Vector2D.getReboundVector(u,v);
-                // projectiles[i].rebounds++;
-            }
-
-            if(Collider2D.detector.circleToPolygon( a7Projectiles[i].x, a7Projectiles[i].y, a7Projectiles[i].radio,boss.poly_head ) ){
-                
-                var founded = false;
-                var x1,y1;
-                var x2,y2;
-
-                var polygon = boss.poly_head;
-                var x_circle = a7Projectiles[i].x;
-                var y_circle = a7Projectiles[i].y;
-                var radio = a7Projectiles[i].radio;
-
-                for (let i=0, j = polygon.length -1; i < polygon.length && !founded; j = i++) {
-
-                    if ( Collider2D.detector.lineToCircle(polygon[i][0],polygon[i][1], polygon[j][0],polygon[j][1], x_circle,y_circle,radio)) {
-                        x1 = polygon[i][0];
-                        y1 = polygon[i][1];
-                        x2 = polygon[j][0];
-                        y2 = polygon[j][1];
-                        founded = true;
-                    }
-                }
-
-                var u = projectiles[i].direction;
-                var v = new Vector2D(x2 - x1, y2 - y1);
-                var vectorRebound = Vector2D.getReboundVector(u,v);
-                forceRebound.x += vectorRebound.x;
-                forceRebound.y += vectorRebound.y;
-                bossDetections++;
-                // projectiles[i].direction = Vector2D.getReboundVector(u,v);
-                // projectiles[i].rebounds++;
-            }
-
-            if (bossDetections != 0) {
+            if (polygonDetections != 0) {
                 a7Projectiles[i].direction = forceRebound;
-                a7Projectiles[i].rebounds++;
-                if (bossDetections > 1) print("holi");
+                a7Projectiles[i].rebounds++;                
             }
-
-
 
             if(a7Projectiles[i]!= null && a7Projectiles[i].rebounds > 20){
+                destroyA7Projectile(a7Projectiles[i]);
                 a7Projectiles.destroy( i );
             }
             
-            if(a7Projectiles[i]!= null && new Vector2D(pj.x-a7Projectiles[i].x,pj.y-a7Projectiles[i].y).getMagnitude() > distance_to_destroy*3 ){
+            if(a7Projectiles[i]!= null && new Vector2D(pj.x-a7Projectiles[i].x,pj.y-a7Projectiles[i].y).getMagnitude() > distance_to_destroy ){
+                destroyA7Projectile(a7Projectiles[i]);
                 a7Projectiles.destroy( i );
             }
 
@@ -886,12 +820,7 @@ function a7Projectiles_Collision(){
                 y: Math.random()* (30 - 10) + 10
               });
               
-              if(pj.pu_doubleproj_caught){
-                  pj.holding.addObj({
-                    x: Math.random()* (55 - 27) + 27,
-                    y: Math.random()* (30 - 10) + 10
-                  });
-              }
+              
               enemiesAway.destroy(i);
     
             }
@@ -906,14 +835,9 @@ function a7Projectiles_Collision(){
                 y: Math.random()* (20 - 10) + 10
               });
               
-              if(pj.pu_doubleproj_caught){
-                  pj.holding.addObj({
-                      x: Math.random()* (55 - 17) + 17,
-                      y: Math.random()* (20 - 10) + 10
-                  });
-              }
-
+              destroyA7Projectile(a7Projectiles[i],true);
               a7Projectiles.destroy(i);
+
 
             }
         }
