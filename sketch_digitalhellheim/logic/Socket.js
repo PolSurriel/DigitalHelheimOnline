@@ -8,7 +8,7 @@ var online = false;
 
 var loga7 = new Array();
 
-var SERVER_IP = 'localhost';
+var SERVER_IP = '192.168.1.105';
 
 function saveInfo() {
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(loga7));
@@ -342,6 +342,7 @@ initSocket = function () {
             restorer.reference = false;
             restorer.contdown = 5;
             restorer.force = data.force
+            restorer.tokillAll = true;
             restorer.speed = 300;
 
             if (in_host_mode) loga7.push({ 

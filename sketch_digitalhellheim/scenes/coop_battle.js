@@ -273,6 +273,56 @@ function coop_battle_update(){
     var motors = [motor1, motor2, motor3];
     
     for (let i = 0; i < motors.length; i++) {
+
+        for (let p = 0; p < a7Projectiles.length; p++) {
+
+            if(a7Projectiles[p] != null){
+                var dist = new Vector2D(a7Projectiles[p].x-motors[i].x,a7Projectiles[p].y-motors[i].y).getMagnitude();
+                if(dist < 170 && Collider2D.detector.circleToPolygon(a7Projectiles[p].x,a7Projectiles[p].y,a7Projectiles[p].radio*2.5,motors[i].poly) ){
+                   
+                    var founded = false;
+                    var x1,y1;
+                    var x2,y2;
+
+                    var polygon = motors[i].poly;
+                    var x_circle = a7Projectiles[p].x;
+                    var y_circle = a7Projectiles[p].y;
+                    var radio = a7Projectiles[p].radio;
+
+                    for (let l=0, j = polygon.length -1; l < polygon.length && !founded; j = l++) {
+
+
+                        if ( Collider2D.detector.lineToCircle(polygon[l][0],polygon[l][1], polygon[j][0],polygon[j][1], x_circle,y_circle,radio)) {
+                            x1 = polygon[l][0];
+                            y1 = polygon[l][1];
+                            x2 = polygon[j][0];
+                            y2 = polygon[j][1];
+                            founded = true;
+                            
+                        }
+                    }
+
+
+                    if(founded){
+                        var u = a7Projectiles[p].direction;
+                        var v = new Vector2D(x2 - x1, y2 - y1);
+                        
+                        a7Projectiles[p].direction = Vector2D.getReboundVector(u,v);
+    
+                    }
+
+
+
+                   
+                   
+
+               }
+
+            }
+            
+        }
+
+
         var dist = new Vector2D(pj.x-motors[i].x,pj.y-motors[i].y).getMagnitude();
         if(dist < 170 && Collider2D.detector.circleToPolygon(pj.x,pj.y,pj.radio*2.5,motors[i].poly) ){
             var newPos = Collider2D.reaction.circleToPolygon(pj.last_x,pj.last_y,  pj.x,pj.y,pj.radio*2.5,motors[i].poly);
@@ -667,6 +717,13 @@ function a7Projectiles_Collision(){
     for (let i = 0; i < a7Projectiles.length; i++) {
 
         if(a7Projectiles[i] != null){
+            if (Collider2D.detector.circleToCircle(a7Projectiles[i].x, a7Projectiles[i].y, pj.x, pj.y, pj.radio, a7Projectiles[i].radio*3)  ){
+                pj.die();
+                a7Projectiles.destroy(i);
+            }
+        }
+
+        if(a7Projectiles[i] != null){
 
             // COLISION CON EL BOSS
             var bossDetections = 0 ;
@@ -811,8 +868,6 @@ function a7Projectiles_Collision(){
             }
             
             if(a7Projectiles[i]!= null && new Vector2D(pj.x-a7Projectiles[i].x,pj.y-a7Projectiles[i].y).getMagnitude() > distance_to_destroy*3 ){
-                print(new Vector2D(pj.x-a7Projectiles[i].x,pj.y-a7Projectiles[i].y).getMagnitude());
-                print(distance_to_destroy);
                 a7Projectiles.destroy( i );
             }
 

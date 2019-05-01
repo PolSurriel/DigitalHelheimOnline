@@ -23,7 +23,6 @@ class A7Projectile {
 
         this.reference = reference;
 
-
         this.size.scale(1.5,1.5,1);
         this.radio = this.size.x/2;
         

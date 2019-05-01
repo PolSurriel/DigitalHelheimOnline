@@ -9,6 +9,7 @@ class Restorer{
     reference;
 
     force = new Vector2D(0,0);
+    tokillAll = false;
 
     following = false;
     inComing = false;
@@ -81,6 +82,11 @@ class Restorer{
 
             if (this.speed <= 0) this.speed = 0;
             else this.speed -= UMI.getSpeed(100);
+
+            if (this.speed == 0 && this.tokillAll){
+                this.tokillAll = false;
+                pj.die();
+            }
 
         }
 

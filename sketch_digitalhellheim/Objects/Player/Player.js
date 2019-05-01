@@ -283,6 +283,7 @@ class Player extends RealObject {
             restorer.reference = false;
             restorer.contdown = 5;
             restorer.force = Vector2D.createVectoByAngle(this.orientation).getUnitaryVector();
+            restorer.tokillAll = true;
             restorer.speed = 300;
             
             throwRestorer(restorer.force, {x:restorer.x, y:restorer.y});
@@ -314,10 +315,10 @@ class Player extends RealObject {
 
         
         
-        if(this.shield_active && !Player.shield_sound.playing()){
+        if(!this.is_online && this.shield_active && !Player.shield_sound.playing()){
             Player.shield_sound.loop();
             
-        }else if (!this.shield_active && Player.shield_sound.playing()) {
+        }else if (!this.is_online && !this.shield_active && Player.shield_sound.playing()) {
 
             Player.shield_sound.stop();
             Player.shield_init_sound.play();
@@ -367,7 +368,7 @@ class Player extends RealObject {
 
         this.orientation = this.directionVector.getAngle();
         
-        if(!this.pu_shield_caught && this.jumping && this.shield_active){
+        if(!this.is_online && !this.pu_shield_caught && this.jumping && this.shield_active){
             this.shooting = false;
             this.shield_active = false;
             Player.shield_sound.stop();
