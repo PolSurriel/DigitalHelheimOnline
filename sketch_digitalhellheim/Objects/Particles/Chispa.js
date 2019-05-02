@@ -69,22 +69,39 @@ class Chispa {
 
             if(!this.noGravity){
 
+                var checkCol = false;
+                var collVector = new Vector2D( 1,0 );
                 if ( _x < 0 ) {
                     this.aColisionado = true;
-                    this.force.x *= -1;
+                    checkCol = true;
+                    collVector = new Vector2D( 0,1 );
+
                 }else if (_x > window.innerWidth) {
+                    checkCol = true;
                     this.aColisionado = true;
-                    this.force.x *= -1;
+                    collVector = new Vector2D( 0,1 );
     
                 }else if(_y < 0){
+                    checkCol = true;
                     this.aColisionado = true;
-                    this.force.y *= -1;
-    
+                    collVector = new Vector2D( 1,0 );
+
                 }else if(_y > window.innerHeight){
+                    checkCol = true;
                     this.aColisionado = true;
-                    this.force.y *= -1;
+                    collVector = new Vector2D( 1,0 );
     
                 }
+
+                if(checkCol){
+                    var newForce = Vector2D.getReboundVector(new Vector2D( this.force.x, this.force.y ), collVector);
+
+                    this.force.x = newForce.x;
+                    this.force.y = newForce.y;
+
+                }
+
+
             }
 
         }

@@ -8,7 +8,7 @@ var online = false;
 
 var loga7 = new Array();
 
-var SERVER_IP = '192.168.1.105';
+var SERVER_IP = 'localhost';
 
 function saveInfo() {
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(loga7));
@@ -422,6 +422,7 @@ initSocket = function () {
 
     setInterval(() => {
         sharePosition(pj.x, pj.y);
+        
       }, 1000);
       
 }

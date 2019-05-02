@@ -101,6 +101,7 @@ function coop_battle_update(){
     if (boss.health <= 0){
         boss.invoked = false;
         boss.in_floor = false;
+        clearInterval(dancingInterval);
         a7_song.stop();
 
     }
@@ -678,7 +679,9 @@ function invoke_a_boss(){
             boss.dancing = true;
 
 
-            setInterval(() => {
+            window.dancingInterval = setInterval(() => {
+        
+
                 beats++;
                 boss.dance_normal = true;
 

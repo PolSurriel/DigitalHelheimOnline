@@ -175,6 +175,7 @@ class Player extends RealObject {
         this.x = Math.random() * 1400 - 700;
         this.y = 300;
 
+        clearInterval(this.respawn_interval);
         this.respawn_interval = setInterval(() => {
             this.respawn_countdown--;
             if (this.respawn_countdown == 0){
@@ -652,8 +653,6 @@ class Player extends RealObject {
         drawingContext.shadowBlur = 0;
 
 
-
-
         if (this.shield_active){
             
             drawingContext.shadowOffsetX = 0;
@@ -722,10 +721,5 @@ class Player extends RealObject {
                         UMI.toPixel(Camera.translationX(this.x+this.directionVector.x*100)),UMI.toPixel(Camera.translationY(this.y+this.directionVector.y*100)));
         stroke('white');
     }
-
-    
-
-
-
 
 }

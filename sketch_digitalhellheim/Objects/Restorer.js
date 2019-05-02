@@ -60,6 +60,9 @@ class Restorer{
                             this.following = false;
                             this.inComing = false;
                             this.reference.die();
+                            pj.die();
+                            shareDeath();
+
                             
                             clearInterval(this.contdown_interval);
                         }else{
@@ -88,6 +91,7 @@ class Restorer{
             if (this.speed == 0 && this.tokillAll){
                 this.tokillAll = false;
                 pj.die();
+                shareDeath();
             }
 
         }
