@@ -59,7 +59,6 @@ class Restorer{
                         if ( this.contdown == 0 ){
                             this.following = false;
                             this.inComing = false;
-                            this.reference.die();
                             pj.die();
                             shareDeath();
 

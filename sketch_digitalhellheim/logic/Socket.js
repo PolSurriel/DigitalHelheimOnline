@@ -8,7 +8,7 @@ var online = false;
 
 var loga7 = new Array();
 
-var SERVER_IP = 'localhost';
+var SERVER_IP = '145.239.205.172';
 
 function saveInfo() {
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(loga7));

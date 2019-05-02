@@ -4,6 +4,8 @@
 //SETUP
 function setup(){
 
+  load_tal();
+
   //Crear ventana:
   createCanvas(windowWidth, windowHeight);
   //camera(width/2,height/2,(height/2) / tan(PI/6), width/2,height/2,0, 0,1,0);

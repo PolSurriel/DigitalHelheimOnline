@@ -217,13 +217,19 @@ function preload() {
 
 
     chispa_sound = new Sound('./src/chispas.mp3', 0.02);
-    
     chispa2_sound = new Sound('./src/chispas.mp3', 0.015);
     power_up_sound = new Sound('./src/get_power_up.mp3',1);
     a7_song = new Sound('./src/a7_song.mp3',0.7);
     menu_music = new Sound('./src/cancion_menu.wav',0.2); 
     music = new Sound('./src/disco-shmisco.mp3',0.5);
-    room_music = new Sound('./src/room_music.mp3',0.5);;
+    room_music = new Sound('./src/room_music.mp3',0.5);
+  
+
+  }
+
+
+  function load_tal(){
+
     bg_room = loadImage('./src/bg_room_texture.png',100,100);
     textura_quemado = loadImage('./src/textura_quemado.png', 47/2, 27/2);
     pj.loadAssets();
@@ -261,41 +267,7 @@ function preload() {
     power_up_shield_img_layer_1= loadImage('./src/power_up_shield_layer_1.png');
     power_up_shield_img_layer_2= loadImage('./src/power_up_shield_layer_2.png');
 
-    if(isMobileDevice()){
-
-      
-      document.getElementById('screen').innerHTML += `
-      
-      <div id="jump-button" style="position:fixed; background-color:gray;border-radius: 50%;" >
-      </div>
-      
-      `;
-      
-      window.jump_button = document.getElementById('jump-button');
-      
-      
-      setTimeout(() => {
-        
-        var w = Math.floor(UMI.toPixel(120));
-        
-        
-        jump_button.style.width = w+'px';
-        jump_button.style.height = w+'px';
-        jump_button.style.opacity = 0.3;
-        jump_button.style.marginLeft = window.innerWidth - window.innerWidth*0.2;
-        jump_button.style.marginTop = window.innerHeight - window.innerHeight*0.2;
-        
-        jump_button.onclick = function (e){
-          onJump(e);
-        }
-        
-      }, 2000);
-      
-    }
-  
-
   }
-
 
   
 
