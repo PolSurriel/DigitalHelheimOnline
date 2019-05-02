@@ -4,7 +4,7 @@
 //SETUP
 function setup(){
 
-  load_tal();
+  //load_tal();
 
   //Crear ventana:
   createCanvas(windowWidth, windowHeight);
