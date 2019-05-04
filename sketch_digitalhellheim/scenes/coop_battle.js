@@ -121,7 +121,7 @@ function coop_battle_update(){
     littleLightnings.update();
     boss.update();
     
-    if (!pj.inmune && !restorer.following && restorer.reference != pj && Collider2D.detector.circleToPoint(restorer.x, restorer.y, restorer.distance_to_infect, pj.x, pj.y) ){
+    if (pj.alive && !pj.inmune && !restorer.following && restorer.reference != pj && Collider2D.detector.circleToPoint(restorer.x, restorer.y, restorer.distance_to_infect, pj.x, pj.y) ){
         // AVISAR AL SERVIDOR
         restorer.reference = pj;
         restorer.following = true;

@@ -426,11 +426,14 @@ function register_draw(){
     textSize(UMI.toPixel(30));
     text('- Press ENTER to continue -', window.innerWidth/2, window.innerHeight/1.5);
 
+    /*
     fill(0);
     rect( UMI.toPixel( Camera.translationX( 950)), UMI.toPixel(Camera.translationY(200)),UMI.toPixel(300),UMI.toPixel(160) );
 
+    
     fill(255)
     textSize(UMI.toPixel(60));
     text('ESTO ES \n SPOILER...', UMI.toPixel(Camera.translationX(1100)), UMI.toPixel(Camera.translationY(280)));
+    */
 
 }

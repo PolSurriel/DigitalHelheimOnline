@@ -239,7 +239,8 @@ io.on('connection', function(socket){
         io.emit('playerSetPosition', { 
             playerToken:data.token,
             x:data.x,
-            y:data.y 
+            y:data.y,
+            alive:data.alive
         });
     });
 

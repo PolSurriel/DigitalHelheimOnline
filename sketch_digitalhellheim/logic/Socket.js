@@ -8,7 +8,7 @@ var online = false;
 
 var loga7 = new Array();
 
-var SERVER_IP = '145.239.205.172';
+var SERVER_IP = 'localhost';
 
 function saveInfo() {
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(loga7));
@@ -119,6 +119,7 @@ initSocket = function () {
                 if(online_players[i] != null && online_players[i].token == data.playerToken){
                     online_players[i].x = data.x;
                     online_players[i].y = data.y;
+                    online_players[i].alive = data.alive;
 
                 }
                 
@@ -265,7 +266,8 @@ initSocket = function () {
                     restorer.reference = online_players[i];
                     restorer.following = true;
                     restorer.inComing = true;
-                    
+                    restorer.contdown = 5;
+
                 }
                 
             }
@@ -550,7 +552,8 @@ function sharePosition(x, y){
     socket.emit('sharePosition', {
         x:x,
         y:y,
-        token:token
+        token:token,
+        alive:pj.alive
     });
 }
 

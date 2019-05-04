@@ -210,19 +210,22 @@ function preload() {
 
     font = loadFont('fuentes/fuente.ttf');
     font2 = loadFont('fuentes/fuente2.ttf');
+    font_p = loadFont('fuentes/font_p.ttf');
 
     TIMES_NEW_ARIAL = loadFont('fuentes/timesnewarial.ttf');
     PIXEL_ARIAL = loadFont('fuentes/Pixeltype.ttf');
 
+    /*
+    chispa_sound = new Sound('./src/chispas.mp3', 0.02);
+    chispa2_sound = new Sound('./src/chispas.mp3', 0.015);
+    power_up_sound = new Sound('./src/get_power_up.mp3',1);
+    a7_song = new Sound('./src/a7_song.mp3',0.7);
+    menu_music = new Sound('./src/cancion_menu.wav',0.2); 
+    music = new Sound('./src/disco-shmisco.mp3',0.5);
+    room_music = new Sound('./src/room_music.mp3',0.5);
+    */
 
-    //chispa_sound = new Sound('./src/chispas.mp3', 0.02);
-    //chispa2_sound = new Sound('./src/chispas.mp3', 0.015);
-    //power_up_sound = new Sound('./src/get_power_up.mp3',1);
-    //a7_song = new Sound('./src/a7_song.mp3',0.7);
-    //menu_music = new Sound('./src/cancion_menu.wav',0.2); 
-    //music = new Sound('./src/disco-shmisco.mp3',0.5);
-    //room_music = new Sound('./src/room_music.mp3',0.5);
-  
+    load_tal();
 
   }
 
