@@ -1,27 +1,33 @@
 class Sound {
 
     src;
+    playing = false;
 
     constructor(src, volume){
         this.src = new Audio(src);
-        this.src.setVolume(volume);
+        this.src.volume = volume;
     }
 
 
     play(){
         this.src.play();
+        this.playing = true;
     }
 
     stop(){
-        this.src.stop();
+        this.playing = false;
+        this.src.pause();
+        this.src.currentTime = 0;
     }
 
     playing(){
-        return this.src.isPlaying();
+        return this.playing;
     }
 
     loop(){
-        this.src.loop();
+        this.playing = true;
+        this.loop = true
+        this.src.play();
     }
 
     end(){
