@@ -26,7 +26,7 @@ class Sound {
 
     loop(){
         this.playing = true;
-        this.loop = true
+        this.src.loop = true
         this.src.play();
     }
 
