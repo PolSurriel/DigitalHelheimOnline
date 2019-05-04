@@ -43,7 +43,7 @@ var display_li = false;
 
 function register_setup(){
 
-    //menu_music.loop();
+    menu_music.loop();
 
     li = new Lightning(UMI.toUMI(window.innerWidth-window.innerWidth/1.8),0,UMI.toUMI(window.innerWidth),500);
 
@@ -237,19 +237,19 @@ function register_update(){
         display_li =  1 == (Math.floor(Math.random() * (100 - 1) ) + 1);
         
         if(display_li){
-            //chispa_sound.loop();
+            chispa_sound.loop();
             li_speed = 100;
         }
     }else if (1 == (Math.floor(Math.random() * (50 - 1) ) + 1)) {
         display_li = false;
         li_speed = 900000;
-        //chispa_sound.stop();
+        chispa_sound.stop();
     }
 
     
     if(li_mode1 == li_mode2){
         display_li = false;
-        //chispa_sound.stop();
+        chispa_sound.stop();
     }
 
 
@@ -318,7 +318,7 @@ function register_update(){
 
         haciendo_chispas = creadas < 15;
         if(creadas > 10){
-            //chispa2_sound.stop();
+            chispa2_sound.stop();
         }
 
     }

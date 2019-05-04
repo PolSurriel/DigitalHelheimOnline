@@ -3,7 +3,7 @@ class Sound {
     src;
 
     constructor(src, volume){
-        this.src = loadSound(src);
+        this.src = new Audio(src);
         this.src.setVolume(volume);
     }
 
