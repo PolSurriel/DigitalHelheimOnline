@@ -107,7 +107,7 @@ function coop_battle_update(){
 
     }
 
-    damage_to_boss = (10*30) / (online_players.added +1);
+    damage_to_boss = (10*40) / (online_players.added +1);
 
     damagenumbers.update();
     restorer.update();
@@ -710,8 +710,25 @@ function invoke_a_boss(){
                     boss.dance_direction = 1;
 
                     boss.arms_orientation = -0.02;
+
+                    if((!boss.shield_active)){
+                        if(Math.random() * 100 > 70 ){
+                            var aux = new A7Projectile( boss.x+boss.arm_pos.x-50, boss.y+boss.arm_pos.y+60, new Vector2D(-3,4).getUnitaryVector(),pj );
+    
+                            a7Projectiles.addObj (  aux );
+                            createA7Projectile([boss.x+boss.arm_pos.x-50, boss.y+boss.arm_pos.y+60, -3,4], aux.obj_id);
+                        }
+                    }
                     
                 }else {
+                    if((!boss.shield_active)){
+                        if(Math.random() * 100 > 70 ){
+                            var aux = new A7Projectile( boss.x+boss.arm_pos.x+50, boss.y+boss.arm_pos.y+60, new Vector2D(3,4).getUnitaryVector(),pj );
+    
+                            a7Projectiles.addObj (  aux );
+                            createA7Projectile([boss.x+boss.arm_pos.x+50, boss.y+boss.arm_pos.y+60, 3,4], aux.obj_id);
+                        }
+                    }
                     boss.arm_pos.x = 10;
                     boss.dance_direction = -1;
 
