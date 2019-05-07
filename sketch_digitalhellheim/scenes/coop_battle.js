@@ -94,7 +94,7 @@ function coop_battle_update(){
         boss.shield_active = false;
         setTimeout(() => {
             boss.shield_active = true;
-        }, 10 * 1000);
+        }, 20 * 1000);
 
     }
 
