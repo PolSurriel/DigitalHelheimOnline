@@ -94,6 +94,8 @@ if(!isMobileDevice()){
             });
         }
 
+        call_on_user_interaction();
+
     }
 
     online_playing_onmouseup = function (e) {
@@ -113,6 +115,8 @@ if(!isMobileDevice()){
                 down:false
             });
         }
+
+        call_on_user_interaction();
     }
 
     online_playing_onkeydown = function (e){
@@ -158,6 +162,7 @@ if(!isMobileDevice()){
         }
 
         
+        call_on_user_interaction();
 
 
 
@@ -207,6 +212,8 @@ if(!isMobileDevice()){
             });
         }
 
+        call_on_user_interaction();
+
 
     }
 
@@ -216,6 +223,8 @@ if(!isMobileDevice()){
             type:'mouseMov',
             vector:pj.mouse_vector
         });
+
+        call_on_user_interaction();
     }
 
 
@@ -225,6 +234,8 @@ if(!isMobileDevice()){
             Mouse.left.clicked = true;
         else if (e.button == 2)
             Mouse.right.clicked = true;
+
+            call_on_user_interaction();
     }
 
     playing_onmouseup = function (e) {
@@ -232,6 +243,8 @@ if(!isMobileDevice()){
             Mouse.left.clicked = false;
         else if (e.button == 2)
             Mouse.right.clicked = false;
+
+            call_on_user_interaction();
 
     }
 
@@ -290,6 +303,8 @@ if(!isMobileDevice()){
                     break;
             }
         }
+
+        call_on_user_interaction();
     }
 
     playing_onkeyup = function (e){
@@ -322,28 +337,29 @@ if(!isMobileDevice()){
                 break;
 
         }
+
+        call_on_user_interaction();
         
 
     }
 
     playing_onmousemove = function(){
-        
+        call_on_user_interaction();
     }
 
 
 
 
-}else {
+}
 
-    function onJump (e){
+function call_on_user_interaction(){
+    for (let i = 0; i < toPlayOnUserInteraction.length; i++) {
+        toPlayOnUserInteraction[i].play();
 
     }
 
-    function touchPadEvent (e){
-        console.log(e.type);
-    }
 
 
-
+    toPlayOnUserInteraction = new Array(0);
 
 }

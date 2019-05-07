@@ -7,6 +7,7 @@ function room_setup(){
     window.onmouseup   = playing_onmouseup; 
     window.onkeydown   = playing_onkeydown; 
     window.onkeyup     = playing_onkeyup; 
+    window.onmousemove = playing_onmousemove;
     
     destroy_all();
     cameraReference = new FollowerReference({x:0,y:0});

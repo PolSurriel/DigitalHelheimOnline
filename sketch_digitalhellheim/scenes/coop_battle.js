@@ -34,9 +34,10 @@ function allDamageActive(){
 window.el_punto = new Vector2D(0,0);
 function coop_battle_setup(){
 
-
-
-
+    chispa_sound.stop();
+    chispa2_sound.stop();
+    power_up_sound.stop();
+    
     online = true;
     initSocket();
 

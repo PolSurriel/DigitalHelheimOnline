@@ -1,33 +1,49 @@
 class Sound {
 
     src;
-    playing = false;
+    isPlaying = false;
+    volume;
+
+    looping = false;
 
     constructor(src, volume){
         this.src = new Audio(src);
-        this.src.volume = volume;
+        this.src.volume = 0;
+        this.volume = volume;
+        this.src.loop = true;
+        toPlayOnUserInteraction.push(this.src);
     }
 
 
     play(){
-        this.src.play();
-        this.playing = true;
+        stopAtFinal.addObj(this);
+        this.src.volume = this.volume;
+        this.src.currentTime = 0;
+        this.isPlaying = true;
+
+        setTimeout(() => {
+            this.stop();
+        }, this.src.duration*1000);
+        
     }
 
     stop(){
-        this.playing = false;
-        this.src.pause();
+        this.isPlaying = false;
+        this.src.volume = 0;
         this.src.currentTime = 0;
+        if(!this.looping) stopAtFinal.destroy(this.index_in_main_array);
+
     }
 
     playing(){
-        return this.playing;
+        return this.isPlaying;
     }
 
     loop(){
-        this.playing = true;
-        this.src.loop = true
-        this.src.play();
+        this.isPlaying = true;
+        this.src.volume = this.volume;
+        this.src.currentTime = 0;
+        this.looping = true;
     }
 
     end(){

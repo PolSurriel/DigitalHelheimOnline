@@ -4,6 +4,7 @@ class Enemy extends RealObject {
     directionVector;
 
     radio = 7;
+    normalRadio = 7;
 
     last_x;
     last_y;
@@ -20,6 +21,15 @@ class Enemy extends RealObject {
 
         this.forceVector = new Vector2D(x-pj.x, y-pj.y).getUnitaryVector();
         this.directionVector = new Vector2D(x-pj.x, y-pj.y);
+    }
+
+    damage() {
+        this.radio += UMI.getSpeed(40);
+        if(this.radio >= this.normalRadio * 2.5){
+            kill_sound.play();
+            enemies.destroy(this.index_in_main_array);
+            score += 100;
+        }
     }
 
     setSpeed(){

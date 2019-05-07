@@ -11,6 +11,7 @@ class EnemyLine extends RealObject {
     timeUntilLastShoot = this.rateOfFire;
 
     radio = 10;
+    normalRadio = 10;
 
     normalSpeed = 190;
     actualSpeed;
@@ -92,6 +93,16 @@ class EnemyLine extends RealObject {
 
     }
 
+    damage() {
+        this.radio += UMI.getSpeed(40);
+        if(this.radio >= this.normalRadio * 2.5){
+            kill_sound.play();
+            enemiesLines.destroy(this.index_in_main_array);
+            score += 100;
+        }
+
+    }
+
     update() {
         this.setSpeed();
         this.last_x = this.x;
@@ -113,10 +124,6 @@ class EnemyLine extends RealObject {
         stroke('black');
         ellipse(UMI.toPixel(Camera.translationX(this.x)) , UMI.toPixel(Camera.translationY(this.y)) ,UMI.toPixel(this.radio*2), UMI.toPixel(this.radio*2));
         
-        textAlign(RIGHT);
-        noStroke();
-        textSize(UMI.toPixel(40));
-        text('x'+score+'    ',window.innerWidth/2,-window.innerHeight/2.2);
     
     }
 

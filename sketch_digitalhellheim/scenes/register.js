@@ -43,6 +43,10 @@ var display_li = false;
 
 function register_setup(){
 
+    window.onmousemove = call_on_user_interaction;
+    window.onmousedown = call_on_user_interaction;
+    window.onmouseup = call_on_user_interaction;
+
     menu_music.loop();
 
     li = new Lightning(UMI.toUMI(window.innerWidth-window.innerWidth/1.8),0,UMI.toUMI(window.innerWidth),500);
@@ -131,6 +135,7 @@ function register_update(){
             var direction = new Vector2D (li.point2.x - li.point1.x ,li.point2.y - li.point1.y).getUnitaryVector();
             vector1 = new Vector2D(direction.x+Math.random() * (2)  -1, direction.y);
             chispas_menu.addObj( new Chispa(li.point1.x, li.point1.y, vector1,true) );
+            
         }
 
     } else if(li_mode1 == 1){
@@ -274,6 +279,8 @@ function register_update(){
         variancia = getRndInteger(10, 90);
         if(haciendo_chispas){
             //chispa2_sound.loop();
+            chispa2_sound.play();
+            
         }
 
     }else {
@@ -356,6 +363,8 @@ function validate(){
 }
 
 window.onkeydown = function(e) {
+
+    call_on_user_interaction();
 
 
     if(e.keyCode == INTRO_KEY){

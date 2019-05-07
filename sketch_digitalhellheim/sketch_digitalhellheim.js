@@ -4,6 +4,8 @@
 //SETUP
 function setup(){
 
+
+  
   //load_tal();
 
   //Crear ventana:
@@ -53,6 +55,7 @@ function setup(){
 function draw(){ 
 
   
+
 
   if(!pause){
     if(!registrado) register_gameloop();

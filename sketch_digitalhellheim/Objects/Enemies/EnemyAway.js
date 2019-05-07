@@ -4,7 +4,7 @@ class EnemyAway extends RealObject {
     directionVector;
 
     distanceToRunAway = 100;
-    maxDistance = 3000;
+    maxDistance = 1000;
 
     static radio = 3;
     radio = EnemyAway.radio;
@@ -27,6 +27,7 @@ class EnemyAway extends RealObject {
         this.actualSpeed = this.normalSpeed;
 
     }
+
 
     moveFront(){
         this.x += this.directionVector.x*this.speed;
@@ -115,17 +116,12 @@ class EnemyAway extends RealObject {
         
         drawingContext.shadowOffsetX = 0;
         drawingContext.shadowOffsetY = 0;
-        drawingContext.shadowBlur = 10;
+        //drawingContext.shadowBlur = 10;
+        drawingContext.shadowBlur = 0;
         drawingContext.shadowColor = "green";
         fill(30,255,30,155);
         stroke('green');
         ellipse(UMI.toPixel(Camera.translationX(this.x)) , UMI.toPixel(Camera.translationY(this.y)) ,UMI.toPixel(this.radio*2), UMI.toPixel(this.radio*2));
-        
-
-        textAlign(RIGHT);
-        noStroke();
-        textSize(UMI.toPixel(40));
-        text('x'+score+'    ',window.innerWidth/2,-window.innerHeight/2.2);
     
     }
 

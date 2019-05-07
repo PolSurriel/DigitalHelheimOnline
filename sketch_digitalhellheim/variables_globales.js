@@ -83,6 +83,10 @@ var pu_4_w_l2 = new Wiggle(-120,180,3);
 var pu_5_w = new Wiggle(80,180,1);
 var pu_5_w_l2 = new Wiggle(80,180,3);
 
+var toPlayOnUserInteraction = new Array(0);
+var stopAtFinal = new Array();
+stopAtFinal.setAllNull();
+
 
 // var poly = [[-10,10], [-30, 50], [40, 30], [55,31]];
 var poly = [[-10,6], [-30, 50], [40, 30],[50, -10] ];
@@ -206,6 +210,15 @@ var boss_cabeza;
 var boss_shield;
 
 
+chispa_sound = new Sound('./src/chispas.mp3', 0.1);
+chispa2_sound = new Sound('./src/chispas.mp3', 0.1);
+power_up_sound = new Sound('./src/get_power_up.mp3',1);
+a7_song = new Sound('./src/a7_song.mp3',0.7);
+menu_music = new Sound('./src/cancion_menu.mp3',0.2); 
+music = new Sound('./src/disco-shmisco.mp3',0.5);
+room_music = new Sound('./src/room_music.mp3',0.5);
+var kill_sound = new Sound('./src/kill_sound.wav',0.5);
+
 function preload() {
 
     font = loadFont('fuentes/fuente.ttf');
@@ -216,13 +229,7 @@ function preload() {
     PIXEL_ARIAL = loadFont('fuentes/Pixeltype.ttf');
 
     
-    chispa_sound = new Sound('./src/chispas.mp3', 0.02);
-    chispa2_sound = new Sound('./src/chispas.mp3', 0.015);
-    power_up_sound = new Sound('./src/get_power_up.mp3',1);
-    a7_song = new Sound('./src/a7_song.mp3',0.7);
-    menu_music = new Sound('./src/cancion_menu.mp3',0.2); 
-    music = new Sound('./src/disco-shmisco.mp3',0.5);
-    room_music = new Sound('./src/room_music.mp3',0.5);
+
     
 
     load_tal();

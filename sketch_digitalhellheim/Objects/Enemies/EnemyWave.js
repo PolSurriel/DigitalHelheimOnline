@@ -11,6 +11,7 @@ class EnemyWave extends RealObject {
     timeUntilLastShoot = this.rateOfFire;
 
     radio = 10;
+    normalRadio = 10;
 
     normalSpeed = 190;
     actualSpeed;
@@ -32,6 +33,17 @@ class EnemyWave extends RealObject {
     setSpeed(){
         this.speed = UMI.getSpeed(this.actualSpeed);
         this.rotationDelay = UMI.getDelay(0.05);
+    }
+
+    damage() {
+        this.radio += UMI.getSpeed(40);
+        if(this.radio >= this.normalRadio * 2.5){
+            kill_sound.play();
+            enemiesWaves.destroy(this.index_in_main_array);
+            score += 100;
+        }
+            
+
     }
 
     moveFront(){
@@ -105,10 +117,6 @@ class EnemyWave extends RealObject {
         stroke('purple');
         ellipse(UMI.toPixel(Camera.translationX(this.x)) , UMI.toPixel(Camera.translationY(this.y)) ,UMI.toPixel(this.radio*2), UMI.toPixel(this.radio*2));
         
-        textAlign(RIGHT);
-        noStroke();
-        textSize(UMI.toPixel(40));
-        text('x'+score+'    ',window.innerWidth/2,-window.innerHeight/2.2);
     
     }
 

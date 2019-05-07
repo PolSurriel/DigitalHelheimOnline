@@ -399,6 +399,7 @@ function world_draw(){
     }
 
     draw_all();
+    enemiesAway.draw();
 
     
 
@@ -528,6 +529,59 @@ function hexagon_collisions(){
     var increment = magnitude / pj.lighting.len_points;
     AB.convertToUnitary();
     */
+
+   var vp = new Vector2D(-(pj.lighting.point2.y - pj.lighting.point1.y), pj.lighting.point2.x - pj.lighting.point1.x).getUnitaryVector();
+
+
+   var enemiesChecking = [ enemies, enemiesLines, enemiesProjectiles, enemiesWaves];
+   if(pj.shooting){
+        for (let e = 0; e < enemiesChecking.length; e++) {
+            for (let i = 0; i < enemiesChecking[e].length; i++) {
+                if (enemiesChecking[e][i] != null ){
+                    if(Collider2D.detector.lineToCircle( pj.lighting.point1.x,pj.lighting.point1.y, pj.lighting.point2.x,pj.lighting.point2.y, enemiesChecking[e][i].x, enemiesChecking[e][i].y, enemiesChecking[e][i].radio )){
+                        var info = Collider2D.reaction.pointToCircle(pj.x,pj.y, enemiesChecking[e][i].x, enemiesChecking[e][i].y, enemiesChecking[e][i].radio);
+                        
+                        info.line = {};
+                        info.line.p1 = info;
+                        info.line.p2 = new Vector2D(info.x+vp.x*2, info.y+vp.y*2);
+                        isTrue = true;
+                        info.isEnemy = true;
+                        info.enemyIndex = [e , i];
+                        colPoints.push(info);
+                    }else {
+
+                        var maxScal = 20;
+                        var test1;
+                        for (let scal = 1; scal < maxScal && !test1; scal+=3) {
+                            test1 = Collider2D.detector.lineToCircle(pj.lighting.point1.x+vp.x*scal,pj.lighting.point1.y+vp.y*scal, 
+                                                                    pj.lighting.point2.x,pj.lighting.point2.y,enemiesChecking[e][i].x, enemiesChecking[e][i].y, enemiesChecking[e][i].radio  );
+
+                            if (!test1){
+                                vp.x = -vp.x;
+                                vp.y = -vp.y;
+                                test1 = Collider2D.detector.lineToCircle(pj.lighting.point1.x+vp.x*scal,pj.lighting.point1.y+vp.y*scal, 
+                                    pj.lighting.point2.x,pj.lighting.point2.y,enemiesChecking[e][i].x, enemiesChecking[e][i].y, enemiesChecking[e][i].radio  );
+                            }
+
+                        }
+
+                        if(test1){
+                            var info = Collider2D.reaction.pointToCircle(pj.x,pj.y, enemiesChecking[e][i].x, enemiesChecking[e][i].y, enemiesChecking[e][i].radio);
+                            
+                            info.line = {};
+                            info.line.p1 = info;
+                            info.line.p2 = new Vector2D(info.x+vp.x*2, info.y+vp.y*2);
+                            isTrue = true;
+                            info.isEnemy = true;
+                            info.enemyIndex = [e , i];
+                            colPoints.push(info);
+                        }
+                    }           
+                }
+            }
+        }
+    }
+    
 
     for (let i = 0; i < hexagons.length; i++) {
         
@@ -741,7 +795,18 @@ function hexagon_collisions(){
             if (distance < minDistance){
                 minDistance = distance;
                 point = colPoints[p];
+                if(colPoints[p].isEnemy){
+                    point.isEnemy = true;
+                    point.enemyIndex = colPoints[p].enemyIndex;
+
+                }else {
+                    point.isEnemy = false;
+                }
             }
+        }
+
+        if(point.isEnemy){
+            enemiesChecking[point.enemyIndex[0]][point.enemyIndex[1]].damage();
         }
 
         pj.lighting.point2.x = point.x;
