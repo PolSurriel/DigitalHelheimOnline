@@ -481,7 +481,7 @@ function coop_battle_update(){
                             if (i == 0)
                             activeMotorDamage(1);
                         else if (i == 1)
-                            activeMotorDamage(2);
+                            activeMotorDamage(3);
                         else if (i == 2)
                             activeMotorDamage(5);
                         }
@@ -623,7 +623,7 @@ function coop_battle_draw(){
 
         fill(0,150,0);
         textSize(UMI.toPixel(50));
-        text('Respan in: '+pj.respawn_countdown, UMI.toPixel( Camera.translationX( cameraReference.x ) ),UMI.toPixel( Camera.translationY( cameraReference.y+50 ) ));
+        text('Respawn in: '+pj.respawn_countdown, UMI.toPixel( Camera.translationX( cameraReference.x ) ),UMI.toPixel( Camera.translationY( cameraReference.y+50 ) ));
         
     }
 
@@ -831,6 +831,21 @@ function a7Projectiles_Collision(){
     }
 
     //SHIELD CAPTION
+
+    for (let p = 0; p < online_players.length; p++) {
+        if (online_players[p] != null && online_players[p].shield_active){
+            for (let i = 0; i < a7Projectiles.length; i++) {            
+            
+                if(a7Projectiles[i]!= null && Collider2D.detector.circleToPolygon( a7Projectiles[i].x, a7Projectiles[i].y, a7Projectiles[i].radio*2, online_players[p].shield_on_draw )){
+                
+                    a7Projectiles.destroy(i);
+
+                }
+            }
+        }
+        
+    }
+
     if (pj.shield_active){
         for (let i = 0; i < enemiesAway.length; i++) {
          

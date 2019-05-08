@@ -195,6 +195,9 @@ initSocket = function () {
         for (let i = 0; i < online_players.length; i++) {
             if(online_players[i] != null && online_players[i].token == data.playerToken){
                 online_players[i].alive = false;
+                online_players[i].holding.setAllNull();
+                online_players[i].holding_on_draw.setAllNull();
+        
                 if (restorer.reference == online_players[i]){
                     restorer.reference = null;
                     restorer.following = false;

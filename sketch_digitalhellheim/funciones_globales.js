@@ -267,3 +267,7 @@ function create_hexagon(x, y){
   return r;
 
 }
+
+function infinityCheck(value){
+  return value == Infinity || value == -Infinity;
+}

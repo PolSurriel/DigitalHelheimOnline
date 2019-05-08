@@ -143,19 +143,6 @@ class Player extends RealObject {
 
     die (){
 
-        for (let i = 0; i < this.holding_on_draw.length; i++) {
-                
-            if(this.holding_on_draw[i] != null){
-            
-                //projectiles.addObj(new Projectile(this.holding_on_draw[i].x, this.holding_on_draw[i].y, new (this.holding_on_draw[i].x-this.x, this.holding_on_draw[i].y-this.y,true).getUnitaryVector()));
-                enemiesAway.addObj( new EnemyAway (this.holding_on_draw[i].x, this.holding_on_draw[i].y) );
-                if(online){
-                    createAway();
-                }
-
-            }
-        }
-
         this.holding.setAllNull();
         this.holding_on_draw.setAllNull();
 
@@ -283,6 +270,8 @@ class Player extends RealObject {
 
     update(){
         if (this.alive){
+            clearInterval(this.respawn_interval);
+            this.respawn_countdown = 5;
             this.alive_update();
         }else {
             
@@ -319,6 +308,15 @@ class Player extends RealObject {
         if(!( this.forceVector.x < Number.MAX_VALUE )) this.forceVector.x = 0;
         if(!( this.forceVector.y < Number.MAX_VALUE )) this.forceVector.y = 0;
         
+        if(infinityCheck( this.x)) this.x = 0;
+        if(infinityCheck( this.y)) this.y = 0;
+        if(infinityCheck( this.orientation)) this.orientation = 0;
+        if(infinityCheck( this.directionVector.x)) this.directionVector.x = 0;
+        if(infinityCheck( this.directionVector.y)) this.directionVector.y = 0;
+        if(infinityCheck( this.forceVector.x)) this.forceVector.x = 0;
+        if(infinityCheck( this.forceVector.y)) this.forceVector.y = 0;
+
+
         if (this.z == 0) this.setSpeed();
         else this.gravityForce = UMI.getSpeed(800)*((60/23)/CURRENT_FPS);
 
