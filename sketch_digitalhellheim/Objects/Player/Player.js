@@ -159,8 +159,11 @@ class Player extends RealObject {
         this.infected = false;
         this.alive = false;
 
-        this.x = Math.random() * 1400 - 700;
-        this.y = 300;
+
+        var dirOnRespawn = Vector2D.createVectoByAngle(Math.random()*360).getUnitaryVector();
+
+        this.x = boss.x + dirOnRespawn.x * 700;
+        this.y = boss.y + dirOnRespawn.y * 700;
 
         clearInterval(this.respawn_interval);
         this.respawn_interval = setInterval(() => {
@@ -270,8 +273,6 @@ class Player extends RealObject {
 
     update(){
         if (this.alive){
-            clearInterval(this.respawn_interval);
-            this.respawn_countdown = 5;
             this.alive_update();
         }else {
             
@@ -280,7 +281,7 @@ class Player extends RealObject {
 
     alive_update(){
 
-        if ( this.infected && (this.shooting || this.shield_active)){
+        if ( ( online && !restorer.inComing) && this.infected && (this.shooting || this.shield_active)){
             this.infected = false;
             this.inmune = true;
 

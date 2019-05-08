@@ -4,6 +4,7 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var players = new Array();
 
+var toSetReferenceRandomly = false;
 
 var roomData = {
     boss_invoked:false,
@@ -16,8 +17,14 @@ var roomData = {
     restorer_position:null,
     restorer_force:null,
     time_reference:new Date(),
+    time : {
+        sec:0,
+        min:10
+    }
     
 }
+
+var contdown_interval = null;
 
 app.use(express.static('../sketch_digitalhellheim'));
 
@@ -28,7 +35,9 @@ io.on('connection', function(socket){
     
     // Check sockets disconnected
     setInterval(function() {
-        if (players.length == 0)
+        if (players.length == 0){
+
+        
             roomData = {
                 boss_invoked:false,
                 invoked_moment:null,
@@ -40,8 +49,17 @@ io.on('connection', function(socket){
                 restorer_position:null,
                 restorer_force:null,
                 time_reference:new Date(),
+                time : {
+                    sec:0,
+                    min:10
+                }
                 
             }
+
+            toSetReferenceRandomly = false;
+
+            clearInterval(contdown_interval); 
+        }
 
         for (var i = 0; i < players.length; i++) {
             if(io.sockets.sockets[players[i].socketId] == undefined){
@@ -101,9 +119,11 @@ io.on('connection', function(socket){
         io.emit('throwRestorer', { 
             playerToken:data.token,
             force:data.force,
-            position:data.position
+            position:data.position,
+            player_pos:data.player_pos
         });
 
+        roomData.restorer_reference = null;
         roomData.restorer_force = data.force;
         roomData.restorer_position = data.position;
     });
@@ -114,6 +134,8 @@ io.on('connection', function(socket){
         });
 
         roomData[data.i] = true;
+
+
     });
 
     socket.on('motorDesactivation',function (data) {
@@ -125,11 +147,23 @@ io.on('connection', function(socket){
     });
 
     socket.on('iGotTheRestorer',function (data) {
-        io.emit('heGotTheRestorer', { 
-            playerToken:data.token
-        });
+        
+        if( roomData.restorer_reference == null){
+            io.emit('heGotTheRestorer', { 
+                playerToken:data.token
+            });
+            roomData.restorer_reference = data.token;
 
-        roomData.restorer_reference = data.token;
+        }else {
+            io.emit('denyRestorer', { 
+                playerToken:data.token,
+                owner:roomData.restorer_reference
+            });
+        }
+
+        toSetReferenceRandomly = false;
+
+
     });
 
     
@@ -152,6 +186,13 @@ io.on('connection', function(socket){
         io.emit('die', { 
             playerToken:data.token,
         });
+
+        
+
+        if( roomData.restorer_reference == data.token ){
+            toSetReferenceRandomly = true;
+            roomData.restorer_force = null;
+        } 
     });
 
     socket.on('iCanShoot',function (data) {
@@ -200,9 +241,21 @@ io.on('connection', function(socket){
             playerToken:data.token,
         });
 
+        if (!roomData.boss_invoked){
+            contdown_interval = setInterval(() => {
+                
+
+                if (--roomData.time.sec < 0){
+                    roomData.time.sec = 59;
+                    roomData.time.min--;
+
+                }
+
+            }, 1000);
+
+        }
         roomData.boss_invoked = true;
         roomData.invoked_moment = new Date();
-
 
     });
 
@@ -242,13 +295,47 @@ io.on('connection', function(socket){
             y:data.y,
             alive:data.alive
         });
+
+        if(toSetReferenceRandomly && data.alive){
+            roomData.restorer_reference = null;
+            io.emit('forceRestorerOwner', { 
+                playerToken:data.token
+            });
+            toSetReferenceRandomly = false;
+        }
+
+        if (data.token == roomData.restorer_reference){
+            if (!data.is_owner){
+                roomData.restorer_reference = null;
+            }
+        }
     });
+
+    socket.on('dieAll',function (data) {
+            io.emit('dieAll', {
+                token:data.token
+            });
+
+            toSetReferenceRandomly = true;
+            roomData.restorer_reference = null;
+        
+
+
+    });
+
 
     // DIE
     socket.on('die',function (data) {
         io.emit('die', {
             token:data.token
         });
+
+        if (data.token == roomData.restorer_reference){
+            if (!data.is_owner){
+                roomData.restorer_reference = null;
+            }
+        }
+
     });
 
 

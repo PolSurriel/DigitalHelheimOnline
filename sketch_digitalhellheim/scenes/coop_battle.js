@@ -10,6 +10,8 @@ var invocation_has_been_called = false;
 
 var motorsDamage = [ false,false,false,false,false,false ];
 
+var respawn_points = [];
+
 var time = {
     sec:0,
     min:10
@@ -73,7 +75,10 @@ function coop_battle_setup(){
     boss = new ArduinoActivity7(-157,-300);
     restorer = new Restorer(-195+37,-336+37);
 
-    
+    var dirOnRespawn = Vector2D.createVectoByAngle(Math.random()*360).getUnitaryVector();
+
+    this.x = boss.x + dirOnRespawn.x * 700;
+    this.y = boss.y + dirOnRespawn.y * 700;
    
 }
 
@@ -329,6 +334,26 @@ function coop_battle_update(){
             
         }
 
+        for (let p = 0; p < online_players.length; p++) {
+            if(online_players[p] != null && online_players[p].alive){
+                var dist = new Vector2D(online_players[p].x-motors[i].x,online_players[p].y-motors[i].y).getMagnitude();
+                if(dist < 170 && Collider2D.detector.circleToPolygon(online_players[p].x,online_players[p].y,online_players[p].radio*2.5,motors[i].poly) ){
+                    var newPos = Collider2D.reaction.circleToPolygon(online_players[p].last_x,online_players[p].last_y,  online_players[p].x,online_players[p].y,online_players[p].radio*2.5,motors[i].poly);
+        
+                    if(!isNaN(newPos.x)){
+                        online_players[p].x = newPos.x;
+                        online_players[p].y = newPos.y;
+                    
+                    }else{
+                        online_players[p].x = online_players[p].last_x;
+                        online_players[p].y = online_players[p].last_y;
+                    }
+                    
+                }
+        
+            }
+            
+        }
 
         var dist = new Vector2D(pj.x-motors[i].x,pj.y-motors[i].y).getMagnitude();
         if(dist < 170 && Collider2D.detector.circleToPolygon(pj.x,pj.y,pj.radio*2.5,motors[i].poly) ){
@@ -657,6 +682,10 @@ function coop_battle_draw(){
 
    }
    textAlign(LEFT);
+    fill(255);
+   for (let i = 0; i < respawn_points.length; i++) {
+        ellipse( UMI.toPixel( Camera.translationX( respawn_points[i][0] ) ), UMI.toPixel( Camera.translationY( respawn_points[i][1])), 10,10);       
+   }
 
 
 }

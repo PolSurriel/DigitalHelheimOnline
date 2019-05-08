@@ -61,6 +61,7 @@ class Restorer{
                             this.inComing = false;
                             pj.die();
                             shareDeath();
+                            shareFailedRestorer();
 
                             
                             clearInterval(this.contdown_interval);
@@ -91,6 +92,7 @@ class Restorer{
                 this.tokillAll = false;
                 pj.die();
                 shareDeath();
+                shareFailedRestorer();
             }
 
         }
