@@ -449,6 +449,7 @@ function shareimhost(){
 }
 
 function activeMotorDamage(i){
+    console.log("MOTOR ACTIVE REF:"+i);
     socket.emit('motorActivation', {
         i:i
     });
