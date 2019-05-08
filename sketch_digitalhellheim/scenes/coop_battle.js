@@ -840,6 +840,7 @@ function a7Projectiles_Collision(){
                 
                     a7Projectiles.destroy(i);
 
+
                 }
             }
         }
