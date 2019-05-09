@@ -84,6 +84,13 @@ io.on('connection', function(socket){
             }
         });
 
+        socket.emit('join',{
+            id:socket.id,
+            token:token,
+            players:players,
+            text:'Te has unido a la sesión.'
+        });
+
         io.to(socket.id).emit('message',{
             playerToken:data.token,
             text:'Te has unido a la sesión.',
