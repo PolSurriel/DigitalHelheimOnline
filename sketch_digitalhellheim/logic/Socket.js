@@ -10,8 +10,8 @@ var loga7 = new Array();
 
 var asking_for_data = true;
 
-var SERVER_IP = '145.239.205.172';
-//var SERVER_IP = '192.168.1.105';
+//var SERVER_IP = '145.239.205.172';
+var SERVER_IP = '192.168.1.105';
 
 function saveInfo() {
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(loga7));
@@ -351,6 +351,20 @@ initSocket = function () {
     });
 
     
+    socket.on('message', function(data){
+        mensajes.push({
+            type:data.type,
+            text:data.text,
+            name: data.name
+        });
+
+        console.log({
+            type:data.type,
+            text:data.text,
+            name: data.name
+        });
+
+    });
 
     socket.on('setRoomState', function(data){
         
@@ -542,6 +556,14 @@ initSocket = function () {
 
 
 // Envios
+
+function sendMessage(text){
+    socket.emit('sendMessage', {
+        text:text,
+        name:name
+
+    });
+}
 
 function createAway(){
 

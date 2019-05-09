@@ -84,22 +84,28 @@ io.on('connection', function(socket){
             }
         });
 
-        socket.emit('join',{
-            id:socket.id,
-            token:token,
-            players:players,
-            text:'Te has unido a la sesión.'
+        io.to(socket.id).emit('message',{
+            playerToken:data.token,
+            text:'Te has unido a la sesión.',
+            type:'server',
+            name:''
         });
 
+        
+
+
         players.forEach(function (player) {
+            
             if(socket.id != player.socketId){
-                io.to(player.socketId).emit('userJoin',
+                io.to(player.socketId).emit('message',
                 {
-                    name:data.name,
-                    token:token, 
-                    text:'Un jugador se ha unido a la sesion'
+                    playerToken:data.token,
+                    text:'"'+data.name+'" se ha unido a la sesión.',
+                    type:'server',
+                    name:''
                 });
             }
+
         }, this);
     
 
@@ -114,6 +120,15 @@ io.on('connection', function(socket){
 
 
     // GAMEPLAY EVENTS
+
+    socket.on('sendMessage',function (data) {
+        io.emit('message', { 
+            text:data.text,
+            name:data.name,
+            type:'user'
+        });
+    });
+
 
     socket.on('throwRestorer',function (data) {
         io.emit('throwRestorer', { 

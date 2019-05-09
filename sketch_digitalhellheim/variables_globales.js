@@ -219,6 +219,8 @@ music = new Sound('./src/disco-shmisco.mp3',0.5);
 room_music = new Sound('./src/room_music.mp3',0.5);
 var kill_sound = new Sound('./src/kill_sound.mp3',0.5);
 
+var fuente_chat;
+
 function preload() {
 
     font = loadFont('fuentes/fuente.ttf');
@@ -227,6 +229,11 @@ function preload() {
 
     TIMES_NEW_ARIAL = loadFont('fuentes/timesnewarial.ttf');
     PIXEL_ARIAL = loadFont('fuentes/Pixeltype.ttf');
+
+    fuente_chat = loadFont('fuentes/Pixel12x10.ttf');
+
+    
+
 
 
     load_tal();

@@ -151,6 +151,14 @@ if(!isMobileDevice()){
                 tengoQEnviar = !Keyboard.jump.pressed;
                 Keyboard.jump.pressed = true;
                 break;
+            case 84:
+                chatActive = true;
+                window.onkeydown = chat_onkeydown;
+                window.onkeyup = null;
+                window.onmousemove = null;
+                window.onmouseup = null;
+                window.onmousedown = null;
+                break;
         }
 
         if(tengoQEnviar){
@@ -165,6 +173,35 @@ if(!isMobileDevice()){
         call_on_user_interaction();
 
 
+
+    }
+
+    
+    chat_onkeydown = function (e) {
+                
+        if(e.keyCode == 27){
+            chatActive = false;
+            window.onkeydown = online_playing_onkeydown;
+            window.onkeyup = online_playing_onkeyup;
+            window.onmousemove = online_playing_onmousemove;
+            window.onmouseup = online_playing_onmouseup;
+            window.onmousedown = online_playing_onmousedown;
+
+        }else if(e.keyCode == INTRO_KEY){
+
+            sendMessage(mensaje_escribiendo);
+            mensaje_escribiendo = '';
+
+        } else if(e.keyCode == DEL_KEY){
+            
+            mensaje_escribiendo = mensaje_escribiendo.substring(0, mensaje_escribiendo.length - 1);
+
+        }else {
+            
+            if(isASCII(e.key) && mensaje_escribiendo.length < MAX_TEXT_LEN)
+            mensaje_escribiendo += e.key;
+
+        }
 
     }
 

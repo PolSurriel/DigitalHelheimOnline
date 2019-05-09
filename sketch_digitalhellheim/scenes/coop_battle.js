@@ -17,6 +17,69 @@ var time = {
     min:10
 }
 
+var chatActive = false;
+
+var mensajes = new Array(0);
+
+var mensaje_escribiendo = '';
+
+var MAX_TEXT_LEN = 50;
+var printar_guion = false;
+
+setInterval(() => {
+    printar_guion = !printar_guion;
+}, 1000);
+function draw_chat(){
+
+    fill(0,0,0,100);
+    stroke(255,255,255,100);
+    strokeWeight(4);
+    rect(-window.innerWidth/2,-window.innerHeight/2, UMI.toPixel(700), window.innerHeight);
+    strokeWeight(1);
+
+    
+    fill(255,255,255,100);
+    textAlign(RIGHT);
+    textSize(UMI.toPixel(100));
+    text('Chat',-window.innerWidth/2 + UMI.toPixel(160),-window.innerHeight/2+ UMI.toPixel(50));
+
+    textAlign(LEFT);
+    textFont(fuente_chat);
+
+
+    textSize(UMI.toPixel(15));
+    fill(255,255,255,100);
+    if (printar_guion)
+        text('> '+mensaje_escribiendo+'_',-window.innerWidth/2 + UMI.toPixel(12),window.innerHeight/2 - UMI.toPixel(22));
+    else
+        text('> '+mensaje_escribiendo,-window.innerWidth/2 + UMI.toPixel(12),window.innerHeight/2 - UMI.toPixel(22));
+    var j = 2;
+    for (let i = mensajes.length; i >= mensajes.length-30; i--) {
+        if(mensajes[i] != undefined){
+            j++;
+            if ( mensajes[i].type == 'server' ){
+                fill(0,255,0,200);
+                text(mensajes[i].text,-window.innerWidth/2 + UMI.toPixel(12),window.innerHeight/2 - UMI.toPixel(22)*(j));
+            }else {
+                fill(255,255,255,200);
+                text(mensajes[i].name+':   '+mensajes[i].text,-window.innerWidth/2 + UMI.toPixel(12),window.innerHeight/2 - UMI.toPixel(22)*(j));
+
+            }
+
+        }
+
+    }
+
+    textAlign(RIGHT);
+
+    textFont(PIXEL_ARIAL);
+
+
+}
+
+
+
+
 function incrementTime(){
     if (--time.sec < 0){
         time.sec = 59;
@@ -687,6 +750,10 @@ function coop_battle_draw(){
         ellipse( UMI.toPixel( Camera.translationX( respawn_points[i][0] ) ), UMI.toPixel( Camera.translationY( respawn_points[i][1])), 10,10);       
    }
 
+
+   if(chatActive){
+       draw_chat();
+   }
 
 }
 
