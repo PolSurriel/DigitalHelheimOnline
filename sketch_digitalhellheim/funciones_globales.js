@@ -62,11 +62,11 @@ function host_mode(){
 
   pj.update = function() {};
   pj.draw = function () {};
-  pj.x = 9999999999;
-  pj.y = 9999999999;
+  pj.x = boss.x;
+  pj.y = boss.y;
   pj.die = function () {};
   window.shareDeath = function() {};
-  
+
 
   cameraReference.following = {x:boss.x, y:boss.y};
   //shareimhost();
