@@ -10,8 +10,8 @@ var loga7 = new Array();
 
 var asking_for_data = true;
 
-//var SERVER_IP = '145.239.205.172';
-var SERVER_IP = '192.168.1.105';
+var SERVER_IP = '145.239.205.172';
+//var SERVER_IP = '192.168.1.105';
 
 function saveInfo() {
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(loga7));
