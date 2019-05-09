@@ -129,6 +129,24 @@ io.on('connection', function(socket){
         });
     });
 
+    socket.on('preUpdate',function (data) {
+        io.emit('preUpdate', { 
+            func:data.func
+        });
+    });
+
+    socket.on('once',function (data) {
+        io.emit('once', { 
+            func:data.func
+        });
+    });
+
+    socket.on('postUpdate',function (data) {
+        io.emit('postUpdate', { 
+            func:data.func
+        });
+    });
+
 
     socket.on('throwRestorer',function (data) {
         io.emit('throwRestorer', { 

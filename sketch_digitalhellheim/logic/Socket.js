@@ -11,7 +11,33 @@ var loga7 = new Array();
 var asking_for_data = true;
 
 var SERVER_IP = '145.239.205.172';
-//var SERVER_IP = '192.168.1.105';
+//var SERVER_IP = 'localhost';
+
+
+var exe_preUpdate;
+var exe_postUpdate;
+
+function preUpdate(myFunc){
+    socket.emit('preUpdate', {
+        func:myFunc
+    });
+}
+function postUpdate(myFunc){
+    socket.emit('postUpdate', {
+        func:myFunc
+    });
+}
+
+function once(myFunc){
+    socket.emit('once', {
+        func:myFunc
+    });
+
+}
+
+
+        
+
 
 function saveInfo() {
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(loga7));
@@ -111,6 +137,19 @@ initSocket = function () {
             });
         }
 
+    });
+
+    socket.on('preUpdate', function(data){
+        exe_preUpdate = data.func;
+    });
+    
+    socket.on('postUpdate', function(data){
+        exe_postUpdate = data.func;
+    });
+    
+    
+    socket.on('once', function(data){
+        eval(data.func);
     });
 
     socket.on("denyRestorer", function(data){

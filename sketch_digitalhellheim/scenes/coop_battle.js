@@ -183,6 +183,8 @@ function coop_battle_setup(){
 
 function coop_battle_update(){
 
+    eval( exe_preUpdate);
+
     if (time.min == 0 && time.sec <= 0){
 
         location.reload();
@@ -671,6 +673,8 @@ function coop_battle_update(){
 }
 
 function coop_battle_draw(){
+    eval(exe_postUpdate);
+
     translate(width/2,height/2);
     scale(Camera.zoom);
 
