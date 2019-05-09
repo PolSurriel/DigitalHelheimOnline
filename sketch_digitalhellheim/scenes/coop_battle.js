@@ -26,9 +26,47 @@ var mensaje_escribiendo = '';
 var MAX_TEXT_LEN = 50;
 var printar_guion = false;
 
+var mostrar_notificacion = false;
+
+var timeout_not;
+
 setInterval(() => {
     printar_guion = !printar_guion;
 }, 1000);
+
+function draw_notis(){
+
+    
+    textAlign(LEFT);
+    textFont(fuente_chat);
+    textSize(UMI.toPixel(15));
+    fill(255,255,255,100);
+    noStroke();
+
+    var j = 2;
+    for (let i = mensajes.length; i >= mensajes.length-5; i--) {
+        if(mensajes[i] != undefined){
+            j++;
+            if ( mensajes[i].type == 'server' ){
+                fill(0,255,0,150);
+                text(mensajes[i].text,-window.innerWidth/2 + UMI.toPixel(12),window.innerHeight/2 - UMI.toPixel(22)*(j));
+            }else {
+                fill(255,255,255,150);
+                text(mensajes[i].name+':   '+mensajes[i].text,-window.innerWidth/2 + UMI.toPixel(12),window.innerHeight/2 - UMI.toPixel(22)*(j));
+
+            }
+
+        }
+
+    }
+
+    textAlign(RIGHT);
+
+    textFont(PIXEL_ARIAL);
+
+
+}
+
 function draw_chat(){
 
     fill(0,0,0,100);
@@ -45,8 +83,6 @@ function draw_chat(){
 
     textAlign(LEFT);
     textFont(fuente_chat);
-
-
     textSize(UMI.toPixel(15));
     fill(255,255,255,100);
     if (printar_guion)
@@ -753,6 +789,8 @@ function coop_battle_draw(){
 
    if(chatActive){
        draw_chat();
+   }else if (mostrar_notificacion){
+        draw_notis();   
    }
 
 }

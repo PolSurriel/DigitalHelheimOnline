@@ -358,11 +358,12 @@ initSocket = function () {
             name: data.name
         });
 
-        console.log({
-            type:data.type,
-            text:data.text,
-            name: data.name
-        });
+        mostrar_notificacion = true;
+
+        clearTimeout(timeout_not);
+        timeout_not = setTimeout(() => {
+            mostrar_notificacion = false;
+        }, 2000);
 
     });
 
