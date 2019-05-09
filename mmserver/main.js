@@ -128,6 +128,11 @@ io.on('connection', function(socket){
 
     // GAMEPLAY EVENTS
 
+    socket.on('denyThing',function (data) {
+        toSetReferenceRandomly = true;
+    });
+
+
     socket.on('sendMessage',function (data) {
         io.emit('message', { 
             text:data.text,

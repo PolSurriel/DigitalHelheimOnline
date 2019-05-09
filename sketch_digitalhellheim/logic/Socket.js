@@ -271,11 +271,17 @@ initSocket = function () {
         clearInterval(restorer.contdown_interval);
 
         if(data.playerToken == token) {
-            restorer.reference = pj;
-            restorer.following = true;
-            restorer.inComing = true;
-            restorer.contdown = 5;
-            pj.infected = true;
+            if(in_host_mode){
+                restorer.reference = pj;
+                restorer.following = true;
+                restorer.inComing = true;
+                restorer.contdown = 5;
+                pj.infected = true;
+
+                socket.emit('denyThing', {});
+
+            }
+
 
         }else {
             for (let i = 0; i < online_players.length; i++) {

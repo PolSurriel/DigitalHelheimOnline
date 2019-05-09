@@ -58,19 +58,22 @@
 var in_host_mode = false;
 
 function host_mode(){
+
+
   pj.update = function() {};
   pj.draw = function () {};
   pj.x = 9999999999;
   pj.y = 9999999999;
   pj.die = function () {};
   window.shareDeath = function() {};
+  
 
-  cameraReference.following = restorer;
-  shareimhost();
+  cameraReference.following = {x:boss.x, y:boss.y};
+  //shareimhost();
 
   in_host_mode= true;
 
-  Camera.zoom(-300);
+  Camera.zoom(-400);
 
   window.onmousedown = () => {}; 
   window.onmouseup   = () => {}; 
