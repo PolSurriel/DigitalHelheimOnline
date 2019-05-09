@@ -51,7 +51,7 @@ class Restorer{
                 this.x += vd.x*speed;
                 this.y += vd.y*speed;
 
-                if( magnitude <= 3 ){
+                if( !in_host_mode && magnitude <= 3 ){
                     this.inComing = false;
                     if(this.reference == pj)damagenumbers.addObj( new DamageNumber (this.x, this.y,this.contdown+1,false,true) );
                     this.contdown_interval = setInterval(() => {
