@@ -744,7 +744,7 @@ function damageToA7(damage){
 
 
 function sharePosition(x, y){
-    if(!in_host_mode){
+    
         socket.emit('sharePosition', {
             x:x,
             y:y,
@@ -752,7 +752,7 @@ function sharePosition(x, y){
             alive:pj.alive,
             is_owner: (restorer.reference == pj)
         });
-    }
+    
 
 }
 

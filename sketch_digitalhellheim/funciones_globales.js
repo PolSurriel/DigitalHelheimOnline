@@ -67,6 +67,7 @@ function host_mode(){
   sharePosition();
   pj.die = function () {};
   window.shareDeath = function() {};
+  window.sharePosition = function () {};
 
 
   cameraReference.following = {x:boss.x, y:boss.y};
