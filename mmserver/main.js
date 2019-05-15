@@ -24,6 +24,8 @@ var roomData = {
     
 }
 
+var host_token = false;
+
 var contdown_interval = null;
 
 app.use(express.static('../sketch_digitalhellheim'));
@@ -55,6 +57,8 @@ io.on('connection', function(socket){
                 }
                 
             }
+
+            host_token = false;
 
             toSetReferenceRandomly = false;
 
@@ -88,6 +92,7 @@ io.on('connection', function(socket){
             id:socket.id,
             token:token,
             players:players,
+            host_token:host_token,
             text:'Te has unido a la sesión.'
         });
 
@@ -110,6 +115,13 @@ io.on('connection', function(socket){
                     text:'"'+data.name+'" se ha unido a la sesión.',
                     type:'server',
                     name:''
+                });
+
+                io.to(player.socketId).emit('userJoin',
+                {
+                    name:data.name,
+                    token:token, 
+                    text:'Un jugador se ha unido a la sesion'
                 });
             }
 
@@ -277,6 +289,8 @@ io.on('connection', function(socket){
         io.emit('heisthehost', { 
             playerToken:data.token,
         });
+
+        host_token = data.token;
     });
 
     

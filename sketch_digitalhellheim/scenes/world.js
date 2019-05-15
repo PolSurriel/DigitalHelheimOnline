@@ -684,8 +684,8 @@ function hexagon_collisions(){
                         enemies[j].y = newPos.y;
                     
                     }else{
-                        enemies[j].x = enemies[j].last_x;
-                        enemies[j].y = enemies[j].last_y;
+                        //enemies[j].x = enemies[j].last_x;
+                        //enemies[j].y = enemies[j].last_y;
                     }
                     
                 }
@@ -709,8 +709,8 @@ function hexagon_collisions(){
                         enemiesLines[j].y = newPos.y;
                     
                     }else{
-                        enemiesLines[j].x = enemiesLines[j].last_x;
-                        enemiesLines[j].y = enemiesLines[j].last_y;
+                        //enemiesLines[j].x = enemiesLines[j].last_x;
+                        //enemiesLines[j].y = enemiesLines[j].last_y;
                     }
                     
                 }
@@ -730,8 +730,8 @@ function hexagon_collisions(){
                         enemiesAway[j].y = newPos.y;
                     
                     }else{
-                        enemiesAway[j].x = enemiesAway[j].last_x;
-                        enemiesAway[j].y = enemiesAway[j].last_y;
+                        //enemiesAway[j].x = enemiesAway[j].last_x;
+                        //enemiesAway[j].y = enemiesAway[j].last_y;
                     }
                     
                 }
@@ -752,8 +752,8 @@ function hexagon_collisions(){
                         enemiesProjectiles[j].y = newPos.y;
                     
                     }else{
-                        enemiesProjectiles[j].x = enemiesProjectiles[j].last_x;
-                        enemiesProjectiles[j].y = enemiesProjectiles[j].last_y;
+                        //enemiesProjectiles[j].x = enemiesProjectiles[j].last_x;
+                        //enemiesProjectiles[j].y = enemiesProjectiles[j].last_y;
                     }
                     
                 }
@@ -774,8 +774,8 @@ function hexagon_collisions(){
                         enemiesWaves[j].y = newPos.y;
                     
                     }else{
-                        enemiesWaves[j].x = enemiesProjectiles[j].last_x;
-                        enemiesWaves[j].y = enemiesProjectiles[j].last_y;
+                        //enemiesWaves[j].x = enemiesProjectiles[j].last_x;
+                        //enemiesWaves[j].y = enemiesProjectiles[j].last_y;
                     }
                     
                 }

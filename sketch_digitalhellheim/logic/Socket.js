@@ -58,24 +58,25 @@ initSocket = function () {
     socket.emit('join_request', {name:name});
 
     socket.on('join', function(data){
-        console.log(data.text);
         window.joined = true;
         id = data.id;
         token = data.token;
         sharePosition(pj.x, pj.y);
 
         data.players.forEach(player => {
-            if(player.id != token) online_players.addObj(new OnlinePlayer(player.name, player.id, -1000,-1000));
+            if(player.id != token) online_players.addObj(new OnlinePlayer(player.name, player.id, 9999,9999));
         });
+
+
 
         
     });
 
     socket.on('userJoin', function(data){
-        console.log(data.text+' - '+data.name);
+
         online_players.addObj(new OnlinePlayer(data.name, data.token, -1000,-1000));
 
-        if (in_host_mode) loga7.push({ 
+         loga7.push({ 
             type:'server-event', name:'userJoin', info:data, time:new Date()
         });
         
@@ -132,7 +133,7 @@ initSocket = function () {
             }
 
             
-            if (in_host_mode) loga7.push({ 
+             loga7.push({ 
                 type:'server-event', name:'playerAction', info:data, time:new Date()
             });
         }
@@ -165,7 +166,7 @@ initSocket = function () {
             }
         }
 
-        if (in_host_mode) loga7.push({ 
+         loga7.push({ 
             type:'server-event', name:'denyRestorer', info:data, time:new Date()
         });
 
@@ -191,7 +192,7 @@ initSocket = function () {
             }
 
             
-            if (in_host_mode) loga7.push({ 
+             loga7.push({ 
                 type:'server-event', name:'playerSetPosition', info:data, time:new Date()
             });
 
@@ -213,7 +214,7 @@ initSocket = function () {
             }
 
             
-            if (in_host_mode) loga7.push({ 
+             loga7.push({ 
                 type:'server-event', name:'setLightningPos', info:data, time:new Date()
             });
         }
@@ -232,7 +233,7 @@ initSocket = function () {
             }
 
             
-            if (in_host_mode) loga7.push({ 
+             loga7.push({ 
                 type:'server-event', name:'playerLeft', info:data, time:new Date()
             });
 
@@ -249,7 +250,7 @@ initSocket = function () {
                 
             }
 
-            if (in_host_mode) loga7.push({ 
+             loga7.push({ 
                 type:'server-event', name:'unlockPlayer', info:data, time:new Date()
             });
         }
@@ -257,11 +258,13 @@ initSocket = function () {
     
 
     socket.on('dieAll', function (data){
-        if(pj.alive) pj.die();
-        clearInterval(restorer.contdown_interval);
-        restorer.contdown = 5;
+        if(!in_host_mode){
+            if(pj.alive) pj.die();
+            clearInterval(restorer.contdown_interval);
+            restorer.contdown = 5;    
+        }
 
-        if (in_host_mode) loga7.push({ 
+         loga7.push({ 
             type:'server-event', name:'dieAll', info:data, time:new Date()
         });
 
@@ -271,15 +274,17 @@ initSocket = function () {
         clearInterval(restorer.contdown_interval);
 
         if(data.playerToken == token) {
-            if(in_host_mode){
+            if(!in_host_mode && pj.alive){
                 restorer.reference = pj;
                 restorer.following = true;
                 restorer.inComing = true;
                 restorer.contdown = 5;
                 pj.infected = true;
 
-                socket.emit('denyThing', {});
+                
 
+            }else {
+                socket.emit('denyThing', {});
             }
 
 
@@ -296,7 +301,7 @@ initSocket = function () {
             }
         }
 
-        if (in_host_mode) loga7.push({ 
+         loga7.push({ 
             type:'server-event', name:'forceRestorerOwner', info:data, time:new Date()
         });
     });
@@ -319,7 +324,7 @@ initSocket = function () {
             
         }
 
-        if (in_host_mode) loga7.push({ 
+         loga7.push({ 
             type:'server-event', name:'die', info:data, time:new Date()
         });
 
@@ -336,7 +341,7 @@ initSocket = function () {
                 
             }
 
-            if (in_host_mode) loga7.push({ 
+             loga7.push({ 
                 type:'server-event', name:'respawn', info:data, time:new Date()
             });
 
@@ -345,14 +350,14 @@ initSocket = function () {
 
     socket.on('motorActivation', function(data){
         motorsDamage[data.i] = true;
-        if (in_host_mode) loga7.push({ 
+         loga7.push({ 
             type:'server-event', name:'motorActivation', info:data, time:new Date()
         });
     });
 
     socket.on('motorDesactivation', function(data){
         motorsDamage[data.i] = false;
-        if (in_host_mode) loga7.push({ 
+         loga7.push({ 
             type:'server-event', name:'motorDesactivation', info:data, time:new Date()
         });
     });
@@ -366,7 +371,7 @@ initSocket = function () {
                 
             }
 
-            if (in_host_mode) loga7.push({ 
+             loga7.push({ 
                 type:'server-event', name:'youCanShoot', info:data, time:new Date()
             });
 
@@ -388,7 +393,7 @@ initSocket = function () {
                 
             }
 
-            if (in_host_mode) loga7.push({ 
+             loga7.push({ 
                 type:'server-event', name:'heGotTheRestorer', info:data, time:new Date()
             });
 
@@ -447,7 +452,7 @@ initSocket = function () {
         //restorer_reference: null
         
 
-       if (in_host_mode) loga7.push({ 
+        loga7.push({ 
             type:'server-event', name:'setRoomState', info:data, time:new Date()
         });
     });
@@ -475,7 +480,7 @@ initSocket = function () {
                 }
             }
 
-            if (in_host_mode) loga7.push({ 
+             loga7.push({ 
                 type:'server-event', name:'unlockPlayer', info:data, time:new Date()
             });
         }
@@ -496,7 +501,7 @@ initSocket = function () {
             }
             
 
-            if (in_host_mode) loga7.push({ 
+             loga7.push({ 
                 type:'server-event', name:'createA7Projectile', info:data, time:new Date()
             });
         }
@@ -512,7 +517,7 @@ initSocket = function () {
                 
             }
 
-            if (in_host_mode) loga7.push({ 
+             loga7.push({ 
                 type:'server-event', name:'youCantShoot', info:data, time:new Date()
             });
 
@@ -528,7 +533,7 @@ initSocket = function () {
                 
             }
 
-            if (in_host_mode) loga7.push({ 
+             loga7.push({ 
                 type:'server-event', name:'heisthehost', info:data, time:new Date()
             });
 
@@ -543,7 +548,7 @@ initSocket = function () {
 
             }
 
-            if (in_host_mode) loga7.push({ 
+             loga7.push({ 
                 type:'server-event', name:'damageToA7', info:data, time:new Date()
             });
         }
@@ -570,7 +575,7 @@ initSocket = function () {
             restorer.x = data.player_pos.x;
 
 
-            if (in_host_mode) loga7.push({ 
+             loga7.push({ 
                 type:'server-event', name:'throwRestorer', info:data, time:new Date()
             });
         }
@@ -581,7 +586,7 @@ initSocket = function () {
     socket.on('a7invoke', function (data) {
         invoke_a_boss();
 
-        if (in_host_mode) loga7.push({ 
+         loga7.push({ 
             type:'server-event', name:'a7invoke', info:data, time:new Date()
         });
     });
@@ -684,9 +689,12 @@ function throwRestorer(force, position){
 }
 
 function iGotTheRestorer(){
-    socket.emit('iGotTheRestorer', {
-        token:token
-    });
+    if(!in_host_mode){
+        socket.emit('iGotTheRestorer', {
+            token:token
+        });
+    }
+
 }
 
 function shareA7Invocation () {
@@ -736,13 +744,16 @@ function damageToA7(damage){
 
 
 function sharePosition(x, y){
-    socket.emit('sharePosition', {
-        x:x,
-        y:y,
-        token:token,
-        alive:pj.alive,
-        is_owner: (restorer.reference == pj)
-    });
+    if(!in_host_mode){
+        socket.emit('sharePosition', {
+            x:x,
+            y:y,
+            token:token,
+            alive:pj.alive,
+            is_owner: (restorer.reference == pj)
+        });
+    }
+
 }
 
 function shareAction(action){
