@@ -10,8 +10,8 @@ var loga7 = new Array();
 
 var asking_for_data = true;
 
-var SERVER_IP = '145.239.205.172';
-//var SERVER_IP = 'localhost';
+//var SERVER_IP = '145.239.205.172';
+var SERVER_IP = 'localhost';
 
 
 var exe_preUpdate;
